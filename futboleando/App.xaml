@@ -1,0 +1,65 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:futboleando"
+             x:Class="futboleando.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="rojoOscuro" >#dc3545</Color>
+            <Color x:Key="verdeOscuro" >#198754</Color>
+            <Color x:Key="azulOscuro" >#0d6efd</Color>
+            <Color x:Key="colorblanco">#FFF</Color>
+            <Color x:Key="colorGray">Gray</Color>
+            <Style x:Key="estiloLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource rojoOscuro}" />
+            </Style>
+            <Style x:Key="estiloDetail" TargetType="Label">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource colorGray}" />
+
+            </Style>
+            <Style x:Key="estiloEntry" TargetType="Entry">
+                <Setter Property="TextColor" Value="#000000" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="BackgroundColor" Value="White" />
+            </Style>
+            <Style x:Key="estiloStackLayoutButton" TargetType="StackLayout">
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Spacing" Value="5" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,20" />
+            </Style>
+            <Style x:Key="verticalStackLayoutPage" TargetType="VerticalStackLayout" >
+                <Setter Property="Margin" Value="10" />
+            </Style>
+            <Style x:Key="estiloPassword" TargetType="Entry" BasedOn="{StaticResource estiloEntry}">
+                <Setter Property="IsPassword" Value="True" />
+            </Style>
+
+            <Style x:Key="estiloBoton" TargetType="Button">
+                <Setter Property="CornerRadius" Value="0" />
+            </Style>
+
+            <Style x:Key="botonVerde" TargetType="Button" BasedOn="{StaticResource estiloBoton}">
+                <Setter Property="BackgroundColor" Value="{StaticResource verdeOscuro}" />
+            </Style>
+
+            <Style x:Key="botonRojo" TargetType="Button" BasedOn="{StaticResource estiloBoton}">
+                <Setter Property="BackgroundColor" Value="{StaticResource rojoOscuro}" />
+            </Style>
+
+            <Style x:Key="botonAzul" TargetType="Button" BasedOn="{StaticResource estiloBoton}">
+                <Setter Property="BackgroundColor" Value="{StaticResource azulOscuro}" />
+            </Style>
+
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
