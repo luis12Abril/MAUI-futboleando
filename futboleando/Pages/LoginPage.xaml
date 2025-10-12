@@ -5,7 +5,7 @@
              Title="LoginPage">
     <VerticalStackLayout>
         <Label 
-            Text="Bienvenido a futboleando"
+            Text="Bienvenido a futboleando MAUI"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>
