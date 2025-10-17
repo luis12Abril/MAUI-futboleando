@@ -12,9 +12,11 @@ namespace futboleandoEntities.Jugador
         public string nombre { get; set; }
         public string appaterno { get; set; }
         public string apmaterno { get; set; }
-        public string combrecompleto { get; set; }
+        public string nombrecompleto { get; set; }
         public string nombreequipo { get; set; }
-        public DateTime fechanacimiento { get; set; }
+        public DateOnly fechanacimiento { get; set; }
+        public int idequipo { get; set; }
+
         //public virtual Equipo? IdequipoNavigation { get; set; }
 
     }

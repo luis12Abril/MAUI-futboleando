@@ -38,6 +38,32 @@ namespace futboleandoAPIS.Controllers
             }
         }
 
+
+        [HttpGet("listarusuariosmasvisitascelular")]
+        public IActionResult ListarUsuariosMasVisitasCelular()
+        {
+            try
+            {
+                var consulta = _bd.Usuarios.Where(p => p.Visitascel > p.Visitas).Select(p => new UsuarioMasVisitasCelularListCLS
+                {
+                    idusuario = p.Idusuario,
+                    nombre = p.Nombre,
+                    idtipousuario = p.Idtipousuario ?? 0, // Si es null, asigna 0
+                    visitas = p.Visitas ?? 0,
+                    visitascel = p.Visitascel ?? 0,
+                    fechaalta = (DateTime)p.Fechaalta
+
+                }).ToList();
+                return Ok(consulta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+
         [HttpPost]
         public IActionResult Post()
         {
