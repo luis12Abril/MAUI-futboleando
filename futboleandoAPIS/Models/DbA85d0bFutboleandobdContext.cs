@@ -77,9 +77,9 @@ public partial class DbA85d0bFutboleandobdContext : DbContext
 
     public virtual DbSet<Usuariotorneo> Usuariotorneos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("server=sql5052.site4now.net;database=db_a85d0b_futboleandobd;uid=db_a85d0b_futboleandobd_admin;pwd=Labt1970");
+//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("server=sql5052.site4now.net;database=db_a85d0b_futboleandobd;uid=db_a85d0b_futboleandobd_admin;pwd=Labt1970");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

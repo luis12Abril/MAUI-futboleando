@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using futboleandoAPIS.Models;
 using futboleandoEntities;
+using futboleandoEntities.Jugador;
+using futboleandoEntities.Usuario;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace futboleandoAPIS.Controllers
 {
@@ -8,9 +11,10 @@ namespace futboleandoAPIS.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        public UsuarioController()
+        private readonly DbA85d0bFutboleandobdContext _bd;
+        public UsuarioController(DbA85d0bFutboleandobdContext bd)
         {
-
+            _bd = bd;
         }
 
         [HttpGet]
@@ -18,7 +22,16 @@ namespace futboleandoAPIS.Controllers
         {
             try
             {
-                return Ok();
+                var consulta = _bd.Usuarios.Where(p => p.Idtipousuario == 3).Select(p => new UsuarioListCLS
+                {
+                    idusuario = p.Idusuario,
+                    nombre = p.Nombre,
+                    idtipousuario = p.Idtipousuario ?? 0, // Si es null, asigna 0
+                    visitas = p.Visitas ?? 0,
+                    visitascel = p.Visitascel ?? 0
+
+                }).ToList();
+                return Ok(consulta);
             }catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);

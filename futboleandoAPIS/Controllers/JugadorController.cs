@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using futboleandoAPIS.Models;
 using futboleandoEntities;
 using futboleandoEntities.Jugador;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using futboleandoEntities.Equipo;
 
 namespace futboleandoAPIS.Controllers
 {
@@ -9,9 +11,10 @@ namespace futboleandoAPIS.Controllers
     [ApiController]
     public class JugadorController : ControllerBase
     {
-        public JugadorController()
+        private readonly DbA85d0bFutboleandobdContext _bd;
+        public JugadorController(DbA85d0bFutboleandobdContext bd)
         {
-
+            _bd = bd;
         }
 
         [HttpGet]
@@ -19,7 +22,19 @@ namespace futboleandoAPIS.Controllers
         {
             try
             {
-                return Ok();
+                var consulta = (from j in _bd.Jugadors
+                                join e in _bd.Equipos on j.Idequipo equals e.Idequipo
+                                where j.Idtorneo == 1068
+                                select new JugadorListCLS
+                                {
+                                    idjugador = j.Idjugador,  
+                                    nombre = j.Nombre,
+                                    appaterno = j.Appaterno,
+                                    apmaterno = j.Apmaterno,    
+                                    combrecompleto = j.Nombre + " " + j.Appaterno + " " + j.Apmaterno,                                    
+                                    nombreequipo = e.Nombre                                   
+                                }).ToList();
+                return Ok(consulta);
             }
             catch (Exception ex)
             {
