@@ -37,6 +37,7 @@ public partial class MenuPage : ContentPage
 
             int idmenu = selectedMenu.idmenu;
             LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
+            JugadorService jugadorService = MauiProgram.ServiceProvider.GetService<JugadorService>();
 
             switch (idmenu)
             {

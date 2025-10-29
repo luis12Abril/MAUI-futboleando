@@ -28,7 +28,7 @@ public partial class JugadorPage : ContentPage
 
     private async Task refrezcarJugador()
     {
-        listarJugador();
+        await listarJugador();
     }
 
     public async Task listarJugador()
