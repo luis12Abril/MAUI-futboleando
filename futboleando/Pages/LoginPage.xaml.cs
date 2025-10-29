@@ -1,7 +1,6 @@
 using futboleandoEntities.Login;
 using futboleando.Service;
 
-
 namespace futboleando.Pages;
 
 public partial class LoginPage : ContentPage

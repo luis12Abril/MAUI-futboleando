@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.LoginPage"
              Title="LoginPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Bienvenido a futboleando MAUI"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <VerticalStackLayout Margin="10" VerticalOptions="Center">
+        <Label Text="Ingrese usuario:" Style="{StaticResource estiloLabel}" />
+        <Entry  Text="{Binding oLoginCLS.nombreusuario}" Style="{StaticResource estiloEntry}" />
+        <Label Text="Ingrese contraseña:" Style="{StaticResource estiloLabel}" />
+        <Entry Text="{Binding oLoginCLS.contra}"  Style="{StaticResource estiloPassword}"   />
+        <Button x:Name="btnIngresar" Clicked="btnIngresar_Clicked"  Text="Ingresar" Style="{StaticResource botonVerde}" />
     </VerticalStackLayout>
 </ContentPage>
