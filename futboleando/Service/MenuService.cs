@@ -16,8 +16,8 @@ namespace futboleando.Service
             listamenu = new ObservableCollection<MenuCLS>
             {
                 new MenuCLS{ idmenu=1 , nombreopcion="Usuario" , nombreicono=""},
-                new MenuCLS{ idmenu=2 , nombreopcion="Equipo" , nombreicono=""},
-                new MenuCLS{ idmenu=3 , nombreopcion="Jugador" , nombreicono=""},
+                new MenuCLS{ idmenu=2 , nombreopcion="Jugador" , nombreicono=""},
+                new MenuCLS{ idmenu=3 , nombreopcion="Equipo" , nombreicono=""},
                 new MenuCLS{ idmenu=4 , nombreopcion="Campo" , nombreicono=""},
                 new MenuCLS{ idmenu=1000 , nombreopcion="Cerrar Sesion" , nombreicono=""}
             };

@@ -40,20 +40,20 @@ namespace futboleando.Service
 
         public async Task<ObservableCollection<JugadorListCLS>> listarJugador()
         {
-            /* try
-             {
-                 var response=  await _httpClient.GetFromJsonAsync<List<CarreraListCLS>>("api/Carrera");
-                 if (response != null)
-                 {
-                     return new ObservableCollection<CarreraListCLS>(response);
-                 }
-                 return new ObservableCollection<CarreraListCLS>();
-             }
-             catch(Exception e)
-             {
-                 return new ObservableCollection<CarreraListCLS>();
-             }*/
-            return listajugador;
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<JugadorListCLS>>("api/Jugador");
+                if (response != null)
+                {
+                    return new ObservableCollection<JugadorListCLS>(response);
+                }
+                return new ObservableCollection<JugadorListCLS>();
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<JugadorListCLS>();
+            }
+            //return listajugador;
         }
 
         public async Task<JugadorFormCLS> recuperarJugadorPorId(int idjugador)

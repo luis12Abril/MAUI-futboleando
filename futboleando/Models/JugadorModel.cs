@@ -1,4 +1,5 @@
-﻿using futboleando.Generic;
+﻿using futboleandoEntities.Jugador;
+using futboleando.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,21 @@ namespace futboleando.Models
 {
     public class JugadorModel : BaseBinding
     {
+
+        private JugadorFormCLS _oJugadorFormCLS;
+
+        public event Func<Task> OnChange;
+        public JugadorFormCLS oJugadorFormCLS
+        {
+            get
+            {
+                return _oJugadorFormCLS;
+            }
+            set
+            {
+                SetValue(ref _oJugadorFormCLS, value);
+            }
+
+        }
     }
 }

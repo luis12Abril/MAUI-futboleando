@@ -27,7 +27,7 @@ namespace futboleando
             builder.Services.AddScoped<JugadorService>();
             builder.Services.AddScoped(sp => new HttpClient
             {
-                BaseAddress = new Uri("http://mauiapp.somee.com/")
+                BaseAddress = new Uri("http://apisfutbleandomaui.somee.com/")
             });
             ServiceProvider = builder.Services.BuildServiceProvider();
 

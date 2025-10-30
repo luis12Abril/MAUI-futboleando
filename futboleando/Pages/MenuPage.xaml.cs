@@ -14,7 +14,7 @@ public partial class MenuPage : ContentPage
 
 
     public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
-	{
+    {
         InitializeComponent();
         menuService = _menuService;
         loginService = _loginService;
@@ -32,49 +32,46 @@ public partial class MenuPage : ContentPage
 
     private void lstMenu_ItemTapped(object sender, ItemTappedEventArgs e)
     {
-        // ESTO ES DEL COPILOT NO DEL CURSO, CHECARLO
-        if(e.Item is MenuCLS selectedMenu)
+
+
+        //CarreraService carreraService = MauiProgram.ServiceProvider.GetService<CarreraService>();
+        //CursoService cursoService = MauiProgram.ServiceProvider.GetService<CursoService>();
+        //LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
+        //PersonaService personaService = MauiProgram.ServiceProvider.GetService<PersonaService>();
+
+        int idmenu = oMenuCLS.idmenu;
+
+        switch (idmenu)
         {
+            //case 1:
+            //    UsuarioPage oUsuarioPage = new UsuarioPage();
+            //    App.Navigate.PushAsync(oUsuarioPage); break;
+            case 2:
+                JugadorPage oJugadorPage = new JugadorPage(jugadorService);
+                App.Navigate.PushAsync(oJugadorPage); break;
 
-            //CarreraService carreraService = MauiProgram.ServiceProvider.GetService<CarreraService>();
-            //CursoService cursoService = MauiProgram.ServiceProvider.GetService<CursoService>();
-            //LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
-            //PersonaService personaService = MauiProgram.ServiceProvider.GetService<PersonaService>();
+            case 1000:
+                Preferences.Remove("usuario");
+                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
 
-            int idmenu = selectedMenu.idmenu;
-   
-            switch (idmenu)
-            {
                 //case 1:
+                //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);
+                //    App.Navigate.PushAsync(oCursoPage); break;
+                //case 2:
+                //    PersonaPage oPersonaPage = new PersonaPage(personaService);
+                //    App.Navigate.PushAsync(oPersonaPage); break;
+                //case 3:
                 //    UsuarioPage oUsuarioPage = new UsuarioPage();
                 //    App.Navigate.PushAsync(oUsuarioPage); break;
-                case 2:
-                    JugadorPage oJugadorPage = new JugadorPage(jugadorService);
-                    App.Navigate.PushAsync(oJugadorPage); break;
+                //case 4:
+                //    CarreraPage oCarreraPage = new CarreraPage(carreraService);
+                //    App.Navigate.PushAsync(oCarreraPage); break;
+                //case 1000:
+                //    Preferences.Remove("usuario");
+                //    App.Current.MainPage = new LoginPage(loginService); break;
 
-                case 1000:
-                    Preferences.Remove("usuario");
-                    App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
-
-                    //case 1:
-                    //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);
-                    //    App.Navigate.PushAsync(oCursoPage); break;
-                    //case 2:
-                    //    PersonaPage oPersonaPage = new PersonaPage(personaService);
-                    //    App.Navigate.PushAsync(oPersonaPage); break;
-                    //case 3:
-                    //    UsuarioPage oUsuarioPage = new UsuarioPage();
-                    //    App.Navigate.PushAsync(oUsuarioPage); break;
-                    //case 4:
-                    //    CarreraPage oCarreraPage = new CarreraPage(carreraService);
-                    //    App.Navigate.PushAsync(oCarreraPage); break;
-                    //case 1000:
-                    //    Preferences.Remove("usuario");
-                    //    App.Current.MainPage = new LoginPage(loginService); break;
-
-            }
-            App.Menu.IsPresented = false;
         }
-       
+        App.Menu.IsPresented = false;
+
     }
 }

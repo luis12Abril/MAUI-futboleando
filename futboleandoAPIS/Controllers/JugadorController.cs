@@ -29,12 +29,12 @@ namespace futboleandoAPIS.Controllers
                                 {
                                     idjugador = j.Idjugador,  
                                     nombre = j.Nombre,
-                                    appaterno = j.Appaterno,
-                                    apmaterno = j.Apmaterno,    
-                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
-                                    idequipo = e.Idequipo,
-                                    nombreequipo = e.Nombre,
-                                    fechanacimiento = (DateOnly)j.Fnacimiento
+                                    appaterno = j.Appaterno
+                                    //apmaterno = j.Apmaterno,    
+                                    //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
+                                    //idequipo = e.Idequipo,
+                                    //nombreequipo = e.Nombre,
+                                    //fechanacimiento = (DateOnly)j.Fnacimiento
                                 }).ToList();
                 return Ok(consulta);
             }
@@ -59,9 +59,9 @@ namespace futboleandoAPIS.Controllers
                 {
                     idjugador = obj.Idjugador,
                     nombre = obj.Nombre,
-                    appaterno = obj.Appaterno,
-                    apmaterno = obj.Apmaterno,
-                    nombrecompleto = (obj.Nombre.Trim() + " " + obj.Appaterno.Trim() + " " + obj.Apmaterno.Trim()).Trim()
+                    appaterno = obj.Appaterno
+                    //apmaterno = obj.Apmaterno,
+                    //nombrecompleto = (obj.Nombre.Trim() + " " + obj.Appaterno.Trim() + " " + obj.Apmaterno.Trim()).Trim()
                 });
             }
             catch (Exception ex)
@@ -82,12 +82,12 @@ namespace futboleandoAPIS.Controllers
                                 {
                                     idjugador = j.Idjugador,
                                     nombre = j.Nombre,
-                                    appaterno = j.Appaterno,
-                                    apmaterno = j.Apmaterno,
-                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
-                                    idequipo = e.Idequipo,
-                                    nombreequipo = e.Nombre,
-                                    fechanacimiento = (DateOnly)j.Fnacimiento
+                                    appaterno = j.Appaterno
+                                    //apmaterno = j.Apmaterno,
+                                    //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
+                                    //idequipo = e.Idequipo,
+                                    //nombreequipo = e.Nombre,
+                                    //fechanacimiento = (DateOnly)j.Fnacimiento
                                 }).ToList();
                 return Ok(consulta);
             }
