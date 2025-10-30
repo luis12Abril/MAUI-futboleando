@@ -9,12 +9,17 @@ public partial class MenuPage : ContentPage
     public ObservableCollection<MenuCLS> listamenu { get; set; }
     public MenuCLS oMenuCLS { get; set; }
     private MenuService menuService;
+    private LoginService loginService;
+    private JugadorService jugadorService;
 
 
-    public MenuPage(MenuService _menuService)
+    public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
 	{
         InitializeComponent();
         menuService = _menuService;
+        loginService = _loginService;
+        jugadorService = _jugadorService;
+
         listarMenus();
 
         BindingContext = this;
@@ -27,6 +32,7 @@ public partial class MenuPage : ContentPage
 
     private void lstMenu_ItemTapped(object sender, ItemTappedEventArgs e)
     {
+        // ESTO ES DEL COPILOT NO DEL CURSO, CHECARLO
         if(e.Item is MenuCLS selectedMenu)
         {
 
@@ -36,9 +42,7 @@ public partial class MenuPage : ContentPage
             //PersonaService personaService = MauiProgram.ServiceProvider.GetService<PersonaService>();
 
             int idmenu = selectedMenu.idmenu;
-            LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
-            JugadorService jugadorService = MauiProgram.ServiceProvider.GetService<JugadorService>();
-
+   
             switch (idmenu)
             {
                 //case 1:
@@ -50,7 +54,7 @@ public partial class MenuPage : ContentPage
 
                 case 1000:
                     Preferences.Remove("usuario");
-                    App.Current.MainPage = new LoginPage(loginService); break;
+                    App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
 
                     //case 1:
                     //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);

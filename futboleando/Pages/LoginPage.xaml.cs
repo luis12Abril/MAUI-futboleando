@@ -7,15 +7,19 @@ public partial class LoginPage : ContentPage
 {
     public LoginCLS oLoginCLS { get; set; }
 
-    private readonly LoginService loginService;
+    private MenuService menuService;
+    private LoginService loginService;
+    private JugadorService jugadorService;
 
     //public string nombreusuario { get; set; }
     //public string contra { get; set; }
-    public LoginPage(LoginService _loginService)
+    public LoginPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
     {
         InitializeComponent();
         oLoginCLS = new LoginCLS();
+        menuService = _menuService;
         loginService = _loginService;
+        jugadorService = _jugadorService;
         BindingContext = this;
     }
 
@@ -25,7 +29,7 @@ public partial class LoginPage : ContentPage
         if (exito == true)
         {
             Preferences.Set("usuario", "ok");
-            Flyout p = new Flyout();
+            Flyout p = new Flyout(menuService, loginService, jugadorService);
             App.Current.MainPage = p;
         }
         else

@@ -5,15 +5,21 @@ namespace futboleando
 {
     public partial class App : Application
     {
-        public App()
+        private MenuService menuService;
+        private LoginService loginService;
+        private JugadorService jugadorService;
+        public App(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
         {
             InitializeComponent();
-            LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
+            menuService = _menuService;
+            loginService = _loginService;
+            jugadorService = _jugadorService;
+          
 
             if (Preferences.Get("usuario", "") == "")
-                MainPage = new LoginPage(loginService);
+                MainPage = new LoginPage(menuService, loginService, jugadorService);
             else
-                MainPage = new Flyout();
+                MainPage = new Flyout(menuService, loginService, jugadorService);
         }
 
         public static NavigationPage Navigate { get; internal set; }

@@ -3,11 +3,17 @@ namespace futboleando.Pages;
 
 public partial class Flyout : FlyoutPage
 {
-    public Flyout()
+    private MenuService menuService;
+    private LoginService loginService;
+    private JugadorService jugadorService;
+    public Flyout(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
     {
         InitializeComponent();
-        MenuService menuService = MauiProgram.ServiceProvider.GetService<MenuService>();
-        var menu = new MenuPage(menuService);
+        menuService = _menuService;
+        loginService = _loginService;
+        jugadorService = _jugadorService;
+        
+        var menu = new MenuPage(menuService, loginService, jugadorService);
         Flyout = menu;
         App.Navigate = Navigate;
         App.Menu = this;
