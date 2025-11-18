@@ -28,13 +28,14 @@ public partial class LoginPage : ContentPage
         bool exito = await loginService.login(oLoginCLS);
         if (exito == true)
         {
+            // se utiliza para para guardar datos en el dispositivo
             Preferences.Set("usuario", "ok");
             Flyout p = new Flyout(menuService, loginService, jugadorService);
             App.Current.MainPage = p;
         }
         else
         {
-            DisplayAlert("Error", "Usuario o contraseña incorrecta", "Salir");
+            await DisplayAlert("Error", "Usuario o contraseña incorrecta", "Salir");
         }
 
     }
