@@ -33,13 +33,21 @@ public partial class MenuPage : ContentPage
     private void lstMenu_ItemTapped(object sender, ItemTappedEventArgs e)
     {
 
+        //DisplayAlert("Aviso", oMenuCLS.nombreopcion, "Salir");
+
 
         //CarreraService carreraService = MauiProgram.ServiceProvider.GetService<CarreraService>();
         //CursoService cursoService = MauiProgram.ServiceProvider.GetService<CursoService>();
         //LoginService loginService = MauiProgram.ServiceProvider.GetService<LoginService>();
         //PersonaService personaService = MauiProgram.ServiceProvider.GetService<PersonaService>();
 
-        int idmenu = oMenuCLS.idmenu;
+        // Obtener el item seleccionado desde el evento
+        var menuSeleccionado = e.Item as MenuCLS;
+        if (menuSeleccionado == null) return;
+
+        int idmenu = menuSeleccionado.idmenu;
+
+        //int idmenu = oMenuCLS.idmenu;
 
         switch (idmenu)
         {
@@ -49,7 +57,7 @@ public partial class MenuPage : ContentPage
             case 2:
                 JugadorPage oJugadorPage = new JugadorPage(jugadorService);
                 App.Navigate.PushAsync(oJugadorPage); break;
-
+               
             case 1000:
                 Preferences.Remove("usuario");
                 App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
@@ -71,7 +79,14 @@ public partial class MenuPage : ContentPage
                 //    App.Current.MainPage = new LoginPage(loginService); break;
 
         }
+
+        // Cerrar el flyout/menu
         App.Menu.IsPresented = false;
+
+        // Deseleccionar el item para evitar que quede marcado
+        if (sender is ListView lv) lv.SelectedItem = null;
+
+        //App.Menu.IsPresented = false;
 
     }
 }

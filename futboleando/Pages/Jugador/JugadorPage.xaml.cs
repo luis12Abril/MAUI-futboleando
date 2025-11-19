@@ -2,9 +2,10 @@
 //using Android.Service.Carrier;
 //using Android.Service.Carrier;
 //using Android.Service.Carrier;
+using System.Collections.ObjectModel;
+//using Android.Service.Carrier;
 using futboleando.Service;
 using futboleandoEntities.Jugador;
-using System.Collections.ObjectModel;
 
 namespace futboleando.Pages;
 
@@ -18,14 +19,15 @@ public partial class JugadorPage : ContentPage
     public string nombrejugador { get; set; }
 
     public JugadorPage(JugadorService _jugadorService)
-	{
+    {
         InitializeComponent();
         jugadorService = _jugadorService;
         jugadorService.Onchange += refrezcarJugador;
         listajugador = new ObservableCollection<JugadorListCLS>();
-        listarJugador();
-        listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
         BindingContext = this;
+        _ = listarJugador();
+        //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
+       
     }
 
     private async Task refrezcarJugador()
@@ -35,15 +37,68 @@ public partial class JugadorPage : ContentPage
 
     public async Task listarJugador()
     {
-        var listaop = await jugadorService.listarJugador();   
-        listajugador.Clear();
-        foreach (var jugador in listaop)
+
+        try
         {
-            listajugador.Add(jugador);
+
+            var listaop = await jugadorService.listarJugador();
+
+            if (listaop.Count == 0)
+            {
+                await DisplayAlert("Debug", "No se recibieron datos de la API", "OK");
+                return;
+            }
+            //else
+            //{
+            //    //Console.WriteLine("Debug: Datos recibidos de la API");
+            //    await DisplayAlert("debug ", "Se recibieron " + listaop.Count.ToString() + " datos de la API", "OK");
+            //    //+listaop.Count.ToString() + "
+            //}
+
+
+            //Actualizar en el hilo principal de forma eficiente
+            await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    listajugador.Clear();
+
+                    // Agregar todos los elementos de una vez
+                    // TEMPORAL: Solo cargar los primeros 100 registros para probar
+                    foreach (var jugador in listaop.Take(30))
+                    {
+                        listajugador.Add(jugador);
+                    }
+                });
+
+            // Mostrar el alert DESPUÉS de cargar los datos
+            //await DisplayAlert("debug ", "Se recibieron " + listaop.Count.ToString() + " datos de la API", "OK");
+
+            //listajugador.Clear();
+            //foreach (var jugador in listaop.Take(30))
+            //{
+            //    //await DisplayAlert("Debug ", jugador.nombre, "OK");
+            //    listajugador.Add(jugador);
+            //    //await DisplayAlert("Debug ", jugador.nombre, "OK");
+            //}
+            //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
+
         }
-        listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
-     
+        catch(Exception ex)
+        {
+            await DisplayAlert("Debug", "Error al conectar con la API: " + ex.Message, "OK");
+            return;
+        }
+
+
+
     }
+
+    private void btnRegresar_Clicked(object sender, EventArgs e)
+    {
+        //App.Navigate.PopAsync();
+        Navigation.PopAsync();
+    }
+
+
 
     //private void entryNombreJugador_TextChanged(object sender, TextChangedEventArgs e)
     //{

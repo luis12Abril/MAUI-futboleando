@@ -3,11 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.JugadorPage"
              Title="Lista de Jugadores">
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" x:Name="toolBarAdd" Clicked="toolBarAdd_Clicked" />
+    </ContentPage.ToolbarItems>-->
+
     <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}">
         <Label Text="Lista de Jugadores" Style="{StaticResource estiloLabel}" />
-        <ListView HasUnevenRows="True" ItemsSource="{Binding listafiltro}" >
+        <Button Text="Regresar" x:Name="btnRegresar" Clicked="btnRegresar_Clicked" />
+        <ListView HasUnevenRows="True" ItemsSource="{Binding listajugador}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
+                                                            
+                    <!--Solo se puede tener un TextCell o un ViewCel dentro de un DataTemplate-->
+
+                    <!--<TextCell Text="{Binding nombre}" 
+                              Detail="{Binding appaterno}" 
+                              TextColor="Black"
+                              DetailColor="Gray" />-->                  
+
+
                     <ViewCell>
                         
                             <VerticalStackLayout Padding="10">
