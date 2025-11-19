@@ -1,3 +1,4 @@
+using futboleando.Pages.Colaborador;
 using futboleando.Service;
 using futboleandoEntities.Menu;
 using System.Collections.ObjectModel;
@@ -57,7 +58,10 @@ public partial class MenuPage : ContentPage
             case 2:
                 JugadorPage oJugadorPage = new JugadorPage(jugadorService);
                 App.Navigate.PushAsync(oJugadorPage); break;
-               
+
+            case 20:
+                ColaboradorPage oColaboradorPage = new ColaboradorPage();
+                App.Navigate.PushAsync(oColaboradorPage); break;
             case 1000:
                 Preferences.Remove("usuario");
                 App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
