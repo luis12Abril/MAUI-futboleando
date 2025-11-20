@@ -1,3 +1,4 @@
+using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
 using futboleando.Service;
 using futboleandoEntities.Menu;
@@ -12,18 +13,23 @@ public partial class MenuPage : ContentPage
     private MenuService menuService;
     private LoginService loginService;
     private JugadorService jugadorService;
+    private CiudadService ciudadService;
+    private ColaboradorService colaboradorService;
 
 
-    public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService)
+    public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService, ColaboradorService _colaboradorService)
     {
         InitializeComponent();
         menuService = _menuService;
         loginService = _loginService;
         jugadorService = _jugadorService;
+        ciudadService = _ciudadService;
+        colaboradorService = _colaboradorService;
 
         listarMenus();
 
         BindingContext = this;
+
     }
 
     public async Task listarMenus()
@@ -35,7 +41,6 @@ public partial class MenuPage : ContentPage
     {
 
         //DisplayAlert("Aviso", oMenuCLS.nombreopcion, "Salir");
-
 
         //CarreraService carreraService = MauiProgram.ServiceProvider.GetService<CarreraService>();
         //CursoService cursoService = MauiProgram.ServiceProvider.GetService<CursoService>();
@@ -59,12 +64,16 @@ public partial class MenuPage : ContentPage
                 JugadorPage oJugadorPage = new JugadorPage(jugadorService);
                 App.Navigate.PushAsync(oJugadorPage); break;
 
+            case 5:
+                CiudadPage oCiudadPage = new CiudadPage(ciudadService);
+                App.Navigate.PushAsync(oCiudadPage); break;
+
             case 20:
-                ColaboradorPage oColaboradorPage = new ColaboradorPage();
+                ColaboradorPage oColaboradorPage = new ColaboradorPage(ciudadService, colaboradorService);
                 App.Navigate.PushAsync(oColaboradorPage); break;
             case 1000:
                 Preferences.Remove("usuario");
-                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService); break;
+                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService); break;
 
                 //case 1:
                 //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);

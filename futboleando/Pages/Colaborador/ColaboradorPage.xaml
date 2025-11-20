@@ -3,10 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Colaborador.ColaboradorPage"
              Title="ColaboradorPage">
-    <VerticalStackLayout>
+    <VerticalStackLayout Margin="10">
+        <Label Text="Seleccione Ciudad:" Style="{StaticResource estiloLabel}"/>
         <Picker 
             ItemsSource="{Binding listaciudad}" ItemDisplayBinding="{Binding nombreciudad}"
-            SelectedItem="{Binding oCiudadListCLS}"           
+            SelectedItem="{Binding oCiudadListCLS}" x:Name="pickerCiudad" SelectedIndexChanged="pickerCiudad_SelectedIndexChanged"
             />
+
+        <ListView ItemsSource="{Binding listacolaborador}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <!--<TextCell Text="{Binding nombre}" Detail="{Binding appaterno}" />-->
+                    <ViewCell>
+                        <Border Margin="5" 
+                          Padding="10"
+                          Stroke="LightGray"
+                          StrokeThickness="1"
+                          BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout>
+                                <Label Text="{Binding nombre}" 
+                             Style="{StaticResource estiloLabel}"
+                             FontSize="16"/>
+                                <Label Text="{Binding appaterno}" 
+                             Style="{StaticResource estiloDetail}"/>
+                                <Label Text="{Binding apmaterno}" 
+                             Style="{StaticResource estiloDetail}"/>
+                                <Label Text="{Binding nombreciudad}" 
+                             Style="{StaticResource estiloDetail}"/>
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </ViewCell>
+                    
+                    
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </VerticalStackLayout>
 </ContentPage>
