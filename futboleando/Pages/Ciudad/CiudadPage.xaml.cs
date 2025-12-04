@@ -43,4 +43,10 @@ public partial class CiudadPage : ContentPage
             listaCiudad.Add(item);
         }
     }
+
+    private void toolbarAdd_Clicked(object sender, EventArgs e)
+    {
+		CiudadFormPage oCiudadFormPage = new CiudadFormPage();
+		Navigation.PushAsync(oCiudadFormPage);
+    }
 }

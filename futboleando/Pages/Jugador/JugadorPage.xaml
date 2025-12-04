@@ -8,8 +8,9 @@
     </ContentPage.ToolbarItems>-->
 
     <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}">
-        <Label Text="Lista de Jugadores" Style="{StaticResource estiloLabel}" />
-        <Button Text="Regresar" x:Name="btnRegresar" Clicked="btnRegresar_Clicked" />
+        <SearchBar Text="{Binding nombrejugador}" x:Name="searchNombre" SearchButtonPressed="searchNombre_SearchButtonPressed"/>
+        <!--<Label Text="Lista de Jugadores" Style="{StaticResource estiloLabel}" />
+        <Button Text="Regresar" x:Name="btnRegresar" Clicked="btnRegresar_Clicked" />-->
         <ListView HasUnevenRows="True" ItemsSource="{Binding listajugador}" >
             <ListView.ItemTemplate>
                 <DataTemplate>

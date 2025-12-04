@@ -98,6 +98,11 @@ public partial class JugadorPage : ContentPage
         Navigation.PopAsync();
     }
 
+    private void searchNombre_SearchButtonPressed(object sender, EventArgs e)
+    {
+        DisplayAlert("Alerta", "Buscar: " + nombrejugador, "OK");
+    }
+
 
 
     //private void entryNombreJugador_TextChanged(object sender, TextChangedEventArgs e)

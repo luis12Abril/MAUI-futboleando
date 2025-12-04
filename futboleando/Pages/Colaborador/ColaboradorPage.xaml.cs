@@ -10,10 +10,12 @@ public partial class ColaboradorPage : ContentPage
 	public ObservableCollection<CiudadListCLS> listaciudad { get; set; }
     public ObservableCollection<ColaboradorListCLS> listacolaborador { get; set; }
     public ObservableCollection<ColaboradorListCLS> listafiltro { get; set; }
+    private ObservableCollection<ColaboradorListCLS> listafiltro2;
     public CiudadListCLS oCiudadListCLS { get; set; }
 
     private ColaboradorService colaboradorService;
     private CiudadService ciudadService;
+    public string nombrecolaborador { get; set; }
 
     public ColaboradorPage(CiudadService _ciudadService, ColaboradorService _colaboradorService )
 	{
@@ -28,6 +30,9 @@ public partial class ColaboradorPage : ContentPage
         listafiltro = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
         listaciudad.Insert(0, primerItem);
 		oCiudadListCLS = primerItem;
+
+        listafiltro2 = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
+       
         BindingContext = this;
     }
 
@@ -54,5 +59,28 @@ public partial class ColaboradorPage : ContentPage
         }
 
         // DisplayAlert("Ciudad Seleccionada", $"Ciudad: {oCiudadListCLS.nombreciudad}", "OK");
+    }
+
+    private void searchNombre_SearchButtonPressed(object sender, EventArgs e)
+    {
+        ObservableCollection<ColaboradorListCLS> listaop;   
+        listacolaborador.Clear();
+        if (nombrecolaborador == null || nombrecolaborador == "")
+        {
+            listaop = listafiltro;
+        }
+        else
+        {
+            var listaColaboradorFiltrada = listafiltro.Where(c => c.nombre!.ToUpper().Contains(nombrecolaborador.ToUpper()) || c.appaterno!.ToUpper().Contains(nombrecolaborador.ToUpper()) || c.apmaterno!.ToUpper().Contains(nombrecolaborador.ToUpper())).ToList();
+            listaop = new ObservableCollection<ColaboradorListCLS>(listaColaboradorFiltrada);
+        }
+        foreach (var item in listaop)
+        {
+            if(!listacolaborador.Contains(item))
+            {
+                listacolaborador.Add(item);
+            }
+        }
+
     }
 }

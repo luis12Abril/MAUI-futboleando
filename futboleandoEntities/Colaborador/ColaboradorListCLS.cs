@@ -15,6 +15,7 @@ namespace futboleandoEntities.Colaborador
         public string telefono { get; set; }
         public int idciudad { get; set; }
         public string nombreciudad { get; set; }
+        public DateOnly fechanacimiento { get; set; }
 
     }
 }

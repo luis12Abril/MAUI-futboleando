@@ -15,11 +15,10 @@ namespace futboleando.Service
         {
             listacolaborador = new ObservableCollection<ColaboradorListCLS>
             {
-                new ColaboradorListCLS { idcolaborador = 1, nombre = "Juan Antonio", appaterno = "Garcia", apmaterno = "Quintero", idciudad = 1, nombreciudad = "Cd. Obregón"},
-                new ColaboradorListCLS { idcolaborador = 2, nombre = "María", appaterno = "Torres", apmaterno = "Rodriguez",  idciudad = 2 , nombreciudad = "Hermosillo"},
-
-                new ColaboradorListCLS { idcolaborador = 3, nombre = "Ernesto", appaterno = "Miranda", apmaterno = "Estrada", idciudad = 1, nombreciudad = "Cd. Obregón" },
-                new ColaboradorListCLS { idcolaborador = 4, nombre = "Marco", appaterno = "Casto", apmaterno = "Nuñes", idciudad = 2, nombreciudad = "Hermosillo" }
+                new ColaboradorListCLS { idcolaborador = 1, nombre = "Juan Antonio", appaterno = "Garcia", apmaterno = "Quintero", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1978, 12, 15)},
+                new ColaboradorListCLS { idcolaborador = 2, nombre = "María", appaterno = "Torres", apmaterno = "Rodriguez",  idciudad = 2 , nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1985, 5, 20)},
+                new ColaboradorListCLS { idcolaborador = 3, nombre = "Ernesto", appaterno = "Miranda", apmaterno = "Estrada", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1990, 3, 10) },
+                new ColaboradorListCLS { idcolaborador = 4, nombre = "Marco", appaterno = "Casto", apmaterno = "Nuñes", idciudad = 2, nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1982, 11, 8) }
             };
         }
 

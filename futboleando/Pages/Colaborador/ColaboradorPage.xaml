@@ -4,6 +4,7 @@
              x:Class="futboleando.Pages.Colaborador.ColaboradorPage"
              Title="ColaboradorPage">
     <VerticalStackLayout Margin="10">
+        <SearchBar Text="{Binding nombrecolaborador}" x:Name="searchNombre" SearchButtonPressed="searchNombre_SearchButtonPressed"/>
         <Label Text="Seleccione Ciudad:" Style="{StaticResource estiloLabel}"/>
         <Picker 
             ItemsSource="{Binding listaciudad}" ItemDisplayBinding="{Binding nombreciudad}"
@@ -28,11 +29,15 @@
                                 <Label Text="{Binding nombre}" 
                              Style="{StaticResource estiloLabel}"
                              FontSize="16"/>
-                                <Label Text="{Binding appaterno}" 
-                             Style="{StaticResource estiloDetail}"/>
-                                <Label Text="{Binding apmaterno}" 
-                             Style="{StaticResource estiloDetail}"/>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="{Binding appaterno}" 
+                                 Style="{StaticResource estiloDetail}"/>
+                                    <Label Text="{Binding apmaterno}" 
+                                 Style="{StaticResource estiloDetail}"/>
+                                </HorizontalStackLayout>
                                 <Label Text="{Binding nombreciudad}" 
+                             Style="{StaticResource estiloDetail}"/>
+                                <Label Text="{Binding fechanacimiento}" 
                              Style="{StaticResource estiloDetail}"/>
                             </VerticalStackLayout>
                         </Border>

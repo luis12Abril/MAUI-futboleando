@@ -3,6 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Ciudad.CiudadPage"
              Title="Ciudad">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" x:Name="toolbarAdd" Clicked="toolbarAdd_Clicked"/>
+    </ContentPage.ToolbarItems>
     <VerticalStackLayout>
         <Label Text="Ingresa Ciudad" Style="{StaticResource estiloLabel}"/>
         <Entry Text="{Binding nombreciudadbuscar}" x:Name="entrynombreciudad" TextChanged="entrynombreciudad_TextChanged"/>

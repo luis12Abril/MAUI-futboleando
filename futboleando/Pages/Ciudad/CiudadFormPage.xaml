@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Ciudad.CiudadFormPage"
+             Title="Formulario Ciudad">
+    <VerticalStackLayout Margin="10">
+        <Label Text="Ingrese Ciudad: " Style="{StaticResource estiloLabel}"/>
+        <Entry Text="{Binding oCiudadFormCLS.nombreciudad}"/>
+        <Label Text="Ingrese Descripción: " Style="{StaticResource estiloLabel}"/>
+        <Editor HeightRequest="100" Text="{Binding oCiudadFormCLS.descripcion}"/>
+    </VerticalStackLayout>
+</ContentPage>
