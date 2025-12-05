@@ -1,3 +1,4 @@
+//using Android.Service.Carrier;
 using futboleando.Service;
 using futboleandoEntities.Ciudad;
 using futboleandoEntities.Colaborador;
@@ -46,7 +47,8 @@ public partial class CiudadPage : ContentPage
 
     private void toolbarAdd_Clicked(object sender, EventArgs e)
     {
-		CiudadFormPage oCiudadFormPage = new CiudadFormPage();
+        CiudadService ciudadService = MauiProgram.ServiceProvider.GetService<CiudadService>();
+        CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
 		Navigation.PushAsync(oCiudadFormPage);
     }
 }

@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Colaborador.ColaboradorPage"
              Title="ColaboradorPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" x:Name="toolbarAdd" Clicked="toolbarAdd_Clicked"/>
+    </ContentPage.ToolbarItems>
+    
     <VerticalStackLayout Margin="10">
         <SearchBar Text="{Binding nombrecolaborador}" x:Name="searchNombre" SearchButtonPressed="searchNombre_SearchButtonPressed"/>
         <Label Text="Seleccione Ciudad:" Style="{StaticResource estiloLabel}"/>

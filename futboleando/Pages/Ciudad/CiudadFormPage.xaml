@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Ciudad.CiudadFormPage"
              Title="Formulario Ciudad">
-    <VerticalStackLayout Margin="10">
+    <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}" Margin="10">
         <Label Text="Ingrese Ciudad: " Style="{StaticResource estiloLabel}"/>
-        <Entry Text="{Binding oCiudadFormCLS.nombreciudad}"/>
+        <Entry Text="{Binding oCiudadModel.oCiudadFormCLS.nombreciudad}"/>
         <Label Text="Ingrese Descripción: " Style="{StaticResource estiloLabel}"/>
-        <Editor HeightRequest="100" Text="{Binding oCiudadFormCLS.descripcion}"/>
+        <Editor HeightRequest="100" Text="{Binding oCiudadModel.oCiudadFormCLS.descripcion}"/>
+
+        <StackLayout Style="{StaticResource estiloStackLayoutButton}">
+            <Button x:Name="btnGuardar" Text="Guardar"  Style="{StaticResource botonVerde}" Clicked="btnGuardar_Clicked"/>
+            <Button x:Name="btnCancelar" Text="Cancelar" Style="{StaticResource botonRojo}" Clicked="btnCancelar_Clicked"/>
+        </StackLayout>
     </VerticalStackLayout>
 </ContentPage>

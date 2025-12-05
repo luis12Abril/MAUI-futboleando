@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Colaborador.ColaboradorFormPage"
+             Title="Pagina Colaborador">
+    <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}">
+        <Label Text="Nombre" Style="{StaticResource estiloLabel}"/>
+        <Entry Text="{Binding oColaboradorModel.oColaboradorFormCLS.nombre}"/>
+        
+        <Label Text="Edad: " Style="{StaticResource estiloLabel}"/>
+        <Entry Text="{Binding oColaboradorModel.oColaboradorFormCLS.edad}" Keyboard="Numeric"/>
+
+        <Label Text="Ciudad: " Style="{StaticResource estiloLabel}"/>
+        <Picker />
+
+        <StackLayout Style="{StaticResource estiloStackLayoutButton}">
+            <Button x:Name="btnGuardar" Text="Guardar"  Style="{StaticResource botonVerde}" Clicked="btnGuardar_Clicked"/>
+            <Button x:Name="btnCancelar" Text="Cancelar" Style="{StaticResource botonRojo}" Clicked="btnCancelar_Clicked"/>
+        </StackLayout>
+    </VerticalStackLayout>
+</ContentPage>

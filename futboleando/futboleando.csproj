@@ -82,6 +82,9 @@
 	  <MauiXaml Update="Pages\Ciudad\CiudadPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Colaborador\ColaboradorFormPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Colaborador\ColaboradorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -103,6 +106,10 @@
 	  <MauiXaml Update="Pages\PrincipalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Pages\NewFolder\" />
 	</ItemGroup>
 
 </Project>

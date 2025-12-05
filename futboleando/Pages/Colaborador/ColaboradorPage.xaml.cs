@@ -83,4 +83,11 @@ public partial class ColaboradorPage : ContentPage
         }
 
     }
+
+    private void toolbarAdd_Clicked(object sender, EventArgs e)
+    {
+        ColaboradorService colaboradorService = MauiProgram.ServiceProvider.GetService<ColaboradorService>();
+        ColaboradorFormPage oColaboradorFormPage = new ColaboradorFormPage(colaboradorService);
+        Navigation.PushAsync(oColaboradorFormPage);
+    }
 }
