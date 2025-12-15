@@ -24,8 +24,8 @@ public partial class ColaboradorPage : ContentPage
         ciudadService = _ciudadService;
 
         CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
-        listaciudad = ciudadService.listarciudad();
-        listacolaborador = colaboradorService.listarcolaborador();
+
+        listarCursos();
 
         listafiltro = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
         listaciudad.Insert(0, primerItem);
@@ -34,6 +34,12 @@ public partial class ColaboradorPage : ContentPage
         listafiltro2 = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
        
         BindingContext = this;
+    }
+
+    public async Task listarCursos()
+    {
+        listaciudad = await ciudadService.listarciudad();
+        listacolaborador = await colaboradorService.listarcolaborador(); 
     }
 
     private void pickerCiudad_SelectedIndexChanged(object sender, EventArgs e)

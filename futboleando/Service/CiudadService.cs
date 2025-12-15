@@ -1,4 +1,5 @@
-﻿using futboleandoEntities.Ciudad;
+﻿using futboleando.Pages.Ciudad;
+using futboleandoEntities.Ciudad;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,10 +23,29 @@ namespace futboleando.Service
 
         }
 
-        public ObservableCollection<CiudadListCLS> listarciudad()
+        public async Task<ObservableCollection<CiudadListCLS>> listarciudad()
         {
             return listaciudad;
         }
 
+
+        public async Task<int> guardariudad(CiudadFormCLS oCiudadFormCLS)
+        {
+            try
+            {
+                listaciudad.Add(new CiudadListCLS
+                {
+                    idciudad = listaciudad.Count + 1,
+                    nombreciudad = oCiudadFormCLS.nombreciudad,
+                    descripcion = oCiudadFormCLS.descripcion
+                });
+                return 1;
+            }
+            catch(Exception ex)
+            {
+                return 0;
+            }
+           
+        }
     }
 }

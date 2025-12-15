@@ -22,7 +22,7 @@ namespace futboleando.Service
             };
         }
 
-        public ObservableCollection<ColaboradorListCLS> listarcolaborador()
+        public async Task<ObservableCollection<ColaboradorListCLS>> listarcolaborador()
         {
             return listacolaborador;
         }

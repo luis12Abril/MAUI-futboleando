@@ -1,5 +1,6 @@
 ﻿using futboleando.Generic;
 using futboleando.Pages.Ciudad;
+using futboleandoEntities.Ciudad;
 using System;
 using System.Collections.Generic;
 using System.Linq;

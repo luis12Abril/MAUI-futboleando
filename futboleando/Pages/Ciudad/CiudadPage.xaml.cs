@@ -16,10 +16,15 @@ public partial class CiudadPage : ContentPage
 	{
 		InitializeComponent(); 
 		ciudadService = _ciudadService;
-		listaCiudad = ciudadService.listarciudad();
+		listarCarrera();		
 		listaFiltro = new ObservableCollection<CiudadListCLS>(listaCiudad);
         BindingContext = this;
 	}
+
+	public async Task listarCarrera()
+	{
+		listaCiudad = await ciudadService.listarciudad();
+    }
 
 	private void entrynombreciudad_TextChanged(object sender, TextChangedEventArgs e)
 	{
