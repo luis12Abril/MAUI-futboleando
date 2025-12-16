@@ -18,9 +18,21 @@ public partial class CiudadFormPage : ContentPage
 		BindingContext = this;
     }
 
-    private void btnGuardar_Clicked(object sender, EventArgs e)
+    private async void btnGuardar_Clicked(object sender, EventArgs e)
     {
+        int respuesta = await ciudadService.guardarCiudad(oCiudadModel.oCiudadFormCLS);
+        if (respuesta == 0)
+        {
+            await DisplayAlert("Error", "Ocurrió un error al guardar la ciudad", "OK");
 
+        }
+        else
+        {
+            ciudadService.NotificarChange();
+            //await DisplayAlert("Éxito", "Ciudad guardada correctamente", "OK");
+            // Regresar a la página anterior
+            await App.Navigate.PopAsync();
+        }
     }
 
     private void btnCancelar_Clicked(object sender, EventArgs e)

@@ -12,6 +12,7 @@ namespace futboleando.Service
     public class CiudadService
     {
         public ObservableCollection<CiudadListCLS> listaciudad { get; set; }
+        public event Func<Task> OnChange;
         public CiudadService() 
         {
             CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
@@ -23,13 +24,18 @@ namespace futboleando.Service
 
         }
 
+        public void NotificarChange()
+        {
+            OnChange?.Invoke();
+        }
+
         public async Task<ObservableCollection<CiudadListCLS>> listarciudad()
         {
             return listaciudad;
         }
 
 
-        public async Task<int> guardariudad(CiudadFormCLS oCiudadFormCLS)
+        public async Task<int> guardarCiudad(CiudadFormCLS oCiudadFormCLS)
         {
             try
             {

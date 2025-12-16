@@ -12,17 +12,24 @@ public partial class CiudadPage : ContentPage
 	public ObservableCollection<CiudadListCLS> listaCiudad { get; set; }
 	public ObservableCollection<CiudadListCLS> listaFiltro;
     public string nombreciudadbuscar { get; set; }
+
     public CiudadPage(CiudadService _ciudadService)
 	{
 		InitializeComponent(); 
 		ciudadService = _ciudadService;
-		listarCarrera();		
+		ciudadService.OnChange += refrescarCiudad;
+        listarCiudad();		
 		listaFiltro = new ObservableCollection<CiudadListCLS>(listaCiudad);
         BindingContext = this;
 	}
 
-	public async Task listarCarrera()
-	{
+    private async Task refrescarCiudad()
+    {
+        listaCiudad = await ciudadService.listarciudad();
+    }
+
+    public async Task listarCiudad()
+	{ 
 		listaCiudad = await ciudadService.listarciudad();
     }
 
@@ -52,7 +59,7 @@ public partial class CiudadPage : ContentPage
 
     private void toolbarAdd_Clicked(object sender, EventArgs e)
     {
-        CiudadService ciudadService = MauiProgram.ServiceProvider.GetService<CiudadService>();
+        //CiudadService ciudadService = MauiProgram.ServiceProvider.GetService<CiudadService>();
         CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
 		Navigation.PushAsync(oCiudadFormPage);
     }
