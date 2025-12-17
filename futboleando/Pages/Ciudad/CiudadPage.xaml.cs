@@ -27,12 +27,12 @@ public partial class CiudadPage : ContentPage
 
     private async Task refrescarCiudad()
     {
-        listaCiudad = await ciudadService.listarciudad();
+        listaCiudad = await ciudadService.listarCiudad();
     }
 
     public async Task listarCiudad()
 	{ 
-		listaCiudad = await ciudadService.listarciudad();
+		listaCiudad = await ciudadService.listarCiudad();
     }
 
 	private void entrynombreciudad_TextChanged(object sender, TextChangedEventArgs e)

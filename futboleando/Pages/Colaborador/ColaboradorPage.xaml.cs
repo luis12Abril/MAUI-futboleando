@@ -23,23 +23,21 @@ public partial class ColaboradorPage : ContentPage
         colaboradorService = _colaboradorService;
         ciudadService = _ciudadService;
 
-        CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
-
         listarCursos();
 
         listafiltro = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
-        listaciudad.Insert(0, primerItem);
-		oCiudadListCLS = primerItem;
-
-        listafiltro2 = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
-       
         BindingContext = this;
     }
 
     public async Task listarCursos()
     {
-        listaciudad = await ciudadService.listarciudad();
-        listacolaborador = await colaboradorService.listarcolaborador(); 
+        CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
+
+        listaciudad = new ObservableCollection<CiudadListCLS>(await ciudadService.listarCiudad());
+        listaciudad.Insert(0, primerItem);
+        oCiudadListCLS = primerItem;
+
+        listacolaborador = await colaboradorService.listarColaborador(); 
     }
 
     private void pickerCiudad_SelectedIndexChanged(object sender, EventArgs e)
@@ -92,8 +90,8 @@ public partial class ColaboradorPage : ContentPage
 
     private void toolbarAdd_Clicked(object sender, EventArgs e)
     {
-        ColaboradorService colaboradorService = MauiProgram.ServiceProvider.GetService<ColaboradorService>();
-        ColaboradorFormPage oColaboradorFormPage = new ColaboradorFormPage(colaboradorService);
+        //ColaboradorService colaboradorService = MauiProgram.ServiceProvider.GetService<ColaboradorService>();
+        ColaboradorFormPage oColaboradorFormPage = new ColaboradorFormPage(colaboradorService, ciudadService);
         Navigation.PushAsync(oColaboradorFormPage);
     }
 }

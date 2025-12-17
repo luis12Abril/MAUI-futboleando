@@ -37,7 +37,7 @@ namespace futboleando.Service
             OnGet?.Invoke(oCiudadFormCLS);
         }
 
-        public async Task<ObservableCollection<CiudadListCLS>> listarciudad()
+        public async Task<ObservableCollection<CiudadListCLS>> listarCiudad()
         {
             return listaciudad;
         }

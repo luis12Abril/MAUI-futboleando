@@ -11,7 +11,7 @@
         <Entry Text="{Binding oColaboradorModel.oColaboradorFormCLS.edad}" Keyboard="Numeric"/>
 
         <Label Text="Ciudad: " Style="{StaticResource estiloLabel}"/>
-        <Picker />
+        <Picker SelectedItem="{Binding opcionSeleccionadaCLS}" ItemsSource="{Binding oColaboradorModel.listaciudad}" ItemDisplayBinding="{Binding nombreciudad}" />
 
         <StackLayout Style="{StaticResource estiloStackLayoutButton}">
             <Button x:Name="btnGuardar" Text="Guardar"  Style="{StaticResource botonVerde}" Clicked="btnGuardar_Clicked"/>

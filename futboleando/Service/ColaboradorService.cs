@@ -22,10 +22,28 @@ namespace futboleando.Service
             };
         }
 
-        public async Task<ObservableCollection<ColaboradorListCLS>> listarcolaborador()
+        public async Task<ObservableCollection<ColaboradorListCLS>> listarColaborador()
         {
             return listacolaborador;
         }
 
+        public async Task<int> guardarColaborador(ColaboradorFormCLS oColaboradorFormCLS)
+        {
+            try
+            {
+                ColaboradorListCLS oColaboradorListCLS = new ColaboradorListCLS();
+                oColaboradorListCLS.nombre = oColaboradorFormCLS.nombre;
+                oColaboradorListCLS.appaterno = oColaboradorFormCLS.appaterno;
+                oColaboradorListCLS.apmaterno = oColaboradorFormCLS.apmaterno;
+
+
+                listacolaborador.Add(oColaboradorListCLS);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
     }
 }
