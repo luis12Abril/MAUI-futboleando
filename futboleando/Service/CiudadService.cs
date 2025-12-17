@@ -13,6 +13,9 @@ namespace futboleando.Service
     {
         public ObservableCollection<CiudadListCLS> listaciudad { get; set; }
         public event Func<Task> OnChange;
+
+        public event Func<CiudadFormCLS, Task> OnGet;
+
         public CiudadService() 
         {
             CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
@@ -29,9 +32,34 @@ namespace futboleando.Service
             OnChange?.Invoke();
         }
 
+        public void NotificarGet(CiudadFormCLS oCiudadFormCLS)
+        {
+            OnGet?.Invoke(oCiudadFormCLS);
+        }
+
         public async Task<ObservableCollection<CiudadListCLS>> listarciudad()
         {
             return listaciudad;
+        }
+
+        public async Task<CiudadFormCLS> recuperarCiudadPorId(int idciudad)
+        {
+            try
+            {
+                CiudadFormCLS oCiudadFormCLS = new CiudadFormCLS();
+                CiudadListCLS oCiudadListCLS1 = listaciudad.FirstOrDefault(c => c.idciudad == idciudad);
+                //CiudadListCLS oCiudadListCLS2 = listaciudad.Where(p=> p.idciudad == idciudad).FirstOrDefault();       LA LINEA DE ARRIBA ES MEJOR
+
+                oCiudadFormCLS.idciudad = oCiudadListCLS1.idciudad;
+                oCiudadFormCLS.nombreciudad = oCiudadListCLS1.nombreciudad;
+                oCiudadFormCLS.descripcion = oCiudadListCLS1.descripcion;
+                return oCiudadFormCLS;
+            }
+            catch(Exception ex)
+            {
+                return new CiudadFormCLS();
+            }
+
         }
 
 

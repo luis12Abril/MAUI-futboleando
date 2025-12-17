@@ -11,6 +11,8 @@ public partial class CiudadPage : ContentPage
 	private readonly CiudadService ciudadService;
 	public ObservableCollection<CiudadListCLS> listaCiudad { get; set; }
 	public ObservableCollection<CiudadListCLS> listaFiltro;
+
+	public CiudadListCLS objSeleccionado { get; set; }
     public string nombreciudadbuscar { get; set; }
 
     public CiudadPage(CiudadService _ciudadService)
@@ -63,4 +65,20 @@ public partial class CiudadPage : ContentPage
         CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
 		Navigation.PushAsync(oCiudadFormPage);
     }
+
+    private async void lstCiudad_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+        CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
+
+		int idciudad = objSeleccionado.idciudad;
+		CiudadFormCLS objCiudad = await ciudadService.recuperarCiudadPorId(idciudad);
+		ciudadService.NotificarGet(objCiudad);
+		Navigation.PushAsync(oCiudadFormPage);
+
+		//int idciudad = ((CiudadListCLS)e.Item).idciudad;
+		//CiudadFormCLS oCiudadFormCLS = ciudadService.recuperarCiudadPorId(idciudad);
+		//oCiudadFormPage.oCiudadModel.oCiudadFormCLS = oCiudadFormCLS;
+		//ciudadService.NotificarGet((CiudadFormCLS)e.Item);
+		//Navigation.PushAsync(oCiudadFormPage);
+	}
 }

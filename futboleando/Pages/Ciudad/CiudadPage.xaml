@@ -11,7 +11,7 @@
         <Label Text="Ingresa Ciudad" Style="{StaticResource estiloLabel}"/>
         <Entry Text="{Binding nombreciudadbuscar}" x:Name="entrynombreciudad" TextChanged="entrynombreciudad_TextChanged"/>
 
-        <ListView HasUnevenRows="True" ItemsSource="{Binding listaCiudad}" >
+        <ListView HasUnevenRows="True" ItemsSource="{Binding listaCiudad}" SelectedItem="{Binding objSeleccionado}" x:Name="lstCiudad" ItemTapped="lstCiudad_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
 
