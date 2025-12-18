@@ -10,6 +10,9 @@ public partial class ColaboradorPage : ContentPage
 	public ObservableCollection<CiudadListCLS> listaciudad { get; set; }
     public ObservableCollection<ColaboradorListCLS> listacolaborador { get; set; }
     public ObservableCollection<ColaboradorListCLS> listafiltro { get; set; }
+
+    public ColaboradorListCLS objSeleccionado { get; set; }
+
     private ObservableCollection<ColaboradorListCLS> listafiltro2;
     public CiudadListCLS oCiudadListCLS { get; set; }
 
@@ -93,5 +96,10 @@ public partial class ColaboradorPage : ContentPage
         //ColaboradorService colaboradorService = MauiProgram.ServiceProvider.GetService<ColaboradorService>();
         ColaboradorFormPage oColaboradorFormPage = new ColaboradorFormPage(colaboradorService, ciudadService);
         Navigation.PushAsync(oColaboradorFormPage);
+    }
+
+    private void lstColaborador_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+
     }
 }

@@ -19,9 +19,10 @@ public partial class CiudadFormPage : ContentPage
 		BindingContext = this;
     }
 
-    private async Task recuperarCarrera(CiudadFormCLS obj)
+    private async Task recuperarCarrera(int id)
     {
-        oCiudadModel.oCiudadFormCLS = obj;
+        CiudadFormCLS objCiudad = await ciudadService.recuperarCiudadPorId(id);
+        oCiudadModel.oCiudadFormCLS = objCiudad;
     }
 
     private async void btnGuardar_Clicked(object sender, EventArgs e)

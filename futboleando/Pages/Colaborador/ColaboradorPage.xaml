@@ -16,7 +16,7 @@
             SelectedItem="{Binding oCiudadListCLS}" x:Name="pickerCiudad" SelectedIndexChanged="pickerCiudad_SelectedIndexChanged"
             />
 
-        <ListView ItemsSource="{Binding listacolaborador}">
+        <ListView x:Name="lstColaborador" SelectedItem="{Binding objSeleccionado}" ItemTapped="lstColaborador_ItemTapped" ItemsSource="{Binding listacolaborador}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <!--<TextCell Text="{Binding nombre}" Detail="{Binding appaterno}" />-->

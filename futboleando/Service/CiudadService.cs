@@ -14,7 +14,7 @@ namespace futboleando.Service
         public ObservableCollection<CiudadListCLS> listaciudad { get; set; }
         public event Func<Task> OnChange;
 
-        public event Func<CiudadFormCLS, Task> OnGet;
+        public event Func<int, Task> OnGet;
 
         public CiudadService() 
         {
@@ -32,9 +32,9 @@ namespace futboleando.Service
             OnChange?.Invoke();
         }
 
-        public void NotificarGet(CiudadFormCLS oCiudadFormCLS)
+        public void NotificarGet(int id)
         {
-            OnGet?.Invoke(oCiudadFormCLS);
+            OnGet?.Invoke(id);
         }
 
         public async Task<ObservableCollection<CiudadListCLS>> listarCiudad()
@@ -59,7 +59,6 @@ namespace futboleando.Service
             {
                 return new CiudadFormCLS();
             }
-
         }
 
 

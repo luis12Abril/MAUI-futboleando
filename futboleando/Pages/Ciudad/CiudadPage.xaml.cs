@@ -71,8 +71,8 @@ public partial class CiudadPage : ContentPage
         CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
 
 		int idciudad = objSeleccionado.idciudad;
-		CiudadFormCLS objCiudad = await ciudadService.recuperarCiudadPorId(idciudad);
-		ciudadService.NotificarGet(objCiudad);
+		//CiudadFormCLS objCiudad = await ciudadService.recuperarCiudadPorId(idciudad);
+		ciudadService.NotificarGet(idciudad);
 		Navigation.PushAsync(oCiudadFormPage);
 
 		//int idciudad = ((CiudadListCLS)e.Item).idciudad;

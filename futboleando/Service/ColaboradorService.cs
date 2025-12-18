@@ -1,4 +1,5 @@
-﻿using futboleandoEntities.Colaborador;
+﻿using futboleandoEntities.Ciudad;
+using futboleandoEntities.Colaborador;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,14 +12,15 @@ namespace futboleando.Service
     public class ColaboradorService
     {
         public ObservableCollection<ColaboradorListCLS> listacolaborador;
-        public ColaboradorService()
+        private readonly CiudadService ciudadService;
+        public ColaboradorService(CiudadService _ciudadService)
         {
+            ciudadService = _ciudadService;
             listacolaborador = new ObservableCollection<ColaboradorListCLS>
             {
                 new ColaboradorListCLS { idcolaborador = 1, nombre = "Juan Antonio", appaterno = "Garcia", apmaterno = "Quintero", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1978, 12, 15)},
                 new ColaboradorListCLS { idcolaborador = 2, nombre = "María", appaterno = "Torres", apmaterno = "Rodriguez",  idciudad = 2 , nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1985, 5, 20)},
                 new ColaboradorListCLS { idcolaborador = 3, nombre = "Ernesto", appaterno = "Miranda", apmaterno = "Estrada", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1990, 3, 10) },
-                new ColaboradorListCLS { idcolaborador = 4, nombre = "Marco", appaterno = "Casto", apmaterno = "Nuñes", idciudad = 2, nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1982, 11, 8) }
             };
         }
 
@@ -31,11 +33,13 @@ namespace futboleando.Service
         {
             try
             {
+                var listaciudad = await ciudadService.listarCiudad();
                 ColaboradorListCLS oColaboradorListCLS = new ColaboradorListCLS();
                 oColaboradorListCLS.nombre = oColaboradorFormCLS.nombre;
                 oColaboradorListCLS.appaterno = oColaboradorFormCLS.appaterno;
                 oColaboradorListCLS.apmaterno = oColaboradorFormCLS.apmaterno;
 
+                oColaboradorListCLS.nombreciudad = listaciudad.FirstOrDefault(x=> x.idciudad == oColaboradorFormCLS.idciudad).nombreciudad;
 
                 listacolaborador.Add(oColaboradorListCLS);
                 return 1;
@@ -45,5 +49,25 @@ namespace futboleando.Service
                 return 0;
             }
         }
+
+        public async Task<ColaboradorFormCLS> recuperarColaboradorPorId(int idcolaborador)
+        {
+            try
+            {
+                ColaboradorFormCLS oColaboradorFormCLS = new ColaboradorFormCLS();
+                ColaboradorListCLS oColaboradorListCLS = listacolaborador.FirstOrDefault(c => c.idcolaborador == idcolaborador);
+
+                oColaboradorFormCLS.idcolaborador = oColaboradorListCLS.idcolaborador;
+                oColaboradorFormCLS.nombre = oColaboradorListCLS.nombre;
+                oColaboradorFormCLS.appaterno = oColaboradorListCLS.appaterno;
+                oColaboradorFormCLS.nombreciudad = oColaboradorListCLS.nombreciudad;
+                return oColaboradorFormCLS;
+            }
+            catch (Exception ex)
+            {
+                return new ColaboradorFormCLS();
+            }
+        }
+
     }
 }
