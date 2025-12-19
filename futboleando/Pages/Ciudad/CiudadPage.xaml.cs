@@ -60,8 +60,7 @@ public partial class CiudadPage : ContentPage
     }
 
     private void toolbarAdd_Clicked(object sender, EventArgs e)
-    {
-        //CiudadService ciudadService = MauiProgram.ServiceProvider.GetService<CiudadService>();
+    {       
         CiudadFormPage oCiudadFormPage = new CiudadFormPage(ciudadService);
 		Navigation.PushAsync(oCiudadFormPage);
     }

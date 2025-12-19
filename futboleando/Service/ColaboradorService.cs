@@ -13,6 +13,7 @@ namespace futboleando.Service
     {
         public ObservableCollection<ColaboradorListCLS> listacolaborador;
         private readonly CiudadService ciudadService;
+        public event Func<int, Task> OnGet;
         public ColaboradorService(CiudadService _ciudadService)
         {
             ciudadService = _ciudadService;
@@ -22,6 +23,11 @@ namespace futboleando.Service
                 new ColaboradorListCLS { idcolaborador = 2, nombre = "María", appaterno = "Torres", apmaterno = "Rodriguez",  idciudad = 2 , nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1985, 5, 20)},
                 new ColaboradorListCLS { idcolaborador = 3, nombre = "Ernesto", appaterno = "Miranda", apmaterno = "Estrada", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1990, 3, 10) },
             };
+        }
+
+        public void NotificarGet(int id)
+        {
+            OnGet?.Invoke(id);
         }
 
         public async Task<ObservableCollection<ColaboradorListCLS>> listarColaborador()
@@ -54,13 +60,17 @@ namespace futboleando.Service
         {
             try
             {
+                var listaciudad = await ciudadService.listarCiudad();
                 ColaboradorFormCLS oColaboradorFormCLS = new ColaboradorFormCLS();
                 ColaboradorListCLS oColaboradorListCLS = listacolaborador.FirstOrDefault(c => c.idcolaborador == idcolaborador);
 
                 oColaboradorFormCLS.idcolaborador = oColaboradorListCLS.idcolaborador;
                 oColaboradorFormCLS.nombre = oColaboradorListCLS.nombre;
                 oColaboradorFormCLS.appaterno = oColaboradorListCLS.appaterno;
+                oColaboradorFormCLS.edad = DateTime.Now.Year - oColaboradorListCLS.fechanacimiento.Year;
                 oColaboradorFormCLS.nombreciudad = oColaboradorListCLS.nombreciudad;
+                oColaboradorFormCLS.idciudad = oColaboradorListCLS.idciudad;
+                oColaboradorFormCLS.idciudad = listaciudad.FirstOrDefault(x => x.nombreciudad == oColaboradorListCLS.nombreciudad).idciudad;
                 return oColaboradorFormCLS;
             }
             catch (Exception ex)
