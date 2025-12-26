@@ -19,6 +19,12 @@ public partial class CiudadFormPage : ContentPage
 		BindingContext = this;
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        ciudadService.OnGet -= recuperarCarrera;
+    }
+
     private async Task recuperarCarrera(int id)
     {
         CiudadFormCLS objCiudad = await ciudadService.recuperarCiudadPorId(id);

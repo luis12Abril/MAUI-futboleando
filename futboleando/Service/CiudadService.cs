@@ -80,5 +80,20 @@ namespace futboleando.Service
             }
            
         }
+
+        public async Task<int> eliminarCiudad(int idciudad)
+        {
+            try
+            {
+                listaciudad = new ObservableCollection<CiudadListCLS>(listaciudad.Where(p => p.idciudad != idciudad));
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+        }
+
     }
 }

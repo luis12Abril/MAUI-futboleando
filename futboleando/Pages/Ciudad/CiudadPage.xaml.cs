@@ -20,6 +20,7 @@ public partial class CiudadPage : ContentPage
 		InitializeComponent(); 
 		ciudadService = _ciudadService;
 		ciudadService.OnChange += refrescarCiudad;
+		listaCiudad = new ObservableCollection<CiudadListCLS>();
         listarCiudad();		
 		listaFiltro = new ObservableCollection<CiudadListCLS>(listaCiudad);
         BindingContext = this;
@@ -32,7 +33,12 @@ public partial class CiudadPage : ContentPage
 
     public async Task listarCiudad()
 	{ 
-		listaCiudad = await ciudadService.listarCiudad();
+		var listaop = await ciudadService.listarCiudad();
+        listaCiudad.Clear();
+        foreach (var item in listaop)
+        {
+            listaCiudad.Add(item);
+        }
     }
 
 	private void entrynombreciudad_TextChanged(object sender, TextChangedEventArgs e)
@@ -80,4 +86,14 @@ public partial class CiudadPage : ContentPage
 		//ciudadService.NotificarGet((CiudadFormCLS)e.Item);
 		//Navigation.PushAsync(oCiudadFormPage);
 	}
+
+    private async void swipeItemEliminar_Invoked(object sender, EventArgs e)
+    {
+		SwipeItem oSwipeItem = (SwipeItem)sender;
+		//int idciudad = (int)oSwipeItem.CommandParameter;
+		CiudadListCLS oCiudadListCLS = (CiudadListCLS)oSwipeItem.BindingContext;
+		await ciudadService.eliminarCiudad(oCiudadListCLS.idciudad);
+		await listarCiudad();
+        //DisplayAlert("Eliminar", "Eliminar ciudad: " + oCiudadListCLS.nombreciudad, "OK");
+    }
 }

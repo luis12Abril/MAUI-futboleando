@@ -27,10 +27,14 @@ public partial class ColaboradorFormPage : ContentPage
         oColaboradorModel.opcionSeleccionadaCLS = new CiudadListCLS();
         BindingContext = this;
 
-
-
         // Inicializar de forma asíncrona
         InicializarAsync();              
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        colaboradorService.OnGet -= recuperarColaboradorPorId;
     }
 
     private async Task recuperarColaboradorPorId(int idcolaborador)
