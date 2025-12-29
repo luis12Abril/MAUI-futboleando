@@ -26,13 +26,14 @@ public partial class ColaboradorPage : ContentPage
         colaboradorService = _colaboradorService;
         ciudadService = _ciudadService;
 
-        listarCursos();
+        listacolaborador = new ObservableCollection<ColaboradorListCLS>();
+        listarColaborador();
 
         listafiltro = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
         BindingContext = this;
     }
 
-    public async Task listarCursos()
+    public async Task listarColaborador()
     {
         CiudadListCLS primerItem = new CiudadListCLS { idciudad = 0, nombreciudad = "-- Todos --", descripcion = "Descripcion de Ciudad C" };
 
@@ -40,7 +41,12 @@ public partial class ColaboradorPage : ContentPage
         listaciudad.Insert(0, primerItem);
         oCiudadListCLS = primerItem;
 
-        listacolaborador = await colaboradorService.listarColaborador(); 
+        var listaop = await colaboradorService.listarColaborador();
+        listacolaborador.Clear();
+        foreach (var item in listaop)
+        {
+            listacolaborador.Add(item);
+        }
     }
 
     private void pickerCiudad_SelectedIndexChanged(object sender, EventArgs e)
@@ -103,5 +109,14 @@ public partial class ColaboradorPage : ContentPage
         int idcolaborador = objSeleccionado.idcolaborador;
         colaboradorService.NotificarGet(idcolaborador);
         App.Navigate.PushAsync(instancia);
+    }
+
+    private async void swipeItemEliminar_Invoked(object sender, EventArgs e)
+    {
+        SwipeItem oSwipeItem = (SwipeItem)sender;       
+        ColaboradorListCLS oColaboradorListCLS = (ColaboradorListCLS)oSwipeItem.BindingContext;
+        await colaboradorService.eliminarColaborador(oColaboradorListCLS.idcolaborador);
+        await listarColaborador();
+        
     }
 }

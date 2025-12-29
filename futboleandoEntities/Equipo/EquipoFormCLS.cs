@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace futboleandoEntities.Equipo
 {
-    public class EquipoListCLS
+    public class EquipoFormCLS
     {
         public int idequipo { get; set; }
         public string nombre { get; set; }

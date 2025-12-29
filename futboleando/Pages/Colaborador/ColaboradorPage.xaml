@@ -21,31 +21,48 @@
                 <DataTemplate>
                     <!--<TextCell Text="{Binding nombre}" Detail="{Binding appaterno}" />-->
                     <ViewCell>
-                        <Border Margin="5" 
-                          Padding="10"
-                          Stroke="LightGray"
-                          StrokeThickness="1"
-                          BackgroundColor="White">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="8"/>
-                            </Border.StrokeShape>
 
-                            <VerticalStackLayout>
-                                <Label Text="{Binding nombre}" 
-                             Style="{StaticResource estiloLabel}"
-                             FontSize="16"/>
-                                <HorizontalStackLayout Spacing="5">
-                                    <Label Text="{Binding appaterno}" 
-                                 Style="{StaticResource estiloDetail}"/>
-                                    <Label Text="{Binding apmaterno}" 
-                                 Style="{StaticResource estiloDetail}"/>
-                                </HorizontalStackLayout>
-                                <Label Text="{Binding nombreciudad}" 
-                             Style="{StaticResource estiloDetail}"/>
-                                <Label Text="{Binding fechanacimiento}" 
-                             Style="{StaticResource estiloDetail}"/>
-                            </VerticalStackLayout>
-                        </Border>
+                        <SwipeView>
+
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                    <SwipeItem x:Name="swipeItemEliminar" Invoked="swipeItemEliminar_Invoked" Text="Eliminar" BackgroundColor="{StaticResource rojoOscuro}"/>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+
+
+                            <Border Margin="5" 
+                                  Padding="10"
+                                  Stroke="LightGray"
+                                  StrokeThickness="1"
+                                  BackgroundColor="White">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="8"/>
+                                        </Border.StrokeShape>
+
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding nombre}" 
+                                         Style="{StaticResource estiloLabel}"
+                                         FontSize="16"/>
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Label Text="{Binding appaterno}" 
+                                             Style="{StaticResource estiloDetail}"/>
+                                        <Label Text="{Binding apmaterno}" 
+                                             Style="{StaticResource estiloDetail}"/>
+                                    </HorizontalStackLayout>
+                                    <Label Text="{Binding nombreciudad}" 
+                                         Style="{StaticResource estiloDetail}"/>
+                                    <Label Text="{Binding fechanacimiento}" 
+                                         Style="{StaticResource estiloDetail}"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+
+                        </SwipeView>
+                        
+                        
+                        
+
 
                     </ViewCell>
                     

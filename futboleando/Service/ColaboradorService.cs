@@ -79,5 +79,19 @@ namespace futboleando.Service
             }
         }
 
+        public async Task<int> eliminarColaborador(int idcolaborador)
+        {
+            try
+            {
+                listacolaborador = new ObservableCollection<ColaboradorListCLS>(listacolaborador.Where(p => p.idcolaborador != idcolaborador));
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+        }
+
     }
 }
