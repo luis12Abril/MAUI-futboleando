@@ -6,7 +6,10 @@
     <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}">
         <Label Text="Nombre" Style="{StaticResource estiloLabel}"/>
         <Entry Text="{Binding oColaboradorModel.oColaboradorFormCLS.nombre}"/>
-        
+
+        <Label Text="Fecha Nacimiento" Style="{StaticResource estiloLabel}"/>
+        <DatePicker Date="{Binding oColaboradorModel.oColaboradorFormCLS.fechanacimiento}" Format="dd/MM/yyyy"/>
+
         <Label Text="Edad: " Style="{StaticResource estiloLabel}"/>
         <Entry Text="{Binding oColaboradorModel.oColaboradorFormCLS.edad}" Keyboard="Numeric"/>
 

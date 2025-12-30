@@ -17,23 +17,26 @@ public partial class CiudadPage : ContentPage
 
     public CiudadPage(CiudadService _ciudadService)
 	{
-		InitializeComponent(); 
-		ciudadService = _ciudadService;
-		ciudadService.OnChange += refrescarCiudad;
-		listaCiudad = new ObservableCollection<CiudadListCLS>();
-        listarCiudad();		
-		listaFiltro = new ObservableCollection<CiudadListCLS>(listaCiudad);
+       
+        InitializeComponent();
+        ciudadService = _ciudadService;
+        ciudadService.OnChange += refrescarCiudad;
+        listaCiudad = new ObservableCollection<CiudadListCLS>();
+        listarCiudad();
+        listaFiltro = new ObservableCollection<CiudadListCLS>(listaCiudad);
         BindingContext = this;
-	}
+
+
+    }
 
     private async Task refrescarCiudad()
     {
-        listaCiudad = await ciudadService.listarCiudad();
+        listaCiudad = await ciudadService.listarCiudad();             
     }
 
     public async Task listarCiudad()
-	{ 
-		var listaop = await ciudadService.listarCiudad();
+	{       
+        var listaop = await ciudadService.listarCiudad();
         listaCiudad.Clear();
         foreach (var item in listaop)
         {
@@ -41,7 +44,7 @@ public partial class CiudadPage : ContentPage
         }
     }
 
-	private void entrynombreciudad_TextChanged(object sender, TextChangedEventArgs e)
+    private void entrynombreciudad_TextChanged(object sender, TextChangedEventArgs e)
 	{
 		// DisplayAlert("Texto cambiado", e.NewTextValue, "OK");
 		//DisplayAlert("Texto cambiado", nombreciudadbuscar, "OK");
