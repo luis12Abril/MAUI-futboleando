@@ -30,11 +30,11 @@ namespace futboleando.Models
 
 
 
-        private CiudadListCLS _opcionSeleccionadaCLS;
-        public CiudadListCLS opcionSeleccionadaCLS
+        private CiudadListCLS _objCiudadSeleccionada;
+        public CiudadListCLS objCiudadSeleccionada
         {
-            get { return _opcionSeleccionadaCLS; }
-            set { SetValue(ref _opcionSeleccionadaCLS, value); }
+            get { return _objCiudadSeleccionada; }
+            set { SetValue(ref _objCiudadSeleccionada, value); }
         }
     }
 }
