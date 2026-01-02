@@ -25,13 +25,19 @@ public partial class ColaboradorPage : ContentPage
 		InitializeComponent();
         colaboradorService = _colaboradorService;
         ciudadService = _ciudadService;
-
+        colaboradorService.OnChange += refrescarColaborador;
         listacolaborador = new ObservableCollection<ColaboradorListCLS>();
         listarColaborador();
 
         listafiltro = new ObservableCollection<ColaboradorListCLS>(listacolaborador);
         BindingContext = this;
     }
+
+    private async Task refrescarColaborador()
+    {
+        await listarColaborador();                    
+    }
+
 
     public async Task listarColaborador()
     {
@@ -47,6 +53,8 @@ public partial class ColaboradorPage : ContentPage
         {
             listacolaborador.Add(item);
         }
+
+
     }
 
     private void pickerCiudad_SelectedIndexChanged(object sender, EventArgs e)

@@ -31,7 +31,8 @@ public partial class CiudadPage : ContentPage
 
     private async Task refrescarCiudad()
     {
-        listaCiudad = await ciudadService.listarCiudad();             
+        await listarCiudad();
+        //listaCiudad = await ciudadService.listarCiudad();             
     }
 
     public async Task listarCiudad()

@@ -12,6 +12,7 @@ namespace futboleando.Service
     public class ColaboradorService
     {
         public ObservableCollection<ColaboradorListCLS> listacolaborador;
+        public event Func<Task> OnChange;
         private readonly CiudadService ciudadService;
         public event Func<int, Task> OnGet;
         public ColaboradorService(CiudadService _ciudadService)
@@ -23,6 +24,11 @@ namespace futboleando.Service
                 new ColaboradorListCLS { idcolaborador = 2, nombre = "María", appaterno = "Torres", apmaterno = "Rodriguez",  idciudad = 2 , nombreciudad = "Hermosillo", fechanacimiento = new DateOnly(1985, 5, 20)},
                 new ColaboradorListCLS { idcolaborador = 3, nombre = "Ernesto", appaterno = "Miranda", apmaterno = "Estrada", idciudad = 1, nombreciudad = "Cd. Obregón", fechanacimiento = new DateOnly(1990, 3, 10) },
             };
+        }
+
+        public void NotificarChange()
+        {
+            OnChange?.Invoke();
         }
 
         public void NotificarGet(int id)

@@ -4,6 +4,7 @@ using futboleandoEntities.Jugador;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using futboleandoEntities.Equipo;
+using Microsoft.EntityFrameworkCore;
 
 namespace futboleandoAPIS.Controllers
 {
@@ -24,12 +25,13 @@ namespace futboleandoAPIS.Controllers
             {
                 var consulta = (from j in _bd.Jugadors
                                 join e in _bd.Equipos on j.Idequipo equals e.Idequipo
-                                where j.Idtorneo > 1
+                                where j.Idtorneo > 10 && j.Idtorneo < 15
                                 select new JugadorListCLS
                                 {
-                                    idjugador = j.Idjugador,  
+                                    idjugador = j.Idjugador,
                                     nombre = j.Nombre,
-                                    appaterno = j.Appaterno
+                                    appaterno = j.Appaterno,
+                                    nombreequipo = e.Nombre
                                     //apmaterno = j.Apmaterno,    
                                     //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
                                     //idequipo = e.Idequipo,
@@ -37,6 +39,7 @@ namespace futboleandoAPIS.Controllers
                                     //fechanacimiento = (DateOnly)j.Fnacimiento
                                 }).ToList();
                 return Ok(consulta);
+
             }
             catch (Exception ex)
             {

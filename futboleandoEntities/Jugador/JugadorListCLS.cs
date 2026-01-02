@@ -13,7 +13,7 @@ namespace futboleandoEntities.Jugador
         public string appaterno { get; set; } = string.Empty;
         //public string apmaterno { get; set; } = string.Empty;
         //public string nombrecompleto { get; set; } = string.Empty;
-        //public string nombreequipo { get; set; } = string.Empty;
+        public string nombreequipo { get; set; } = string.Empty;
         //public DateOnly fechanacimiento { get; set; }
         //public int idequipo { get; set; }
 

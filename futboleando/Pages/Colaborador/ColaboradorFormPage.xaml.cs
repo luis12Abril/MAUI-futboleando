@@ -96,7 +96,7 @@ public partial class ColaboradorFormPage : ContentPage
         }
         else
         {
-            ciudadService.NotificarChange();
+            colaboradorService.NotificarChange();
             await DisplayAlert("Éxito", "Colaborador guardado correctamente", "OK");
             //App.Current.MainPage = new Flyout();  
             // Regresar a la página anterior
