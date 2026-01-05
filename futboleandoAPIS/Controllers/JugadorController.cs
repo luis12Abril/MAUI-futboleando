@@ -31,7 +31,8 @@ namespace futboleandoAPIS.Controllers
                                     idjugador = j.Idjugador,
                                     nombre = j.Nombre,
                                     appaterno = j.Appaterno,
-                                    nombreequipo = e.Nombre
+                                    nombreequipo = e.Nombre, 
+                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim()).Trim() + " " + j.Apmaterno.Trim()
                                     //apmaterno = j.Apmaterno,    
                                     //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
                                     //idequipo = e.Idequipo,
@@ -119,7 +120,14 @@ namespace futboleandoAPIS.Controllers
         {
             try
             {
-                return Ok();
+                var obJugador = _bd.Jugadors.FirstOrDefault(j => j.Idjugador == id);
+                if (obJugador == null)
+                {
+                    return NotFound();
+                }
+                obJugador.Habilitado = 0;                
+                _bd.SaveChanges();
+                return Ok("Se elimino correctamente");
             }
             catch (Exception ex)
             {
