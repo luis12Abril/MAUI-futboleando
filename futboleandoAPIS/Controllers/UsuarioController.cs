@@ -39,6 +39,36 @@ namespace futboleandoAPIS.Controllers
         }
 
 
+        [HttpGet("ListarUsuariosPorTipo/{idtipo}")]
+        public IActionResult ListarUsuariosPorTipo(int idtipo)
+        {
+            try
+            {
+                var consulta = (from u in _bd.Usuarios
+                               join t in _bd.Tipousuarios on u.Idtipousuario equals t.Idtipousuario 
+                               where u.Habilitado == 1 && u.Idtipousuario == idtipo
+                    select new UsuarioTipoListCLS
+                {
+                    idusuario = u.Idusuario,
+                    nombre = u.Nombre,
+                    idtipousuario = u.Idtipousuario ?? 0, // Si es null, asigna 0
+                    visitas = u.Visitas ?? 0,
+                    visitascel = u.Visitascel ?? 0,
+                    nombretipousuario = t.Nombre
+
+                    }).ToList();
+
+                return Ok(consulta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+
+
         [HttpGet("listarusuariosmasvisitascelular")]
         public IActionResult ListarUsuariosMasVisitasCelular()
         {
