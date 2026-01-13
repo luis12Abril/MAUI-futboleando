@@ -130,7 +130,7 @@ public partial class JugadorPage : ContentPage
         }
         else
         {
-            var listaJugadorFiltrada = listafiltro.Where(j => j.nombrecompleto!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
+            var listaJugadorFiltrada = listafiltro.Where(j => j.nombre!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
             listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
         }
 
@@ -153,7 +153,7 @@ public partial class JugadorPage : ContentPage
         }
         else
         {
-            var listaJugadorFiltrada = listafiltro.Where(j => j.nombrecompleto!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
+            var listaJugadorFiltrada = listafiltro.Where(j => j.nombre!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
             listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
         }
 
