@@ -43,11 +43,22 @@ public partial class JugadorPage : ContentPage
 
             var listaop = await jugadorService.listarJugador();
 
-            if (listaop.Count == 0)
+
+            listajugador.Clear();
+            foreach (var jugador in listaop.Take(30))
             {
-                await DisplayAlert("Debug", "No se recibieron datos de la API", "OK");
-                return;
+                //await DisplayAlert("Debug ", jugador.nombre, "OK");
+                listajugador.Add(jugador);
+                //await DisplayAlert("Debug ", jugador.nombre, "OK");
             }
+            listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
+
+
+            //if (listaop.Count == 0)
+            //{
+            //    await DisplayAlert("Debug", "No se recibieron datos de la API", "OK");
+            //    return;
+            //}
             //else
             //{
             //    //Console.WriteLine("Debug: Datos recibidos de la API");
@@ -57,17 +68,20 @@ public partial class JugadorPage : ContentPage
 
 
             //Actualizar en el hilo principal de forma eficiente
-            await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    listajugador.Clear();
+            //await MainThread.InvokeOnMainThreadAsync(() =>
+            //    {
+            //        listajugador.Clear();
 
-                    // Agregar todos los elementos de una vez
-                    // TEMPORAL: Solo cargar los primeros 100 registros para probar
-                    foreach (var jugador in listaop.Take(30))
-                    {
-                        listajugador.Add(jugador);
-                    }
-                });
+            //        // Agregar todos los elementos de una vez
+            //        // TEMPORAL: Solo cargar los primeros 100 registros para probar
+            //        foreach (var jugador in listaop.Take(30))
+            //        {
+            //            listajugador.Add(jugador);
+            //        }
+            //    });
+            //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
+
+
 
             // Mostrar el alert DESPUÉS de cargar los datos
             //await DisplayAlert("debug ", "Se recibieron " + listaop.Count.ToString() + " datos de la API", "OK");
@@ -105,10 +119,49 @@ public partial class JugadorPage : ContentPage
 
 
 
-    //private void entryNombreJugador_TextChanged(object sender, TextChangedEventArgs e)
-    //{
+    private void entryNombreJugador_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        ObservableCollection<JugadorListCLS> listaop;
+        listajugador.Clear();
 
-    //}
+        if (nombrejugador == null || nombrejugador == "")
+        {
+            listaop = listafiltro;
+        }
+        else
+        {
+            var listaJugadorFiltrada = listafiltro.Where(j => j.nombrecompleto!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
+            listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
+        }
+
+        foreach (var item in listaop)
+        {
+            listajugador.Add(item);
+        }
+
+
+    }
+
+    private void entryNombreJugador_TextChanged_1(object sender, TextChangedEventArgs e)
+    {
+        ObservableCollection<JugadorListCLS> listaop;
+        listajugador.Clear();
+
+        if (nombrejugador == null || nombrejugador == "")
+        {
+            listaop = listafiltro;
+        }
+        else
+        {
+            var listaJugadorFiltrada = listafiltro.Where(j => j.nombrecompleto!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
+            listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
+        }
+
+        foreach (var item in listaop)
+        {
+            listajugador.Add(item);
+        }
+    }
 
     //private void lstJugadores_ItemTapped(object sender, ItemTappedEventArgs e)
     //{

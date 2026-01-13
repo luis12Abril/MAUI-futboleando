@@ -11,6 +11,10 @@
         <SearchBar Text="{Binding nombrejugador}" x:Name="searchNombre" SearchButtonPressed="searchNombre_SearchButtonPressed"/>
         <!--<Label Text="Lista de Jugadores" Style="{StaticResource estiloLabel}" />
         <Button Text="Regresar" x:Name="btnRegresar" Clicked="btnRegresar_Clicked" />-->
+
+        <Label Text="Ingrese nombre Jugador:" Style="{StaticResource estiloLabel}" />
+        <Entry Text="{Binding nombrejugador}" x:Name="entryNombreJugador" TextChanged="entryNombreJugador_TextChanged_1" />
+
         <ListView HasUnevenRows="True" ItemsSource="{Binding listajugador}" >
             <ListView.ItemTemplate>
                 <DataTemplate>

@@ -20,11 +20,14 @@ namespace futboleando.Service
         public JugadorService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            listajugador = new ObservableCollection<JugadorListCLS>()
-            {
-                new JugadorListCLS{idjugador=1 , nombre="Luis", appaterno="Barreras"},
-                new JugadorListCLS{idjugador=2 , nombre="Angel", appaterno="Garcia"}
-            };
+
+
+            // ESTA PARTE ES SIMULADA HASTA QUE TENGAMOS LA API
+            //listajugador = new ObservableCollection<JugadorListCLS>()
+            //{
+            //    new JugadorListCLS{idjugador=1 , nombre="Luis", appaterno="Barreras"},
+            //    new JugadorListCLS{idjugador=2 , nombre="Angel", appaterno="Garcia"}
+            //};
 
         }
 

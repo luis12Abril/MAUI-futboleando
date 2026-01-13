@@ -29,10 +29,16 @@ namespace futboleandoAPIS.Controllers
                                 select new JugadorListCLS
                                 {
                                     idjugador = j.Idjugador,
-                                    nombre = j.Nombre,
-                                    appaterno = j.Appaterno,
-                                    nombreequipo = e.Nombre, 
-                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim()).Trim() + " " + j.Apmaterno.Trim()
+                                    nombrecompleto = j.Nombre
+                                    //nombre = j.Nombre,
+                                    //appaterno = j.Appaterno
+                                    //nombreequipo = e.Nombre,
+
+                                    // ✅ Construye el nombre completo de forma segura
+                                    //nombrecompleto = $"{j.Nombre ?? ""} {j.Appaterno ?? ""} {j.Apmaterno ?? ""}".Trim()
+
+
+                                    //nombrecompleto = j.Nombre 
                                     //apmaterno = j.Apmaterno,    
                                     //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
                                     //idequipo = e.Idequipo,
