@@ -43,6 +43,7 @@ namespace futboleando.Service
 
         public async Task<ObservableCollection<JugadorListCLS>> listarJugador()
         {
+
             try
             {
                 var response = await _httpClient.GetFromJsonAsync<List<JugadorListCLS>>("api/Jugador");

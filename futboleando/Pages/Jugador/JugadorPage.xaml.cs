@@ -22,7 +22,7 @@ public partial class JugadorPage : ContentPage
     {
         InitializeComponent();
         jugadorService = _jugadorService;
-        jugadorService.Onchange += refrezcarJugador;
+        jugadorService.Onchange += refrescarJugador;
         listajugador = new ObservableCollection<JugadorListCLS>();
         BindingContext = this;
         _ = listarJugador();
@@ -30,7 +30,7 @@ public partial class JugadorPage : ContentPage
        
     }
 
-    private async Task refrezcarJugador()
+    private async Task refrescarJugador()
     {
         await listarJugador();
     }

@@ -32,7 +32,7 @@ namespace futboleandoAPIS.Controllers
                                     nombre = j.Nombre,
                                     appaterno = j.Appaterno,
                                     nombreequipo = e.Nombre,
-                                    nombrecompleto = "LUIS BARRERAS" //j.Nombre 
+                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim()
 
                                     // ✅ Construye el nombre completo de forma segura
                                     //nombrecompleto = $"{j.Nombre ?? ""} {j.Appaterno ?? ""} {j.Apmaterno ?? ""}".Trim()
@@ -58,6 +58,9 @@ namespace futboleandoAPIS.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
+            var a = 1;
+            var b = 2;
+            var c = a + b;
             try
             {
                 var obj = _bd.Jugadors.FirstOrDefault(j => j.Idjugador == id);
