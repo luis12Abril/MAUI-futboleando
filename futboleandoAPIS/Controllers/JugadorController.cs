@@ -58,9 +58,6 @@ namespace futboleandoAPIS.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var a = 1;
-            var b = 2;
-            var c = a + b;
             try
             {
                 var obj = _bd.Jugadors.FirstOrDefault(j => j.Idjugador == id);

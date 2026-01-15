@@ -11,6 +11,7 @@ namespace futboleando.Models
     public class EquipoModel:BaseBinding
     {
         private EquipoFormCLS _oEquipoFormCLS;
+        public event Func<Task> OnChange;
 
         public EquipoFormCLS oEquipoFormCLS
         {

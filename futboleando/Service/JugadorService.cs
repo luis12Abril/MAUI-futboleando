@@ -64,11 +64,12 @@ namespace futboleando.Service
         {
             try
             {
-                JugadorFormCLS oJugadorFormCLS = new JugadorFormCLS();
-                JugadorListCLS oJugadorListCLS = listajugador.Where(p => p.idjugador == idjugador).FirstOrDefault();
-                oJugadorFormCLS.nombre = oJugadorListCLS.nombre;
-                oJugadorFormCLS.appaterno = oJugadorListCLS.appaterno;
-                return oJugadorFormCLS;
+                var response = await _httpClient.GetFromJsonAsync<JugadorFormCLS>("api/Jugador" + idjugador);
+                if (response != null)
+                {
+                    return response;
+                }
+                return new JugadorFormCLS();
             }
             catch (Exception ex)
             {

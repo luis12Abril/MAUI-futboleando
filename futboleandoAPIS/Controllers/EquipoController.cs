@@ -1,8 +1,10 @@
 ﻿using futboleandoAPIS.Models;
-using futboleandoEntities.Equipo;
+using futboleandoEntities;
 using futboleandoEntities.Jugador;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using futboleandoEntities.Equipo;
+using Microsoft.EntityFrameworkCore;
 
 namespace futboleandoAPIS.Controllers
 {
@@ -21,12 +23,16 @@ namespace futboleandoAPIS.Controllers
         {
             try
             {
-                var consulta = (from j in _bd.Equipos                               
-                              
+                var consulta = (from j in _bd.Equipos
+                                where j.Idtorneo == 1052
                                 select new EquipoListCLS
                                 {
                                     idequipo = j.Idequipo,
-                                    nombre = j.Nombre
+                                    nombre = j.Nombre,
+                                    representante = j.Representante,                                   
+                                    golesfavor = j.Golesafavor,
+                                    golescontra = j.Golesencontra,
+                                    puntos = j.Puntos
                                 }).ToList();
                 return Ok(consulta);
             }
