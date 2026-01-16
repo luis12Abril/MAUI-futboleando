@@ -5,7 +5,7 @@ using futboleandoEntities.Equipo;
 
 namespace futboleando.Pages;
 
-public partial class EquiposPage : ContentPage
+public partial class EquipoPage : ContentPage
 {
     private readonly EquipoService equipoService;
     public ObservableCollection<EquipoListCLS> listaequipo { get; set; }
@@ -13,7 +13,7 @@ public partial class EquiposPage : ContentPage
 
     public EquipoListCLS objSeleccionado { get; set; }
     public string nombreequipo { get; set; }
-    public EquiposPage(EquipoService _equipoService)
+    public EquipoPage(EquipoService _equipoService)
 	{
         InitializeComponent();
         equipoService = _equipoService;

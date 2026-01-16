@@ -16,8 +16,10 @@ public partial class MenuPage : ContentPage
     private CiudadService ciudadService;
     private ColaboradorService colaboradorService;
 
+    private EquipoService equipoService;
 
-    public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService, ColaboradorService _colaboradorService)
+    public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService, ColaboradorService _colaboradorService,
+        EquipoService _equipoService)
     {
         InitializeComponent();
         menuService = _menuService;
@@ -25,6 +27,8 @@ public partial class MenuPage : ContentPage
         jugadorService = _jugadorService;
         ciudadService = _ciudadService;
         colaboradorService = _colaboradorService;
+
+        equipoService = _equipoService;
 
         listarMenus();
 
@@ -64,6 +68,10 @@ public partial class MenuPage : ContentPage
                 JugadorPage oJugadorPage = new JugadorPage(jugadorService);
                 App.Navigate.PushAsync(oJugadorPage); break;
 
+            case 3:
+                EquipoPage oEquiposPage = new EquipoPage(equipoService);
+                App.Navigate.PushAsync(oEquiposPage); break;
+
             case 5:
                 CiudadPage oCiudadPage = new CiudadPage(ciudadService);
                 App.Navigate.PushAsync(oCiudadPage); break;
@@ -73,7 +81,7 @@ public partial class MenuPage : ContentPage
                 App.Navigate.PushAsync(oColaboradorPage); break;
             case 1000:
                 Preferences.Remove("usuario");
-                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService); break;
+                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService); break;
 
                 //case 1:
                 //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);

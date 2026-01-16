@@ -15,6 +15,7 @@ namespace futboleandoEntities.Equipo
         public int? golesfavor { get; set; }
         public int? golescontra { get; set; }
         public int? puntos { get; set; }
-       
+        public int? diferenciagoles { get; set; }
+
     }
 }

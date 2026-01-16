@@ -32,8 +32,12 @@ namespace futboleandoAPIS.Controllers
                                     representante = j.Representante,                                   
                                     golesfavor = j.Golesafavor,
                                     golescontra = j.Golesencontra,
+                                    diferenciagoles = j.Difgoles,
                                     puntos = j.Puntos
-                                }).ToList();
+                                }).OrderByDescending(e => e.puntos)  // ✅ ORDENAR POR PUNTOS (mayor a menor)
+                                .ThenByDescending(e => e.diferenciagoles)  // ✅ Desempate por diferencia de goles
+                                .ThenByDescending(e => e.golesfavor)  // ✅ Segundo desempate por goles a favor
+                                .ToList();
                 return Ok(consulta);
             }
             catch (Exception ex)
