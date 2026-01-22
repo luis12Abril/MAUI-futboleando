@@ -2,11 +2,209 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.PrincipalPage"
-             Title="Pagina Principal Video 141">
-    <VerticalStackLayout>
-        <Label 
-            Text="Bienvenido a futboleando..."
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="Inicio"
+             BackgroundColor="#F5F5F5">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- ========== BIENVENIDA ========== -->
+            <Frame Padding="25"
+                   CornerRadius="20"
+                   HasShadow="True"
+                   BorderColor="Transparent">
+                <Frame.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                        <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Frame.Background>
+                
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Opacity="0.3" Radius="15" Offset="0,5" />
+                </Frame.Shadow>
+                
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="⚽"
+                           FontSize="60"
+                           HorizontalOptions="Center" />
+                    
+                    <Label Text="¡Bienvenido a Futboleando!"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                    
+                    <Label Text="Sistema de gestión de torneos deportivos"
+                           FontSize="16"
+                           TextColor="White"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ========== TARJETAS DE ACCESO RÁPIDO ========== -->
+            <Label Text="Accesos Rápidos"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#333333"
+                   Margin="0,10,0,0" />
+            
+            <Grid ColumnDefinitions="*,*" 
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="15"
+                  RowSpacing="15">
+                
+                <!-- Tarjeta: Comunicados -->
+                <Frame Grid.Column="0" Grid.Row="0"
+                       Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnComunicadosTapped" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="📢"
+                               FontSize="40"
+                               HorizontalOptions="Center" />
+                        <Label Text="Comunicados"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource azulOscuro}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tarjeta: Equipos -->
+                <Frame Grid.Column="1" Grid.Row="0"
+                       Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnEquiposTapped" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="👥"
+                               FontSize="40"
+                               HorizontalOptions="Center" />
+                        <Label Text="Equipos"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource rojoOscuro}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tarjeta: Jugadores -->
+                <Frame Grid.Column="0" Grid.Row="1"
+                       Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnJugadoresTapped" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="🏃"
+                               FontSize="40"
+                               HorizontalOptions="Center" />
+                        <Label Text="Jugadores"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource verdeOscuro}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tarjeta: Ciudades -->
+                <Frame Grid.Column="1" Grid.Row="1"
+                       Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCiudadesTapped" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="🏙️"
+                               FontSize="40"
+                               HorizontalOptions="Center" />
+                        <Label Text="Ciudades"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#FF9800"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- ========== INFORMACIÓN ADICIONAL ========== -->
+            <Frame Padding="20"
+                   CornerRadius="15"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   BorderColor="Transparent"
+                   Margin="0,10,0,0">
+                
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="ℹ️ Información del Sistema"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource azulOscuro}" />
+                    
+                    <BoxView Color="#E0E0E0"
+                             HeightRequest="1"
+                             Margin="0,5,0,5" />
+                    
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="📊"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Gestiona todos tus torneos en un solo lugar"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🔔"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Mantén informados a todos los participantes"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="📱"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Acceso desde cualquier dispositivo"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
 </ContentPage>

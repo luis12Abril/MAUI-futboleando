@@ -16,8 +16,6 @@ public partial class LoginPage : ContentPage
     private EquipoService equipoService;
     private ComunicadoService comunicadoService;
 
-    //public string nombreusuario { get; set; }
-    //public string contra { get; set; }
     public LoginPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService,
         ColaboradorService _colaboradorService, EquipoService _equipoService, ComunicadoService _comunicadoService)
     {
@@ -32,23 +30,41 @@ public partial class LoginPage : ContentPage
         equipoService = _equipoService;
         comunicadoService = _comunicadoService;
         BindingContext = this;
-      
     }
 
     private async void btnIngresar_Clicked(object sender, EventArgs e)
     {
+        // Validar campos vacíos
+        if (string.IsNullOrWhiteSpace(oLoginCLS.nombreusuario) || string.IsNullOrWhiteSpace(oLoginCLS.contra))
+        {
+            await DisplayAlert("Error", "Por favor complete todos los campos", "OK");
+            return;
+        }
+
+        // Mostrar indicador de carga (opcional)
+        btnIngresar.IsEnabled = false;
+        btnIngresar.Text = "Ingresando...";
+
         bool exito = await loginService.login(oLoginCLS);
+        
         if (exito == true)
         {
-            // se utiliza para para guardar datos en el dispositivo
+            // Se utiliza para guardar datos en el dispositivo
             Preferences.Set("usuario", "ok");
             Flyout p = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
             App.Current.MainPage = p;
         }
         else
         {
-            await DisplayAlert("Error", "Usuario o contraseña incorrecta", "Salir");
+            await DisplayAlert("Error de Autenticación", "Usuario o contraseña incorrecta. Por favor intente nuevamente.", "OK");
+            btnIngresar.IsEnabled = true;
+            btnIngresar.Text = "INGRESAR";
         }
+    }
 
+    private async void OnRegistrarTapped(object sender, EventArgs e)
+    {
+        // Aquí puedes navegar a una página de registro o mostrar un mensaje
+        await DisplayAlert("Registro", "La funcionalidad de registro estará disponible próximamente.", "OK");
     }
 }

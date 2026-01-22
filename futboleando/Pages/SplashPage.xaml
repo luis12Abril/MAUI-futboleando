@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.SplashPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource azulOscuro}">
+
+    <Grid>
+        <!-- Fondo degradado -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Contenido central -->
+        <VerticalStackLayout VerticalOptions="Center" 
+                             HorizontalOptions="Center"
+                             Spacing="30">
+
+            <!-- Logo/Icono animado -->
+            <Label x:Name="lblBall"
+                   Text="⚽"
+                   FontSize="120"
+                   HorizontalOptions="Center"
+                   Opacity="0"
+                   Scale="0.5" />
+
+            <!-- Título de la app -->
+            <VerticalStackLayout Spacing="10" 
+                                 x:Name="lblTitle"
+                                 Opacity="0">
+                <Label Text="FUTBOLEANDO"
+                       FontSize="42"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center" />
+
+                <Label Text="Tu torneo, tu pasión"
+                       FontSize="18"
+                       TextColor="White"
+                       Opacity="0.9"
+                       HorizontalOptions="Center"
+                       FontAttributes="Italic" />
+            </VerticalStackLayout>
+
+            <!-- Indicador de carga -->
+            <ActivityIndicator x:Name="activityIndicator"
+                              IsRunning="True"
+                              Color="White"
+                              HeightRequest="40"
+                              WidthRequest="40"
+                              Opacity="0"
+                              Margin="0,20,0,0" />
+        </VerticalStackLayout>
+
+        <!-- Versión en la parte inferior -->
+        <Label Text="v1.0.0"
+               FontSize="12"
+               TextColor="White"
+               Opacity="0.6"
+               VerticalOptions="End"
+               HorizontalOptions="Center"
+               Margin="0,0,0,20" />
+    </Grid>
+</ContentPage>

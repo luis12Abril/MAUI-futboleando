@@ -2,18 +2,148 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.MenuPage"
-             Title="MenuPage">
-    <VerticalStackLayout Margin="10">
-        <ListView SelectedItem="{Binding oMenuCLS}" 
-               x:Name="lstMenu" ItemTapped="lstMenu_ItemTapped"  ItemsSource="{Binding listamenu}" >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <!--<TextCell Text="{Binding nombreopcion}" />-->
-                    <ViewCell>
-                        <Label Style="{StaticResource estiloLabel}" Text="{Binding nombreopcion}" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+             Title="Menú"
+             BackgroundColor="#F5F5F5">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        
+        <!-- ========== ENCABEZADO DEL MENÚ ========== -->
+        <Grid Grid.Row="0" 
+              Padding="20,30,20,20">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                    <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+            
+            <VerticalStackLayout Spacing="8">
+                <!-- Avatar/Logo del usuario -->
+                <Frame WidthRequest="80"
+                       HeightRequest="80"
+                       CornerRadius="40"
+                       Padding="0"
+                       HasShadow="True"
+                       BorderColor="White"
+                       BackgroundColor="White"
+                       HorizontalOptions="Start">
+                    <Label Text="⚽"
+                           FontSize="50"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Frame>
+                
+                <!-- Nombre del usuario -->
+                <Label Text="Luis"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White" />
+                
+                <Label Text="Administrador"
+                       FontSize="14"
+                       TextColor="White"
+                       Opacity="0.9" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- ========== LISTA DE OPCIONES DEL MENÚ ========== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="0,15,0,15" Spacing="0">
+                
+                <Label Text="NAVEGACIÓN"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="#999999"
+                       Margin="20,10,20,10" />
+                
+                <ListView SelectedItem="{Binding oMenuCLS}" 
+                          x:Name="lstMenu" 
+                          ItemTapped="lstMenu_ItemTapped"  
+                          ItemsSource="{Binding listamenu}"
+                          SeparatorVisibility="None"
+                          HasUnevenRows="True"
+                          BackgroundColor="Transparent"
+                          SelectionMode="None">
+                    
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <!-- Efecto hover/selección -->
+                                <Frame Margin="8,4,8,4"
+                                       Padding="0"
+                                       CornerRadius="12"
+                                       BackgroundColor="White"
+                                       HasShadow="False"
+                                       BorderColor="Transparent">
+                                    
+                                    <Grid Padding="20,15" 
+                                          ColumnDefinitions="Auto,*,Auto">
+                                        
+                                        <!-- Icono -->
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="45"
+                                               HeightRequest="45"
+                                               CornerRadius="22.5"
+                                               Padding="0"
+                                               HasShadow="False"
+                                               BackgroundColor="{StaticResource azulOscuro}"
+                                               VerticalOptions="Center">
+                                            <Label Text="{Binding nombreicono}"
+                                                   FontSize="22"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Frame>
+                                        
+                                        <!-- Nombre de la opción -->
+                                        <Label Grid.Column="1"
+                                               Text="{Binding nombreopcion}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333"
+                                               VerticalOptions="Center"
+                                               Margin="15,0,0,0" />
+                                        
+                                        <!-- Flecha -->
+                                        <Label Grid.Column="2"
+                                               Text="›"
+                                               FontSize="28"
+                                               TextColor="{StaticResource azulOscuro}"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ========== PIE DEL MENÚ ========== -->
+        <Grid Grid.Row="2" 
+              Padding="20,15"
+              BackgroundColor="White">
+            
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.1" Radius="8" Offset="0,-2" />
+            </Grid.Shadow>
+            
+            <VerticalStackLayout Spacing="5">
+                <Label Text="© 2024 Futboleando"
+                       FontSize="12"
+                       TextColor="#999999"
+                       HorizontalOptions="Center" />
+                <Label Text="Versión 1.0.0"
+                       FontSize="10"
+                       TextColor="#CCCCCC"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+        
+    </Grid>
 </ContentPage>
