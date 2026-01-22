@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Comunicado.ComunicadoPage"
+             Title="ComunicadoPage">
+    <Grid Padding="10">
+        <ListView HasUnevenRows="True" ItemsSource="{Binding listacomunicado}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <VerticalStackLayout Padding="10">
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+                                <Label Grid.Row="0" Grid.Column="0" 
+                                 Text="Fecha       :" 
+                                 Style="{StaticResource estiloLabel}" 
+                                 VerticalOptions="Center" />
+                                <Label Grid.Row="0" Grid.Column="1" 
+                                 Text="{Binding fechacomunicadoformateada}" 
+                                 Style="{StaticResource estiloLabel}"
+                                 Margin="10,0,0,0"
+                                 VerticalOptions="Center" />
+
+                                <Label Grid.Row="1" Grid.Column="0" 
+                                 Text="Comunicado :" 
+                                 Style="{StaticResource estiloLabel}"
+                                 VerticalOptions="Center" />
+                                <Label Grid.Row="1" Grid.Column="1" LineBreakMode="TailTruncation"
+                                 Text="{Binding comunicadocorto}" 
+                                 Style="{StaticResource estiloLabel}"
+                                 Margin="10,0,0,0"
+                                 VerticalOptions="Center" />
+
+                           
+                                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                 Text="{Binding comunicadolargo}" 
+                                 Style="{StaticResource estiloLabel}"
+                                 Margin="0,0,0,0"
+                                 VerticalOptions="Center" />   
+
+                            </Grid>
+                        </VerticalStackLayout>
+
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

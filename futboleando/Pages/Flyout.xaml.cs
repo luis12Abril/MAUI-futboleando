@@ -10,8 +10,9 @@ public partial class Flyout : FlyoutPage
     private ColaboradorService colaboradorService;
 
     private EquipoService equipoService;
+    private ComunicadoService comunicadoService;
     public Flyout(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService,
-        ColaboradorService _colaboradorService, EquipoService _equipoService )
+        ColaboradorService _colaboradorService, EquipoService _equipoService, ComunicadoService _comunicadoService )
     {
         InitializeComponent();
         menuService = _menuService;
@@ -21,8 +22,9 @@ public partial class Flyout : FlyoutPage
         colaboradorService = _colaboradorService;
 
         equipoService = _equipoService;
+        comunicadoService = _comunicadoService;
 
-        var menu = new MenuPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService);
+        var menu = new MenuPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
         Flyout = menu;
         App.Navigate = Navigate;
         App.Menu = this;

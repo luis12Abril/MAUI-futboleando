@@ -14,11 +14,12 @@ public partial class LoginPage : ContentPage
     private ColaboradorService colaboradorService;  
 
     private EquipoService equipoService;
+    private ComunicadoService comunicadoService;
 
     //public string nombreusuario { get; set; }
     //public string contra { get; set; }
     public LoginPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService,
-        ColaboradorService _colaboradorService, EquipoService _equipoService)
+        ColaboradorService _colaboradorService, EquipoService _equipoService, ComunicadoService _comunicadoService)
     {
         InitializeComponent();
         oLoginCLS = new LoginCLS();
@@ -29,8 +30,9 @@ public partial class LoginPage : ContentPage
         colaboradorService = _colaboradorService;
 
         equipoService = _equipoService;
+        comunicadoService = _comunicadoService;
         BindingContext = this;
-       
+      
     }
 
     private async void btnIngresar_Clicked(object sender, EventArgs e)
@@ -40,7 +42,7 @@ public partial class LoginPage : ContentPage
         {
             // se utiliza para para guardar datos en el dispositivo
             Preferences.Set("usuario", "ok");
-            Flyout p = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService);
+            Flyout p = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
             App.Current.MainPage = p;
         }
         else

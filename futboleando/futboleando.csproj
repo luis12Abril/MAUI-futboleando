@@ -57,6 +57,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Pages\NewFolder\**" />
+	  <Compile Remove="Pages\NewFolder\**" />
+	  <EmbeddedResource Remove="Pages\NewFolder\**" />
+	  <MauiCss Remove="Pages\NewFolder\**" />
+	  <MauiXaml Remove="Pages\NewFolder\**" />
+	  <None Remove="Pages\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
@@ -91,6 +100,9 @@
 	  <MauiXaml Update="Pages\Colaborador\ColaboradorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Comunicado\ComunicadoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Equipo\EquipoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -112,10 +124,6 @@
 	  <MauiXaml Update="Pages\PrincipalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Pages\NewFolder\" />
 	</ItemGroup>
 
 </Project>

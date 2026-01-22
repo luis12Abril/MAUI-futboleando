@@ -1,5 +1,6 @@
 using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
+using futboleando.Pages.Comunicado;
 using futboleando.Service;
 using futboleandoEntities.Menu;
 using System.Collections.ObjectModel;
@@ -18,8 +19,10 @@ public partial class MenuPage : ContentPage
 
     private EquipoService equipoService;
 
+    private ComunicadoService comunicadoService;
+
     public MenuPage(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService, ColaboradorService _colaboradorService,
-        EquipoService _equipoService)
+        EquipoService _equipoService, ComunicadoService _comunicadoService)
     {
         InitializeComponent();
         menuService = _menuService;
@@ -29,11 +32,12 @@ public partial class MenuPage : ContentPage
         colaboradorService = _colaboradorService;
 
         equipoService = _equipoService;
+        comunicadoService = _comunicadoService;
 
         listarMenus();
 
         BindingContext = this;
-
+        //this.comunicadoService = comunicadoService;
     }
 
     public async Task listarMenus()
@@ -76,12 +80,16 @@ public partial class MenuPage : ContentPage
                 CiudadPage oCiudadPage = new CiudadPage(ciudadService);
                 App.Navigate.PushAsync(oCiudadPage); break;
 
+            case 6:
+                ComunicadoPage oComunicadoPage = new ComunicadoPage(comunicadoService);
+                App.Navigate.PushAsync(oComunicadoPage); break;
+
             case 20:
                 ColaboradorPage oColaboradorPage = new ColaboradorPage(ciudadService, colaboradorService);
                 App.Navigate.PushAsync(oColaboradorPage); break;
             case 1000:
                 Preferences.Remove("usuario");
-                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService); break;
+                App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService); break;
 
                 //case 1:
                 //    CursoPage oCursoPage = new CursoPage(carreraService, cursoService);

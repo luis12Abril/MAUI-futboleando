@@ -12,11 +12,14 @@ namespace futboleando
         private ColaboradorService colaboradorService;  
 
         private EquipoService equipoService;
+
+        private ComunicadoService comunicadoService;
+
         public static NavigationPage Navigate { get; internal set; }
         public static Flyout Menu { get; internal set; }
 
         public App(MenuService _menuService, LoginService _loginService, JugadorService _jugadorService, CiudadService _ciudadService, 
-            ColaboradorService _colaboradorService, EquipoService _equipoService)
+            ColaboradorService _colaboradorService, EquipoService _equipoService, ComunicadoService _comunicadoService)
         {
             InitializeComponent();
             menuService = _menuService;
@@ -26,13 +29,17 @@ namespace futboleando
             colaboradorService = _colaboradorService;
 
             equipoService = _equipoService;
+            comunicadoService = _comunicadoService;
+
+
 
             // este Preferences se lleno el login
             // MainPage es la pagina principal que se carga al iniciar la app
             if (Preferences.Get("usuario", "") == "")
-                MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService);
+                MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
             else
-                MainPage = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService);
+                MainPage = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
+            this.comunicadoService = comunicadoService;
         }
     }
 }
