@@ -31,22 +31,17 @@ namespace futboleandoAPIS.Controllers
                                     idjugador = j.Idjugador,
                                     nombre = j.Nombre,
                                     appaterno = j.Appaterno,
+                                    apmaterno = j.Apmaterno,
                                     nombreequipo = e.Nombre,
-                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim()
-
-                                    // ✅ Construye el nombre completo de forma segura
-                                    //nombrecompleto = $"{j.Nombre ?? ""} {j.Appaterno ?? ""} {j.Apmaterno ?? ""}".Trim()
-
-
-                                    //nombrecompleto = j.Nombre 
-                                    //apmaterno = j.Apmaterno,    
-                                    //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
-                                    //idequipo = e.Idequipo,
-                                    //nombreequipo = e.Nombre,
-                                    //fechanacimiento = (DateOnly)j.Fnacimiento
-                                }).ToList();
+                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
+                                    fnacimiento = (DateOnly)j.Fnacimiento,
+                                    goles = j.Goles ?? 0
+                                })
+                                .OrderByDescending(j => j.fnacimiento)  // ✅ Ordenar por fecha de nacimiento (más jóvenes primero)
+                                .ThenByDescending(j => j.goles)         // ✅ Desempate por goles
+                                .ToList();
+                
                 return Ok(consulta);
-
             }
             catch (Exception ex)
             {

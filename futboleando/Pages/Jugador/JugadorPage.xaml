@@ -2,70 +2,266 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.JugadorPage"
-             Title="Lista de Jugadores">
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem Text="+" x:Name="toolBarAdd" Clicked="toolBarAdd_Clicked" />
-    </ContentPage.ToolbarItems>-->
+             Title="Jugadores"
+             BackgroundColor="#F5F5F5">
+    
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="0">
+        
+        <!-- ========== ENCABEZADO ========== -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{StaticResource verdeOscuro}"
+              Padding="20,15">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+            
+            <VerticalStackLayout>
+                <Label Text="🏃 Jugadores del Torneo" 
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Start" />
+                <Label Text="Gestiona y consulta los jugadores"
+                       FontSize="14"
+                       TextColor="White"
+                       Opacity="0.9"
+                       Margin="0,5,0,0" />
+            </VerticalStackLayout>
+        </Grid>
 
-    <VerticalStackLayout Style="{StaticResource verticalStackLayoutPage}">
-        <SearchBar Text="{Binding nombrejugador}" x:Name="searchNombre" SearchButtonPressed="searchNombre_SearchButtonPressed"/>
-        <!--<Label Text="Lista de Jugadores" Style="{StaticResource estiloLabel}" />
-        <Button Text="Regresar" x:Name="btnRegresar" Clicked="btnRegresar_Clicked" />-->
+        <!-- ========== LÍNEA SEPARADORA ========== -->
+        <BoxView Grid.Row="1"
+                 Color="{StaticResource azulOscuro}"
+                 HeightRequest="4" />
 
-        <Label Text="Ingrese nombre Jugador:" Style="{StaticResource estiloLabel}" />
-        <Entry Text="{Binding nombrejugador}" x:Name="entryNombreJugador" TextChanged="entryNombreJugador_TextChanged_1" />
+        <!-- ========== BARRA DE BÚSQUEDA ========== -->
+        <Frame Grid.Row="2"
+               Padding="15"
+               Margin="15,15,15,10"
+               CornerRadius="12"
+               BackgroundColor="White"
+               HasShadow="True"
+               BorderColor="Transparent">
+            
+            <VerticalStackLayout Spacing="8">
+                <Label Text="🔍 Buscar Jugador"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource azulOscuro}" />
+                
+                <Border StrokeThickness="2"
+                        Stroke="{StaticResource verdeOscuro}"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="White">
+                    
+                    <Entry x:Name="entryNombreJugador"
+                           Placeholder="Escribe el nombre del jugador..."
+                           FontSize="16"
+                           TextColor="#000000"
+                           PlaceholderColor="#999999"
+                           BackgroundColor="Transparent"
+                           TextChanged="entryNombreJugador_TextChanged_1"
+                           Margin="10,5" />
+                </Border>
+            </VerticalStackLayout>
+        </Frame>
 
-        <ListView HasUnevenRows="True" ItemsSource="{Binding listajugador}" >
-            <ListView.ItemTemplate>
+        <!-- ========== CONTADOR TOTAL DE JUGADORES ========== -->
+        <Frame Grid.Row="3"
+               Padding="12,8"
+               Margin="15,0,15,10"
+               CornerRadius="8"
+               BackgroundColor="{StaticResource azulOscuro}"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Label Text="👥"
+                       FontSize="16"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Label Text="{Binding TotalJugadoresTexto}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Frame>
+
+        <!-- ========== LISTA DE JUGADORES (CollectionView optimizado) ========== -->
+        <CollectionView Grid.Row="4"
+                        ItemsSource="{Binding listajugador}"
+                        SelectionMode="None"
+                        Margin="10,0,10,10">
+            
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                                                            
-                    <!--Solo se puede tener un TextCell o un ViewCel dentro de un DataTemplate-->
-
-                    <!--<TextCell Text="{Binding nombre}" 
-                              Detail="{Binding appaterno}" 
-                              TextColor="Black"
-                              DetailColor="Gray" />-->                  
-
-
-                    <ViewCell>
+                    <!-- Contenedor de la tarjeta -->
+                    <Frame Margin="5,5,5,10"
+                           Padding="0"
+                           CornerRadius="15"
+                           BackgroundColor="White"
+                           HasShadow="True"
+                           BorderColor="Transparent">
                         
-                            <VerticalStackLayout Padding="10">
-                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-                                    <Label Grid.Row="0" Grid.Column="0" 
-                                           Text="Nombre       :" 
-                                           Style="{StaticResource estiloLabel}" 
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" 
+                                    Opacity="0.15" 
+                                    Radius="10" 
+                                    Offset="0,4" />
+                        </Frame.Shadow>
+                        
+                        <Grid RowDefinitions="Auto,1,Auto,1,Auto" 
+                              Padding="0">
+                            
+                            <!-- Franja superior con número y nombre completo -->
+                            <Grid Grid.Row="0" 
+                                  BackgroundColor="{StaticResource verdeOscuro}"
+                                  Padding="15,12"
+                                  ColumnDefinitions="Auto,Auto,*">
+                                
+                                <!-- Número de jugador -->
+                                <Frame Grid.Column="0"
+                                       WidthRequest="32"
+                                       HeightRequest="32"
+                                       CornerRadius="16"
+                                       Padding="0"
+                                       BackgroundColor="White"
+                                       HasShadow="False"
+                                       BorderColor="Transparent"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,10,0">
+                                    <Label Text="{Binding Index}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource verdeOscuro}"
+                                           HorizontalOptions="Center"
                                            VerticalOptions="Center" />
-                                    <Label Grid.Row="0" Grid.Column="1" 
-                                           Text="{Binding nombre}" 
-                                           Style="{StaticResource estiloLabel}"
-                                           Margin="10,0,0,0"
-                                           VerticalOptions="Center" />
-                                    
-                                    <Label Grid.Row="1" Grid.Column="0" 
-                                           Text="Ap. Paterno :" 
-                                           Style="{StaticResource estiloLabel}"
-                                           VerticalOptions="Center" />
-                                    <Label Grid.Row="1" Grid.Column="1" 
-                                           Text="{Binding appaterno}" 
-                                           Style="{StaticResource estiloLabel}"
-                                           Margin="10,0,0,0"
-                                           VerticalOptions="Center" />
-
-                                <Label Grid.Row="2" Grid.Column="0" 
-                                           Text="Ap. Materno :" 
-                                           Style="{StaticResource estiloLabel}"
-                                           VerticalOptions="Center" />
-                                <Label Grid.Row="2" Grid.Column="1" 
-                                           Text="{Binding apmaterno}" 
-                                           Style="{StaticResource estiloLabel}"
-                                           Margin="10,0,0,0"
-                                           VerticalOptions="Center" />
+                                </Frame>
+                                
+                                <!-- Icono de jugador -->
+                                <Label Grid.Column="1"
+                                       Text="👤" 
+                                       FontSize="20" 
+                                       VerticalOptions="Center"
+                                       Margin="0,0,8,0" />
+                                
+                                <!-- Nombre completo -->
+                                <Label Grid.Column="2"
+                                       Text="{Binding Jugador.nombrecompleto}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="FillAndExpand" />
                             </Grid>
-                            </VerticalStackLayout>
-                       
-                    </ViewCell>
+
+                            <!-- Línea separadora -->
+                            <BoxView Grid.Row="1" 
+                                     Color="#E0E0E0" 
+                                     HeightRequest="1" />
+
+                            <!-- Equipo -->
+                            <Grid Grid.Row="2" 
+                                  Padding="15,10"
+                                  BackgroundColor="White">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Frame WidthRequest="40"
+                                           HeightRequest="40"
+                                           CornerRadius="20"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           BackgroundColor="{StaticResource azulOscuro}"
+                                           VerticalOptions="Center">
+                                        <Label Text="👥"
+                                               FontSize="20"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Frame>
+                                    
+                                    <VerticalStackLayout VerticalOptions="Center" 
+                                                         Spacing="2">
+                                        <Label Text="Equipo"
+                                               FontSize="11"
+                                               TextColor="#999999" />
+                                        <Label Text="{Binding Jugador.nombreequipo}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource azulOscuro}" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Línea separadora -->
+                            <BoxView Grid.Row="3" 
+                                     Color="#E0E0E0" 
+                                     HeightRequest="1" 
+                                     Margin="15,0" />
+
+                            <!-- Fecha de nacimiento y Goles -->
+                            <Grid Grid.Row="4" 
+                                  Padding="15,10"
+                                  BackgroundColor="White"
+                                  ColumnDefinitions="*,Auto">
+                                
+                                <!-- Fecha de Nacimiento -->
+                                <HorizontalStackLayout Grid.Column="0" 
+                                                       Spacing="8"
+                                                       VerticalOptions="Center">
+                                    <Label Text="🎂"
+                                           FontSize="18"
+                                           VerticalOptions="Center" />
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Fecha Nacimiento"
+                                               FontSize="10"
+                                               TextColor="#999999" />
+                                        <Label Text="{Binding Jugador.fnacimiento, StringFormat='{0:dd/MM/yyyy}'}"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               TextColor="#424242" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                                
+                                <!-- Goles -->
+                                <Frame Grid.Column="1"
+                                       Padding="12,8"
+                                       CornerRadius="10"
+                                       BackgroundColor="{StaticResource rojoOscuro}"
+                                       HasShadow="False"
+                                       BorderColor="Transparent"
+                                       VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="6">
+                                        <Label Text="⚽"
+                                               FontSize="18"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding Jugador.goles}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               VerticalOptions="Center" />
+                                        <Label Text="goles"
+                                               FontSize="11"
+                                               TextColor="White"
+                                               Opacity="0.9"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Frame>
+                                
+                            </Grid>
+                            
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+            </CollectionView.ItemTemplate>
+            
+            <!-- Espacio al final de la lista -->
+            <CollectionView.Footer>
+                <ContentView HeightRequest="50" />
+            </CollectionView.Footer>
+            
+        </CollectionView>
+        
+    </Grid>
 </ContentPage>

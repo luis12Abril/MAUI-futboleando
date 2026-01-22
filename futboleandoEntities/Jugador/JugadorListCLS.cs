@@ -8,12 +8,17 @@ namespace futboleandoEntities.Jugador
 {
     public class JugadorListCLS
     {
-        public int idjugador { get; set; }  
+        public int? idjugador { get; set; }  
         public string nombre { get; set; } = string.Empty;
         public string appaterno { get; set; } = string.Empty;
         public string apmaterno { get; set; } = string.Empty;
         public string nombrecompleto { get; set; } = string.Empty;
+        public int? idequipo { get; set; }
         public string nombreequipo { get; set; } = string.Empty;
+        public DateOnly? fnacimiento { get; set; }
+        public int? goles { get; set; }
+
+
         //public DateOnly fechanacimiento { get; set; }
         //public int idequipo { get; set; }
 

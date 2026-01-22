@@ -1,33 +1,46 @@
-//using futboleando.Pages.Jugador;
-//using Android.Service.Carrier;
-//using Android.Service.Carrier;
-//using Android.Service.Carrier;
-using System.Collections.ObjectModel;
-//using Android.Service.Carrier;
+﻿using System.Collections.ObjectModel;
 using futboleando.Service;
 using futboleandoEntities.Jugador;
+using futboleando.Models;
+using System.ComponentModel;
 
 namespace futboleando.Pages;
 
-public partial class JugadorPage : ContentPage
+public partial class JugadorPage : ContentPage, INotifyPropertyChanged
 {
     private readonly JugadorService jugadorService;
-    public ObservableCollection<JugadorListCLS> listajugador { get; set; }
-    public ObservableCollection<JugadorListCLS> listafiltro { get; set; }
+    public ObservableCollection<JugadorIndexed> listajugador { get; set; }
+    private List<JugadorListCLS> listafiltro { get; set; }
 
     public JugadorListCLS objSeleccionado { get; set; }
-    public string nombrejugador { get; set; }
+
+    private CancellationTokenSource _debounceTokenSource;
+
+    // ✅ Propiedad para el total de jugadores
+    private int _totalJugadores;
+    public int TotalJugadores
+    {
+        get => _totalJugadores;
+        set
+        {
+            _totalJugadores = value;
+            OnPropertyChanged(nameof(TotalJugadores));
+            OnPropertyChanged(nameof(TotalJugadoresTexto));
+        }
+    }
+
+    // ✅ Texto formateado para mostrar
+    public string TotalJugadoresTexto => $"Total: {TotalJugadores} jugador{(TotalJugadores != 1 ? "es" : "")}";
 
     public JugadorPage(JugadorService _jugadorService)
     {
         InitializeComponent();
         jugadorService = _jugadorService;
         jugadorService.Onchange += refrescarJugador;
-        listajugador = new ObservableCollection<JugadorListCLS>();
+        listajugador = new ObservableCollection<JugadorIndexed>();
+        listafiltro = new List<JugadorListCLS>();
         BindingContext = this;
         _ = listarJugador();
-        //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
-       
     }
 
     private async Task refrescarJugador()
@@ -37,139 +50,114 @@ public partial class JugadorPage : ContentPage
 
     public async Task listarJugador()
     {
-
         try
         {
-
             var listaop = await jugadorService.listarJugador();
 
+            // ✅ Convertir a lista simple para mejor rendimiento
+            //listafiltro = listaop.Take(100).ToList();
+            listafiltro = listaop.ToList();
 
-            listajugador.Clear();
-            foreach (var jugador in listaop.Take(30))
+            // ✅ Actualizar UI en el hilo principal
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                //await DisplayAlert("Debug ", jugador.nombre, "OK");
-                listajugador.Add(jugador);
-                //await DisplayAlert("Debug ", jugador.nombre, "OK");
-            }
-            listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
-
-
-            //if (listaop.Count == 0)
-            //{
-            //    await DisplayAlert("Debug", "No se recibieron datos de la API", "OK");
-            //    return;
-            //}
-            //else
-            //{
-            //    //Console.WriteLine("Debug: Datos recibidos de la API");
-            //    await DisplayAlert("debug ", "Se recibieron " + listaop.Count.ToString() + " datos de la API", "OK");
-            //    //+listaop.Count.ToString() + "
-            //}
-
-
-            //Actualizar en el hilo principal de forma eficiente
-            //await MainThread.InvokeOnMainThreadAsync(() =>
-            //    {
-            //        listajugador.Clear();
-
-            //        // Agregar todos los elementos de una vez
-            //        // TEMPORAL: Solo cargar los primeros 100 registros para probar
-            //        foreach (var jugador in listaop.Take(30))
-            //        {
-            //            listajugador.Add(jugador);
-            //        }
-            //    });
-            //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
-
-
-
-            // Mostrar el alert DESPU�S de cargar los datos
-            //await DisplayAlert("debug ", "Se recibieron " + listaop.Count.ToString() + " datos de la API", "OK");
-
-            //listajugador.Clear();
-            //foreach (var jugador in listaop.Take(30))
-            //{
-            //    //await DisplayAlert("Debug ", jugador.nombre, "OK");
-            //    listajugador.Add(jugador);
-            //    //await DisplayAlert("Debug ", jugador.nombre, "OK");
-            //}
-            //listafiltro = new ObservableCollection<JugadorListCLS>(listajugador);
-
+                listajugador.Clear();
+                int index = 1;
+                foreach (var jugador in listafiltro)
+                {
+                    listajugador.Add(new JugadorIndexed 
+                    { 
+                        Index = index++, 
+                        Jugador = jugador 
+                    });
+                }
+                
+                // ✅ Actualizar contador
+                TotalJugadores = listajugador.Count;
+            });
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            await DisplayAlert("Debug", "Error al conectar con la API: " + ex.Message, "OK");
-            return;
+            await DisplayAlert("Error", "Error al cargar jugadores: " + ex.Message, "OK");
         }
-
-
-
     }
 
     private void btnRegresar_Clicked(object sender, EventArgs e)
     {
-        //App.Navigate.PopAsync();
         Navigation.PopAsync();
     }
 
     private void searchNombre_SearchButtonPressed(object sender, EventArgs e)
     {
-        DisplayAlert("Alerta", "Buscar: " + nombrejugador, "OK");
+        DisplayAlert("Alerta", "Buscar", "OK");
     }
 
-
-
-    private void entryNombreJugador_TextChanged(object sender, TextChangedEventArgs e)
+    private async void entryNombreJugador_TextChanged_1(object sender, TextChangedEventArgs e)
     {
-        ObservableCollection<JugadorListCLS> listaop;
-        listajugador.Clear();
+        // ✅ Cancelar búsqueda anterior (debouncing)
+        _debounceTokenSource?.Cancel();
+        _debounceTokenSource = new CancellationTokenSource();
+        var token = _debounceTokenSource.Token;
 
-        if (nombrejugador == null || nombrejugador == "")
+        try
         {
-            listaop = listafiltro;
+            // ✅ Esperar 300ms antes de filtrar (evita filtrar en cada tecla)
+            await Task.Delay(300, token);
+
+            string textoBusqueda = e.NewTextValue?.Trim() ?? string.Empty;
+
+            // ✅ Verificar que haya datos
+            if (listafiltro == null || listafiltro.Count == 0)
+                return;
+
+            List<JugadorListCLS> listaFiltrada;
+
+            if (string.IsNullOrWhiteSpace(textoBusqueda))
+            {
+                // Mostrar todos
+                listaFiltrada = listafiltro;
+            }
+            else
+            {
+                // ✅ Filtrar en background thread (no bloquea UI)
+                string textoBusquedaUpper = textoBusqueda.ToUpper();
+                
+                listaFiltrada = await Task.Run(() =>
+                {
+                    return listafiltro
+                        .Where(j => 
+                            (j.nombrecompleto?.ToUpper().Contains(textoBusquedaUpper) ?? false) ||
+                            (j.nombre?.ToUpper().Contains(textoBusquedaUpper) ?? false) ||
+                            (j.nombreequipo?.ToUpper().Contains(textoBusquedaUpper) ?? false))
+                        .ToList();
+                }, token);
+            }
+
+            // ✅ Actualizar UI solo una vez
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                listajugador.Clear();
+                int index = 1;
+                foreach (var jugador in listaFiltrada)
+                {
+                    listajugador.Add(new JugadorIndexed 
+                    { 
+                        Index = index++, 
+                        Jugador = jugador 
+                    });
+                }
+                
+                // ✅ Actualizar contador
+                TotalJugadores = listajugador.Count;
+            });
         }
-        else
+        catch (TaskCanceledException)
         {
-            var listaJugadorFiltrada = listafiltro.Where(j => j.nombre!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
-            listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
+            // Usuario sigue escribiendo, ignorar esta búsqueda
         }
-
-        foreach (var item in listaop)
+        catch (Exception ex)
         {
-            listajugador.Add(item);
+            // Ignorar otros errores para no bloquear la UI
         }
-
-
     }
-
-    private void entryNombreJugador_TextChanged_1(object sender, TextChangedEventArgs e)
-    {
-        ObservableCollection<JugadorListCLS> listaop;
-        listajugador.Clear();
-
-        if (nombrejugador == null || nombrejugador == "")
-        {
-            listaop = listafiltro;
-        }
-        else
-        {
-            var listaJugadorFiltrada = listafiltro.Where(j => j.nombre!.ToUpper().Contains(nombrejugador.ToUpper())).ToList();
-            listaop = new ObservableCollection<JugadorListCLS>(listaJugadorFiltrada);
-        }
-
-        foreach (var item in listaop)
-        {
-            listajugador.Add(item);
-        }
-    }
-
-    //private void lstJugadores_ItemTapped(object sender, ItemTappedEventArgs e)
-    //{
-
-    //}
-
-    //private void swipeItemEliminar_Invoked(object sender, EventArgs e)
-    //{
-
-    //}
 }
