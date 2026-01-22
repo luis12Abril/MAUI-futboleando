@@ -2,47 +2,131 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Comunicado.ComunicadoPage"
-             Title="ComunicadoPage">
-    <Grid Padding="10">
-        <ListView HasUnevenRows="True" ItemsSource="{Binding listacomunicado}" >
+             Title="Comunicados"
+             BackgroundColor="#F5F5F5">
+    
+    <Grid RowDefinitions="Auto,Auto,*" Padding="0">
+        
+        <!-- ========== ENCABEZADO ========== -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{StaticResource rojoOscuro}"
+              Padding="20,15">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+            
+            <VerticalStackLayout>
+                <Label Text="📢 Comunicados Oficiales" 
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Start" />
+                <Label Text="Información importante del torneo"
+                       FontSize="14"
+                       TextColor="White"
+                       Opacity="0.9"
+                       Margin="0,5,0,0" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- ========== LÍNEA SEPARADORA ========== -->
+        <BoxView Grid.Row="1"
+                 Color="{StaticResource azulOscuro}"
+                 HeightRequest="4" />
+
+        <!-- ========== LISTA DE COMUNICADOS ========== -->
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding listacomunicado}"
+                  HasUnevenRows="True"
+                  SeparatorVisibility="None"
+                  BackgroundColor="Transparent"
+                  Margin="10,15,10,10">
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <VerticalStackLayout Padding="10">
-                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
-                                <Label Grid.Row="0" Grid.Column="0" 
-                                 Text="Fecha       :" 
-                                 Style="{StaticResource estiloLabel}" 
-                                 VerticalOptions="Center" />
-                                <Label Grid.Row="0" Grid.Column="1" 
-                                 Text="{Binding fechacomunicadoformateada}" 
-                                 Style="{StaticResource estiloLabel}"
-                                 Margin="10,0,0,0"
-                                 VerticalOptions="Center" />
+                        <!-- Contenedor de la tarjeta -->
+                        <Frame Margin="0,0,0,15"
+                               Padding="0"
+                               CornerRadius="12"
+                               BackgroundColor="White"
+                               HasShadow="True"
+                               BorderColor="Transparent">
+                            
+                            <!-- Efecto de sombra adicional -->
+                            <Frame.Shadow>
+                                <Shadow Brush="Black" 
+                                        Opacity="0.15" 
+                                        Radius="10" 
+                                        Offset="0,4" />
+                            </Frame.Shadow>
+                            
+                            <Grid RowDefinitions="Auto,Auto,1,Auto" 
+                                  Padding="0">
+                                
+                                <!-- Franja superior con fecha -->
+                                <Grid Grid.Row="0" 
+                                      BackgroundColor="{StaticResource azulOscuro}"
+                                      Padding="15,10">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="📅" FontSize="18" VerticalOptions="Center" />
+                                        <Label Text="{Binding fechacomunicadoformateada}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
 
-                                <Label Grid.Row="1" Grid.Column="0" 
-                                 Text="Comunicado :" 
-                                 Style="{StaticResource estiloLabel}"
-                                 VerticalOptions="Center" />
-                                <Label Grid.Row="1" Grid.Column="1" LineBreakMode="TailTruncation"
-                                 Text="{Binding comunicadocorto}" 
-                                 Style="{StaticResource estiloLabel}"
-                                 Margin="10,0,0,0"
-                                 VerticalOptions="Center" />
+                                <!-- Título del comunicado -->
+                                <Grid Grid.Row="1" 
+                                      Padding="15,12,15,8"
+                                      BackgroundColor="White">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="📌" 
+                                               FontSize="18" 
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding comunicadocorto}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource rojoOscuro}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="2"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="FillAndExpand" />
+                                    </HorizontalStackLayout>
+                                </Grid>
 
-                           
-                                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                                 Text="{Binding comunicadolargo}" 
-                                 Style="{StaticResource estiloLabel}"
-                                 Margin="0,0,0,0"
-                                 VerticalOptions="Center" />   
+                                <!-- Línea separadora -->
+                                <BoxView Grid.Row="2" 
+                                         Color="#E0E0E0" 
+                                         HeightRequest="1" 
+                                         Margin="15,0" />
 
+                                <!-- Contenido del comunicado -->
+                                <Grid Grid.Row="3" 
+                                      Padding="15,12,15,15"
+                                      BackgroundColor="White">
+                                    <Label Text="{Binding comunicadolargo}"
+                                           FontSize="14"
+                                           TextColor="#424242"
+                                           LineBreakMode="WordWrap"
+                                           LineHeight="1.4"
+                                           VerticalOptions="Start" />
+                                </Grid>
+                                
                             </Grid>
-                        </VerticalStackLayout>
-
+                        </Frame>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            
+            <!-- Espacio al final de la lista -->
+            <ListView.Footer>
+                <ContentView HeightRequest="50" />
+            </ListView.Footer>
+            
         </ListView>
+        
     </Grid>
 </ContentPage>
