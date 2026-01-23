@@ -1,4 +1,5 @@
-﻿using futboleandoEntities.Jugador;
+﻿using futboleandoEntities.Equipo;
+using futboleandoEntities.Jugador;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,15 +21,6 @@ namespace futboleando.Service
         public JugadorService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-
-
-            // ESTA PARTE ES SIMULADA HASTA QUE TENGAMOS LA API
-            //listajugador = new ObservableCollection<JugadorListCLS>()
-            //{
-            //    new JugadorListCLS{idjugador=1 , nombre="Luis", appaterno="Barreras"},
-            //    new JugadorListCLS{idjugador=2 , nombre="Angel", appaterno="Garcia"}
-            //};
-
         }
 
         public void notificarChange()
@@ -41,9 +33,9 @@ namespace futboleando.Service
             OnGet?.Invoke(id);
         }
 
+        // ✅ Método anterior - devuelve todos los jugadores
         public async Task<ObservableCollection<JugadorListCLS>> listarJugador()
         {
-
             try
             {
                 var response = await _httpClient.GetFromJsonAsync<List<JugadorListCLS>>("api/Jugador");
@@ -57,7 +49,24 @@ namespace futboleando.Service
             {
                 return new ObservableCollection<JugadorListCLS>();
             }
-            //return listajugador;
+        }
+
+        // ✅ Nuevo método - devuelve jugadores por torneo
+        public async Task<ObservableCollection<JugadorListCLS>> listarJugadorPorTorneo(int idTorneo)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<JugadorListCLS>>($"api/Jugador/PorTorneo/{idTorneo}");
+                if (response != null)
+                {
+                    return new ObservableCollection<JugadorListCLS>(response);
+                }
+                return new ObservableCollection<JugadorListCLS>();
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<JugadorListCLS>();
+            }
         }
 
         public async Task<JugadorFormCLS> recuperarJugadorPorId(int idjugador)
@@ -77,7 +86,6 @@ namespace futboleando.Service
             }
         }
 
-
         public async Task<int> guardarJugador(JugadorFormCLS oJugadorFormCLS)
         {
             try
@@ -93,7 +101,6 @@ namespace futboleando.Service
             {
                 return 0;
             }
-
         }
 
         public async Task<int> eliminarJugador(int idjugador)
@@ -108,8 +115,6 @@ namespace futboleando.Service
             {
                 return 0;
             }
-
         }
-
     }
 }

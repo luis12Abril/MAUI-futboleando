@@ -18,6 +18,7 @@ namespace futboleandoAPIS.Controllers
             _bd = bd;
         }
 
+        // ✅ Endpoint sin parámetro - devuelve todos los jugadores habilitados
         [HttpGet]
         public IActionResult Get()
         {
@@ -25,7 +26,9 @@ namespace futboleandoAPIS.Controllers
             {
                 var consulta = (from j in _bd.Jugadors
                                 join e in _bd.Equipos on j.Idequipo equals e.Idequipo
-                                where j.Idtorneo > 10 && j.Idtorneo < 15
+                                where j.Habilitado == 1 
+                                   && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"  // ✅ Excluir autogoles
+                                   && e.Nombre.Trim() != "_SIN EQUIPO"  // ✅ También excluye jugadores sin equipo
                                 select new JugadorListCLS
                                 {
                                     idjugador = j.Idjugador,
@@ -37,8 +40,8 @@ namespace futboleandoAPIS.Controllers
                                     fnacimiento = (DateOnly)j.Fnacimiento,
                                     goles = j.Goles ?? 0
                                 })
-                                .OrderByDescending(j => j.fnacimiento)  // ✅ Ordenar por fecha de nacimiento (más jóvenes primero)
-                                .ThenByDescending(j => j.goles)         // ✅ Desempate por goles
+                                .OrderByDescending(j => j.goles)
+                                .ThenBy(j => j.nombrecompleto)
                                 .ToList();
                 
                 return Ok(consulta);
@@ -49,6 +52,40 @@ namespace futboleandoAPIS.Controllers
             }
         }
 
+        // ✅ Endpoint con parámetro de torneo - devuelve jugadores del torneo específico
+        [HttpGet("PorTorneo/{idTorneo}")]
+        public IActionResult GetPorTorneo(int idTorneo)
+        {
+            try
+            {
+                var consulta = (from j in _bd.Jugadors
+                                join e in _bd.Equipos on j.Idequipo equals e.Idequipo
+                                where j.Idtorneo == idTorneo 
+                                   && j.Habilitado == 1
+                                   && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"  // ✅ Excluir autogoles
+                                   && e.Nombre.Trim() != "_SIN EQUIPO"  // ✅ También excluye jugadores sin equipo
+                                select new JugadorListCLS
+                                {
+                                    idjugador = j.Idjugador,
+                                    nombre = j.Nombre,
+                                    appaterno = j.Appaterno,
+                                    apmaterno = j.Apmaterno,
+                                    nombreequipo = e.Nombre,
+                                    nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
+                                    fnacimiento = (DateOnly)j.Fnacimiento,
+                                    goles = j.Goles ?? 0
+                                })
+                                .OrderByDescending(j => j.goles)  // ✅ Ordenar por goles (goleadores primero)
+                                .ThenBy(j => j.nombrecompleto)    // ✅ Desempate alfabético
+                                .ToList();
+                
+                return Ok(consulta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -65,8 +102,6 @@ namespace futboleandoAPIS.Controllers
                     idjugador = obj.Idjugador,
                     nombre = obj.Nombre,
                     appaterno = obj.Appaterno
-                    //apmaterno = obj.Apmaterno,
-                    //nombrecompleto = (obj.Nombre.Trim() + " " + obj.Appaterno.Trim() + " " + obj.Apmaterno.Trim()).Trim()
                 });
             }
             catch (Exception ex)
@@ -82,17 +117,12 @@ namespace futboleandoAPIS.Controllers
             {
                 var consulta = (from j in _bd.Jugadors
                                 join e in _bd.Equipos on j.Idequipo equals e.Idequipo
-                                where j.Idequipo == idequipo 
+                                where j.Idequipo == idequipo && j.Habilitado == 1
                                 select new JugadorListCLS
                                 {
                                     idjugador = j.Idjugador,
                                     nombre = j.Nombre,
                                     appaterno = j.Appaterno
-                                    //apmaterno = j.Apmaterno,
-                                    //nombrecompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
-                                    //idequipo = e.Idequipo,
-                                    //nombreequipo = e.Nombre,
-                                    //fechanacimiento = (DateOnly)j.Fnacimiento
                                 }).ToList();
                 return Ok(consulta);
             }
@@ -114,7 +144,6 @@ namespace futboleandoAPIS.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

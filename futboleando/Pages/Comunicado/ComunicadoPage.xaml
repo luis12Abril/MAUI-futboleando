@@ -34,99 +34,178 @@
                  Color="{StaticResource azulOscuro}"
                  HeightRequest="4" />
 
-        <!-- ========== LISTA DE COMUNICADOS ========== -->
-        <ListView Grid.Row="2"
-                  ItemsSource="{Binding listacomunicado}"
-                  HasUnevenRows="True"
-                  SeparatorVisibility="None"
-                  BackgroundColor="Transparent"
-                  Margin="10,15,10,10">
+        <!-- ========== CONTENIDO PRINCIPAL ========== -->
+        <Grid Grid.Row="2">
             
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <!-- Contenedor de la tarjeta -->
-                        <Frame Margin="0,0,0,15"
-                               Padding="0"
-                               CornerRadius="12"
-                               BackgroundColor="White"
-                               HasShadow="True"
-                               BorderColor="Transparent">
-                            
-                            <!-- Efecto de sombra adicional -->
-                            <Frame.Shadow>
-                                <Shadow Brush="Black" 
-                                        Opacity="0.15" 
-                                        Radius="10" 
-                                        Offset="0,4" />
-                            </Frame.Shadow>
-                            
-                            <Grid RowDefinitions="Auto,Auto,1,Auto" 
-                                  Padding="0">
+            <!-- ========== LISTA DE COMUNICADOS ========== -->
+            <ListView x:Name="listViewComunicados"
+                      ItemsSource="{Binding listacomunicado}"
+                      HasUnevenRows="True"
+                      SeparatorVisibility="None"
+                      BackgroundColor="Transparent"
+                      Margin="10,15,10,10">
+                
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!-- Contenedor de la tarjeta -->
+                            <Frame Margin="0,0,0,15"
+                                   Padding="0"
+                                   CornerRadius="12"
+                                   BackgroundColor="White"
+                                   HasShadow="True"
+                                   BorderColor="Transparent">
                                 
-                                <!-- Franja superior con fecha -->
-                                <Grid Grid.Row="0" 
-                                      BackgroundColor="{StaticResource azulOscuro}"
-                                      Padding="15,10">
-                                    <HorizontalStackLayout Spacing="8">
-                                        <Label Text="📅" FontSize="18" VerticalOptions="Center" />
-                                        <Label Text="{Binding fechacomunicadoformateada}"
+                                <!-- Efecto de sombra adicional -->
+                                <Frame.Shadow>
+                                    <Shadow Brush="Black" 
+                                            Opacity="0.15" 
+                                            Radius="10" 
+                                            Offset="0,4" />
+                                </Frame.Shadow>
+                                
+                                <Grid RowDefinitions="Auto,Auto,1,Auto" 
+                                      Padding="0">
+                                    
+                                    <!-- Franja superior con fecha -->
+                                    <Grid Grid.Row="0" 
+                                          BackgroundColor="{StaticResource azulOscuro}"
+                                          Padding="15,10">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="📅" FontSize="18" VerticalOptions="Center" />
+                                            <Label Text="{Binding fechacomunicadoformateada}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+
+                                    <!-- Título del comunicado -->
+                                    <Grid Grid.Row="1" 
+                                          Padding="15,12,15,8"
+                                          BackgroundColor="White">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="📌" 
+                                                   FontSize="18" 
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding comunicadocorto}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource rojoOscuro}"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="2"
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="FillAndExpand" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+
+                                    <!-- Línea separadora -->
+                                    <BoxView Grid.Row="2" 
+                                             Color="#E0E0E0" 
+                                             HeightRequest="1" 
+                                             Margin="15,0" />
+
+                                    <!-- Contenido del comunicado -->
+                                    <Grid Grid.Row="3" 
+                                          Padding="15,12,15,15"
+                                          BackgroundColor="White">
+                                        <Label Text="{Binding comunicadolargo}"
                                                FontSize="14"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
-                                               VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
+                                               TextColor="#424242"
+                                               LineBreakMode="WordWrap"
+                                               LineHeight="1.4"
+                                               VerticalOptions="Start" />
+                                    </Grid>
+                                    
                                 </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+                <!-- Espacio al final de la lista -->
+                <ListView.Footer>
+                    <ContentView HeightRequest="50" />
+                </ListView.Footer>
+                
+            </ListView>
 
-                                <!-- Título del comunicado -->
-                                <Grid Grid.Row="1" 
-                                      Padding="15,12,15,8"
-                                      BackgroundColor="White">
-                                    <HorizontalStackLayout Spacing="8">
-                                        <Label Text="📌" 
-                                               FontSize="18" 
-                                               VerticalOptions="Center" />
-                                        <Label Text="{Binding comunicadocorto}"
-                                               FontSize="16"
-                                               FontAttributes="Bold"
-                                               TextColor="{StaticResource rojoOscuro}"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="2"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="FillAndExpand" />
-                                    </HorizontalStackLayout>
-                                </Grid>
-
-                                <!-- Línea separadora -->
-                                <BoxView Grid.Row="2" 
-                                         Color="#E0E0E0" 
-                                         HeightRequest="1" 
-                                         Margin="15,0" />
-
-                                <!-- Contenido del comunicado -->
-                                <Grid Grid.Row="3" 
-                                      Padding="15,12,15,15"
-                                      BackgroundColor="White">
-                                    <Label Text="{Binding comunicadolargo}"
-                                           FontSize="14"
-                                           TextColor="#424242"
-                                           LineBreakMode="WordWrap"
-                                           LineHeight="1.4"
-                                           VerticalOptions="Start" />
-                                </Grid>
-                                
-                            </Grid>
-                        </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <!-- ========== MENSAJE CUANDO NO HAY COMUNICADOS ========== -->
+            <Frame x:Name="frameNoComunicados"
+                   IsVisible="False"
+                   Padding="30"
+                   Margin="20"
+                   CornerRadius="20"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   BorderColor="Transparent"
+                   VerticalOptions="Center">
+                
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Opacity="0.15" Radius="15" Offset="0,5" />
+                </Frame.Shadow>
+                
+                <VerticalStackLayout Spacing="20" HorizontalOptions="Center">
+                    
+                    <!-- Icono grande -->
+                    <Frame WidthRequest="100"
+                           HeightRequest="100"
+                           CornerRadius="50"
+                           Padding="0"
+                           BackgroundColor="#F0F4F8"
+                           HasShadow="False"
+                           HorizontalOptions="Center"
+                           BorderColor="Transparent">
+                        <Label Text="📢"
+                               FontSize="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+                    
+                    <!-- Título -->
+                    <Label Text="Sin comunicados por el momento"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource azulOscuro}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                    
+                    <!-- Descripción -->
+                    <Label FontSize="15"
+                           TextColor="#666666"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           LineHeight="1.5">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Este torneo aún no cuenta con comunicados oficiales."/>
+                                <Span Text="&#10;"/>
+                                <Span Text="Aquí se publicarán noticias, avisos y actualizaciones importantes."/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    
+                    <!-- Separador decorativo -->
+                    <BoxView Color="{StaticResource azulOscuro}"
+                             HeightRequest="3"
+                             WidthRequest="60"
+                             CornerRadius="2"
+                             HorizontalOptions="Center"
+                             Margin="0,10,0,0" />
+                    
+                    <!-- Mensaje adicional -->
+                    <Label Text="Mantente atento a futuras actualizaciones"
+                           FontSize="13"
+                           FontAttributes="Italic"
+                           TextColor="#999999"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                    
+                </VerticalStackLayout>
+            </Frame>
             
-            <!-- Espacio al final de la lista -->
-            <ListView.Footer>
-                <ContentView HeightRequest="50" />
-            </ListView.Footer>
-            
-        </ListView>
+        </Grid>
         
     </Grid>
 </ContentPage>

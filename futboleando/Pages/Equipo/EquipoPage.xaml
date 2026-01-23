@@ -2,80 +2,271 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.EquipoPage"
-             Title="Equipos  Page">
-    <Grid Padding="10">
-        <ListView HasUnevenRows="True" ItemsSource="{Binding listaequipo}" >
-            <ListView.ItemTemplate>
+             Title="Equipos"
+             BackgroundColor="#F5F5F5">
+    
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="0">
+        
+        <!-- Encabezado -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{StaticResource verdeOscuro}"
+              Padding="20,15">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+            
+            <VerticalStackLayout>
+                <Label Text="Tabla de Posiciones" 
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Start" />
+                <Label Text="Clasificación general del torneo"
+                       FontSize="14"
+                       TextColor="White"
+                       Opacity="0.9"
+                       Margin="0,5,0,0" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Línea separadora -->
+        <BoxView Grid.Row="1"
+                 Color="{StaticResource azulOscuro}"
+                 HeightRequest="4" />
+
+        <!-- Contador total de equipos -->
+        <Frame Grid.Row="2"
+               Padding="12,8"
+               Margin="15,10,15,10"
+               CornerRadius="8"
+               BackgroundColor="{StaticResource azulOscuro}"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Label Text="Equipos participantes:"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Label Text="{Binding TotalEquipos}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="#FFD700"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Frame>
+
+        <!-- Lista de equipos -->
+        <CollectionView Grid.Row="3"
+                        ItemsSource="{Binding listaequipo}"
+                        SelectionMode="None"
+                        Margin="10,0,10,10">
+            
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <VerticalStackLayout Padding="10">
-                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-                                <Label Grid.Row="0" Grid.Column="0" 
-                                    Text="Equipo       :" 
-                                    Style="{StaticResource estiloLabel}" 
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="0" Grid.Column="1" 
-                                    Text="{Binding nombre}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
-                                <Label Grid.Row="1" Grid.Column="0" 
-                                    Text="Representante :" 
-                                    Style="{StaticResource estiloLabel}"
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="1" Grid.Column="1" 
-                                    Text="{Binding representante}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
-                                <Label Grid.Row="2" Grid.Column="0" 
-                                    Text="Goles a Favor :" 
-                                    Style="{StaticResource estiloLabel}"
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="2" Grid.Column="1" 
-                                    Text="{Binding golesfavor}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
-                                <Label Grid.Row="3" Grid.Column="0" 
-                                    Text="Goles en Contra :" 
-                                    Style="{StaticResource estiloLabel}"
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="3" Grid.Column="1" 
-                                    Text="{Binding golescontra}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
-                                <Label Grid.Row="4" Grid.Column="0" 
-                                    Text="Diferencia de Goles :" 
-                                    Style="{StaticResource estiloLabel}"
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="4" Grid.Column="1" 
-                                    Text="{Binding diferenciagoles}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
-                                <Label Grid.Row="5" Grid.Column="0" 
-                                    Text="PUNTOS :" 
-                                    Style="{StaticResource estiloLabel}"
-                                    VerticalOptions="Center" />
-                                <Label Grid.Row="5" Grid.Column="1" 
-                                    Text="{Binding puntos}" 
-                                    Style="{StaticResource estiloLabel}"
-                                    Margin="10,0,0,0"
-                                    VerticalOptions="Center" />
-
+                    <Frame Margin="5,5,5,10"
+                           Padding="0"
+                           CornerRadius="15"
+                           BackgroundColor="White"
+                           HasShadow="True"
+                           BorderColor="Transparent">
+                        
+                        <Frame.Shadow>
+                            <Shadow Brush="Black" 
+                                    Opacity="0.15" 
+                                    Radius="10" 
+                                    Offset="0,4" />
+                        </Frame.Shadow>
+                        
+                        <Grid RowDefinitions="Auto,1,Auto,1,Auto" 
+                              Padding="0">
+                            
+                            <!-- Franja superior con nombre del equipo -->
+                            <Grid Grid.Row="0" 
+                                  BackgroundColor="{StaticResource verdeOscuro}"
+                                  Padding="15,12"
+                                  ColumnDefinitions="Auto,*,Auto">
+                                
+                                <!-- Posición -->
+                                <Frame Grid.Column="0"
+                                       WidthRequest="32"
+                                       HeightRequest="32"
+                                       CornerRadius="16"
+                                       Padding="0"
+                                       BackgroundColor="White"
+                                       HasShadow="False"
+                                       BorderColor="Transparent"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,10,0">
+                                    <Label Text="{Binding Index}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource verdeOscuro}"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center" />
+                                </Frame>
+                                
+                                <!-- Nombre del equipo -->
+                                <Label Grid.Column="1"
+                                       Text="{Binding Equipo.nombre}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="FillAndExpand" />
+                                
+                                <!-- Puntos destacados -->
+                                <Frame Grid.Column="2"
+                                       Padding="10,6"
+                                       CornerRadius="12"
+                                       BackgroundColor="#FFD700"
+                                       HasShadow="False"
+                                       BorderColor="Transparent"
+                                       VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="{Binding Equipo.puntos}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="Black"
+                                               VerticalOptions="Center" />
+                                        <Label Text="pts"
+                                               FontSize="11"
+                                               TextColor="Black"
+                                               Opacity="0.8"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Frame>
                             </Grid>
-                        </VerticalStackLayout>
 
-                    </ViewCell>
+                            <!-- Línea separadora -->
+                            <BoxView Grid.Row="1" 
+                                     Color="#E0E0E0" 
+                                     HeightRequest="1" />
+
+                            <!-- Representante -->
+                            <Grid Grid.Row="2" 
+                                  Padding="15,10"
+                                  BackgroundColor="White">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Frame WidthRequest="36"
+                                           HeightRequest="36"
+                                           CornerRadius="18"
+                                           Padding="0"
+                                           HasShadow="False"
+                                           BackgroundColor="{StaticResource azulOscuro}"
+                                           VerticalOptions="Center">
+                                        <Label Text="👤"
+                                               FontSize="18"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Frame>
+                                    
+                                    <VerticalStackLayout VerticalOptions="Center" 
+                                                         Spacing="2">
+                                        <Label Text="Representante"
+                                               FontSize="11"
+                                               TextColor="#999999" />
+                                        <Label Text="{Binding Equipo.representante}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource azulOscuro}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </Grid>
+
+                            <!-- Línea separadora -->
+                            <BoxView Grid.Row="3" 
+                                     Color="#E0E0E0" 
+                                     HeightRequest="1" 
+                                     Margin="15,0" />
+
+                            <!-- Estadísticas -->
+                            <Grid Grid.Row="4" 
+                                  Padding="15,12"
+                                  BackgroundColor="White"
+                                  ColumnDefinitions="*,*,*">
+                                
+                                <!-- Goles a favor -->
+                                <VerticalStackLayout Grid.Column="0" 
+                                                     Spacing="4"
+                                                     HorizontalOptions="Center">
+                                    <Label Text="GF"
+                                           FontSize="11"
+                                           TextColor="#999999"
+                                           HorizontalOptions="Center" />
+                                    <Frame Padding="8,4"
+                                           CornerRadius="8"
+                                           BackgroundColor="#4CAF50"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           HorizontalOptions="Center">
+                                        <Label Text="{Binding Equipo.golesfavor}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="White" />
+                                    </Frame>
+                                </VerticalStackLayout>
+                                
+                                <!-- Goles en contra -->
+                                <VerticalStackLayout Grid.Column="1" 
+                                                     Spacing="4"
+                                                     HorizontalOptions="Center">
+                                    <Label Text="GC"
+                                           FontSize="11"
+                                           TextColor="#999999"
+                                           HorizontalOptions="Center" />
+                                    <Frame Padding="8,4"
+                                           CornerRadius="8"
+                                           BackgroundColor="#F44336"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           HorizontalOptions="Center">
+                                        <Label Text="{Binding Equipo.golescontra}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="White" />
+                                    </Frame>
+                                </VerticalStackLayout>
+                                
+                                <!-- Diferencia de goles -->
+                                <VerticalStackLayout Grid.Column="2" 
+                                                     Spacing="4"
+                                                     HorizontalOptions="Center">
+                                    <Label Text="DIF"
+                                           FontSize="11"
+                                           TextColor="#999999"
+                                           HorizontalOptions="Center" />
+                                    <Frame Padding="8,4"
+                                           CornerRadius="8"
+                                           BackgroundColor="{StaticResource azulOscuro}"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           HorizontalOptions="Center">
+                                        <Label Text="{Binding Equipo.diferenciagoles}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="White" />
+                                    </Frame>
+                                </VerticalStackLayout>
+                                
+                            </Grid>
+                            
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+            
+            <!-- Espacio al final de la lista -->
+            <CollectionView.Footer>
+                <ContentView HeightRequest="50" />
+            </CollectionView.Footer>
+            
+        </CollectionView>
+        
     </Grid>
 </ContentPage>

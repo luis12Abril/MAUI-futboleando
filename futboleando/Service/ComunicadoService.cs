@@ -51,5 +51,22 @@ namespace futboleando.Service
                 return new ObservableCollection<ComunicadoListCLS>();
             }
         }
+
+        public async Task<ObservableCollection<ComunicadoListCLS>> listarComunicadoPorTorneo(int idTorneo)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<ComunicadoListCLS>>($"api/Comunicado/PorTorneo/{idTorneo}");
+                if (response != null)
+                {
+                    return new ObservableCollection<ComunicadoListCLS>(response);
+                }
+                return new ObservableCollection<ComunicadoListCLS>();
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<ComunicadoListCLS>();
+            }
+        }
     } 
 }

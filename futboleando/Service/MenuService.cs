@@ -22,6 +22,7 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
                 new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
                 new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},
+                new MenuCLS{ idmenu=99 , nombreopcion="Seleccionar Torneo" , nombreicono="🏆"},  // ✅ Nueva opción
                 new MenuCLS{ idmenu=1000 , nombreopcion="Cerrar Sesión" , nombreicono="🚪"}
             };
         }

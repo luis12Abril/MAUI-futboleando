@@ -34,6 +34,7 @@ namespace futboleando.Service
             OnGet?.Invoke(id);
         }
 
+        // ✅ Método anterior - devuelve todos los equipos
         public async Task<ObservableCollection<EquipoListCLS>> listarEquipo()
         {
             try
@@ -49,6 +50,24 @@ namespace futboleando.Service
             {
                 return new ObservableCollection<EquipoListCLS>();
             }          
+        }
+
+        // ✅ Nuevo método - devuelve equipos por torneo
+        public async Task<ObservableCollection<EquipoListCLS>> listarEquipoPorTorneo(int idTorneo)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<EquipoListCLS>>($"api/Equipo/PorTorneo/{idTorneo}");
+                if (response != null)
+                {
+                    return new ObservableCollection<EquipoListCLS>(response);
+                }
+                return new ObservableCollection<EquipoListCLS>();
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<EquipoListCLS>();
+            }
         }
     }
 }

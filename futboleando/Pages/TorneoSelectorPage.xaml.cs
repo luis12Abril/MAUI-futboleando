@@ -104,6 +104,7 @@ namespace futboleando.Pages
         {
             try
             {
+                // ? Restaurar Estado
                 var estados = pickerEstado.ItemsSource as List<EstadoListCLS>;
                 var estado = estados?.FirstOrDefault(e => e.idestado == idEstado);
                 if (estado != null)
@@ -111,21 +112,36 @@ namespace futboleando.Pages
                     pickerEstado.SelectedItem = estado;
                     await Task.Delay(500);
 
-                    var municipios = pickerMunicipio.ItemsSource as List<MunicipioListCLS>;
+                    // ? Cargar y restaurar Municipio
+                    var municipios = await municipioService.ListarPorEstado(idEstado);
+                    pickerMunicipio.ItemsSource = municipios.ToList();
+                    pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
+                    pickerMunicipio.IsEnabled = municipios.Count > 0;
+
                     var municipio = municipios?.FirstOrDefault(m => m.idmunicipio == idMunicipio);
                     if (municipio != null)
                     {
                         pickerMunicipio.SelectedItem = municipio;
                         await Task.Delay(500);
 
-                        var ligas = pickerLiga.ItemsSource as List<LigaListCLS>;
+                        // ? Cargar y restaurar Liga
+                        var ligas = await ligaService.ListarPorMunicipio(idMunicipio);
+                        pickerLiga.ItemsSource = ligas.ToList();
+                        pickerLiga.ItemDisplayBinding = new Binding("nombre");
+                        pickerLiga.IsEnabled = ligas.Count > 0;
+
                         var liga = ligas?.FirstOrDefault(l => l.idliga == idLiga);
                         if (liga != null)
                         {
                             pickerLiga.SelectedItem = liga;
                             await Task.Delay(500);
 
-                            var torneos = pickerTorneo.ItemsSource as List<TorneoListCLS>;
+                            // ? Cargar y restaurar Torneo
+                            var torneos = await torneoService.ListarPorLiga(idLiga);
+                            pickerTorneo.ItemsSource = torneos.ToList();
+                            pickerTorneo.ItemDisplayBinding = new Binding("nombre");
+                            pickerTorneo.IsEnabled = torneos.Count > 0;
+
                             var torneo = torneos?.FirstOrDefault(t => t.idtorneo == idTorneo);
                             if (torneo != null)
                             {
@@ -135,7 +151,10 @@ namespace futboleando.Pages
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Aviso", "No se pudo restaurar completamente la última selección", "OK");
+            }
         }
 
         private async void OnEstadoSelected(object sender, EventArgs e)
@@ -299,9 +318,19 @@ namespace futboleando.Pages
                 Preferences.Set("NombreLiga", ligaSeleccionada.nombre);
                 Preferences.Set("NombreTorneo", torneoSeleccionado.nombre);
 
-                Application.Current.MainPage = new Flyout(
-                    menuService, loginService, jugadorService,
-                    ciudadService, colaboradorService, equipoService, comunicadoService);
+                // ? Verificar si estamos en navegación (desde el menú) o es primera vez
+                if (Navigation.NavigationStack.Count > 1)
+                {
+                    // ? Estamos en navegación del menú, regresar directamente
+                    await Navigation.PopAsync();
+                }
+                else
+                {
+                    // ? Es primera vez (login), crear el Flyout
+                    Application.Current.MainPage = new Flyout(
+                        menuService, loginService, jugadorService,
+                        ciudadService, colaboradorService, equipoService, comunicadoService);
+                }
             }
             catch (Exception ex)
             {

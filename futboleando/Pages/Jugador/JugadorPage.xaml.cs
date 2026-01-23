@@ -52,13 +52,26 @@ public partial class JugadorPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            var listaop = await jugadorService.listarJugador();
+            // ✅ Obtener el ID del torneo seleccionado desde Preferences
+            var idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
 
-            // ✅ Convertir a lista simple para mejor rendimiento
-            //listafiltro = listaop.Take(100).ToList();
-            listafiltro = listaop.ToList();
+            ObservableCollection<JugadorListCLS> listaop;
 
-            // ✅ Actualizar UI en el hilo principal
+            if (idTorneoSeleccionado > 0)
+            {
+                // ✅ Obtener jugadores del torneo seleccionado
+                listaop = await jugadorService.listarJugadorPorTorneo(idTorneoSeleccionado);
+            }
+            else
+            {
+                // ✅ Si no hay torneo seleccionado, obtener todos
+                listaop = await jugadorService.listarJugador();
+            }
+
+            // Convertir a lista simple para mejor rendimiento
+            listafiltro = listaop.Take(100).ToList();
+
+            // Actualizar UI en el hilo principal
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 listajugador.Clear();
@@ -72,7 +85,7 @@ public partial class JugadorPage : ContentPage, INotifyPropertyChanged
                     });
                 }
                 
-                // ✅ Actualizar contador
+                // Actualizar contador
                 TotalJugadores = listajugador.Count;
             });
         }

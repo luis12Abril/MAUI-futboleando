@@ -87,6 +87,22 @@ public partial class MenuPage : ContentPage
             case 20:
                 ColaboradorPage oColaboradorPage = new ColaboradorPage(ciudadService, colaboradorService);
                 App.Navigate.PushAsync(oColaboradorPage); break;
+
+            // ? Nueva opción: Seleccionar Torneo
+            case 99:
+                var estadoService = MauiProgram.ServiceProvider.GetService<EstadoService>();
+                var municipioService = MauiProgram.ServiceProvider.GetService<MunicipioService>();
+                var ligaService = MauiProgram.ServiceProvider.GetService<LigaService>();
+                var torneoService = MauiProgram.ServiceProvider.GetService<TorneoService>();
+
+                TorneoSelectorPage oTorneoSelectorPage = new TorneoSelectorPage(
+                    estadoService, municipioService, ligaService, torneoService,
+                    menuService, loginService, jugadorService, ciudadService, 
+                    colaboradorService, equipoService, comunicadoService);
+                
+                App.Navigate.PushAsync(oTorneoSelectorPage); 
+                break;
+
             case 1000:
                 Preferences.Remove("usuario");
                 App.Current.MainPage = new LoginPage(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService); break;
