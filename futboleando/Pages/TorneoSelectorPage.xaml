@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.TorneoSelectorPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1e3c72" Offset="0.0" />
+                <GradientStop Color="#2a5298" Offset="0.5" />
+                <GradientStop Color="#7e22ce" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Encabezado compacto -->
+        <VerticalStackLayout Grid.Row="0" Spacing="5" Padding="20,30,20,15">
+            <Label Text="SELECCIONA TU TORNEO"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center" />
+            
+            <Label Text="Tu pasion, tu equipo, tu momento"
+                   FontSize="14"
+                   TextColor="White"
+                   Opacity="0.9"
+                   HorizontalOptions="Center"
+                   FontAttributes="Italic" />
+        </VerticalStackLayout>
+
+        <!-- Contenido principal sin scroll -->
+        <Grid Grid.Row="1" Padding="20,0">
+            <Frame Padding="20"
+                   CornerRadius="25"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   BorderColor="Transparent"
+                   VerticalOptions="Center">
+                
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Opacity="0.4" Radius="20" Offset="0,8" />
+                </Frame.Shadow>
+
+                <VerticalStackLayout Spacing="15">
+                    
+                    <!-- Picker Estado -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame WidthRequest="28"
+                                   HeightRequest="28"
+                                   CornerRadius="14"
+                                   Padding="0"
+                                   BackgroundColor="#1e3c72"
+                                   HasShadow="False"
+                                   VerticalOptions="Center">
+                                <Label Text="1"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
+                            <Label Text="Estado"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1e3c72"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Border StrokeThickness="2"
+                                Stroke="#1e3c72"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8F9FA">
+                            <Picker x:Name="pickerEstado"
+                                    Title="Selecciona un estado"
+                                    FontSize="15"
+                                    TextColor="#1e3c72"
+                                    TitleColor="#6c757d"
+                                    BackgroundColor="Transparent"
+                                    Margin="10,5"
+                                    SelectedIndexChanged="OnEstadoSelected" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Picker Municipio -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame WidthRequest="28"
+                                   HeightRequest="28"
+                                   CornerRadius="14"
+                                   Padding="0"
+                                   BackgroundColor="#2a5298"
+                                   HasShadow="False"
+                                   VerticalOptions="Center">
+                                <Label Text="2"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
+                            <Label Text="Municipio"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2a5298"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Border StrokeThickness="2"
+                                Stroke="#2a5298"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8F9FA">
+                            <Picker x:Name="pickerMunicipio"
+                                    Title="Selecciona un municipio"
+                                    FontSize="15"
+                                    TextColor="#2a5298"
+                                    TitleColor="#6c757d"
+                                    BackgroundColor="Transparent"
+                                    Margin="10,5"
+                                    IsEnabled="False"
+                                    SelectedIndexChanged="OnMunicipioSelected" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Picker Liga -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame WidthRequest="28"
+                                   HeightRequest="28"
+                                   CornerRadius="14"
+                                   Padding="0"
+                                   BackgroundColor="#7e22ce"
+                                   HasShadow="False"
+                                   VerticalOptions="Center">
+                                <Label Text="3"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
+                            <Label Text="Liga"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#7e22ce"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Border StrokeThickness="2"
+                                Stroke="#7e22ce"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8F9FA">
+                            <Picker x:Name="pickerLiga"
+                                    Title="Selecciona una liga"
+                                    FontSize="15"
+                                    TextColor="#7e22ce"
+                                    TitleColor="#6c757d"
+                                    BackgroundColor="Transparent"
+                                    Margin="10,5"
+                                    IsEnabled="False"
+                                    SelectedIndexChanged="OnLigaSelected" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Picker Torneo -->
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="8">
+                            <Frame WidthRequest="28"
+                                   HeightRequest="28"
+                                   CornerRadius="14"
+                                   Padding="0"
+                                   BackgroundColor="#dc2626"
+                                   HasShadow="False"
+                                   VerticalOptions="Center">
+                                <Label Text="4"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
+                            <Label Text="Torneo"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#dc2626"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        
+                        <Border StrokeThickness="2"
+                                Stroke="#dc2626"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8F9FA">
+                            <Picker x:Name="pickerTorneo"
+                                    Title="Selecciona un torneo"
+                                    FontSize="15"
+                                    TextColor="#dc2626"
+                                    TitleColor="#6c757d"
+                                    BackgroundColor="Transparent"
+                                    Margin="10,5"
+                                    IsEnabled="False"
+                                    SelectedIndexChanged="OnTorneoSelected" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <ActivityIndicator x:Name="activityIndicator"
+                                       IsRunning="False"
+                                       IsVisible="False"
+                                       Color="#1e3c72"
+                                       HeightRequest="35"
+                                       Margin="0,5,0,0" />
+
+                    <Button x:Name="btnVerTorneo"
+                            Text="INGRESAR AL TORNEO"
+                            FontSize="17"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="#CCCCCC"
+                            CornerRadius="15"
+                            HeightRequest="55"
+                            Margin="0,10,0,0"
+                            IsEnabled="False"
+                            Clicked="OnVerTorneoClicked">
+                        <Button.Shadow>
+                            <Shadow Brush="Black" Opacity="0.3" Radius="10" Offset="0,5" />
+                        </Button.Shadow>
+                    </Button>
+
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+        <!-- Pie de pagina con mejor contraste -->
+        <Frame Grid.Row="2"
+               Padding="15,12"
+               CornerRadius="0"
+               BackgroundColor="#1a1a2e"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="admin@futboleando.com.mx"
+                       FontSize="12"
+                       TextColor="#e0e0e0"
+                       HorizontalOptions="Center" />
+                <Label Text="https://futboleando.com.mx"
+                       FontSize="12"
+                       TextColor="#4a9eff"
+                       HorizontalOptions="Center" />
+                <Label Text="SOLICITA TU TORNEO"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#00ff88"
+                       HorizontalOptions="Center"
+                       Margin="0,3,0,0" />
+                <Label Text="v1.62"
+                       FontSize="10"
+                       TextColor="#808080"
+                       HorizontalOptions="Center"
+                       Margin="0,2,0,0" />
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+</ContentPage>

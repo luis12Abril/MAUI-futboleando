@@ -11,11 +11,18 @@ namespace futboleando.Pages
         private readonly ColaboradorService colaboradorService;
         private readonly EquipoService equipoService;
         private readonly ComunicadoService comunicadoService;
+        
+        private readonly EstadoService estadoService;
+        private readonly MunicipioService municipioService;
+        private readonly LigaService ligaService;
+        private readonly TorneoService torneoService;
 
         public SplashPage(MenuService _menuService, LoginService _loginService,
             JugadorService _jugadorService, CiudadService _ciudadService,
             ColaboradorService _colaboradorService, EquipoService _equipoService,
-            ComunicadoService _comunicadoService)
+            ComunicadoService _comunicadoService,
+            EstadoService _estadoService, MunicipioService _municipioService,
+            LigaService _ligaService, TorneoService _torneoService)
         {
             InitializeComponent();
 
@@ -26,6 +33,11 @@ namespace futboleando.Pages
             colaboradorService = _colaboradorService;
             equipoService = _equipoService;
             comunicadoService = _comunicadoService;
+            
+            estadoService = _estadoService;
+            municipioService = _municipioService;
+            ligaService = _ligaService;
+            torneoService = _torneoService;
         }
 
         protected override async void OnAppearing()
@@ -71,9 +83,12 @@ namespace futboleando.Pages
             }
             else
             {
-                // Ir directamente al menú principal
-                Application.Current.MainPage = new Flyout(menuService, loginService,
-                    jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
+                // ? CAMBIO: Siempre ir al selector de torneo (mostrará última selección si existe)
+                Application.Current.MainPage = new NavigationPage(
+                    new TorneoSelectorPage(estadoService, municipioService, ligaService, torneoService,
+                        menuService, loginService, jugadorService, ciudadService, colaboradorService,
+                        equipoService, comunicadoService)
+                );
             }
         }
     }

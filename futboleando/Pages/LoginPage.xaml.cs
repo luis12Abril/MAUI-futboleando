@@ -41,7 +41,7 @@ public partial class LoginPage : ContentPage
             return;
         }
 
-        // Mostrar indicador de carga (opcional)
+        // Mostrar indicador de carga
         btnIngresar.IsEnabled = false;
         btnIngresar.Text = "Ingresando...";
 
@@ -49,10 +49,20 @@ public partial class LoginPage : ContentPage
         
         if (exito == true)
         {
-            // Se utiliza para guardar datos en el dispositivo
+            // Guardar sesión
             Preferences.Set("usuario", "ok");
-            Flyout p = new Flyout(menuService, loginService, jugadorService, ciudadService, colaboradorService, equipoService, comunicadoService);
-            App.Current.MainPage = p;
+            
+            // ? CAMBIO: Siempre ir al selector de torneo
+            var estadoService = MauiProgram.ServiceProvider.GetService<EstadoService>();
+            var municipioService = MauiProgram.ServiceProvider.GetService<MunicipioService>();
+            var ligaService = MauiProgram.ServiceProvider.GetService<LigaService>();
+            var torneoService = MauiProgram.ServiceProvider.GetService<TorneoService>();
+
+            App.Current.MainPage = new NavigationPage(
+                new TorneoSelectorPage(estadoService, municipioService, ligaService, torneoService,
+                    menuService, loginService, jugadorService, ciudadService, colaboradorService,
+                    equipoService, comunicadoService)
+            );
         }
         else
         {

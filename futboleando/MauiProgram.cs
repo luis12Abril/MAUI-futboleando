@@ -29,6 +29,12 @@ namespace futboleando
             builder.Services.AddSingleton<ColaboradorService>();
             builder.Services.AddScoped<EquipoService>();
             builder.Services.AddScoped<ComunicadoService>();
+            
+            // ✅ Servicios para selector de torneo
+            builder.Services.AddScoped<EstadoService>();
+            builder.Services.AddScoped<MunicipioService>();
+            builder.Services.AddScoped<LigaService>();
+            builder.Services.AddScoped<TorneoService>();
 
 
             builder.Services.AddScoped(sp => new HttpClient
