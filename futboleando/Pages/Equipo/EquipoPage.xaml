@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:futboleando.Converters"
              x:Class="futboleando.Pages.EquipoPage"
              Title="Equipos"
              BackgroundColor="#F5F5F5">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ByteArrayToImageConverter x:Key="ByteArrayToImage" />
+            <converters:HasImageConverter x:Key="HasImage" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     
     <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="0">
         
@@ -81,7 +89,7 @@
                         <Grid RowDefinitions="Auto,1,Auto,1,Auto" 
                               Padding="0">
                             
-                            <!-- Franja superior con nombre del equipo -->
+                            <!-- Franja superior con nombre del equipo y puntos -->
                             <Grid Grid.Row="0" 
                                   BackgroundColor="{StaticResource verdeOscuro}"
                                   Padding="15,12"
@@ -145,9 +153,141 @@
                                      Color="#E0E0E0" 
                                      HeightRequest="1" />
 
-                            <!-- Representante -->
+                            <!-- ✅ DISEÑO FINAL: Foto MUY GRANDE a la izquierda + Estadísticas compactas a la derecha -->
                             <Grid Grid.Row="2" 
-                                  Padding="15,10"
+                                  Padding="15,20"
+                                  BackgroundColor="White"
+                                  ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="15">
+                                
+                                <!-- ✅ FOTO DEL EQUIPO (Izquierda - MUY GRANDE, ocupa todo el espacio disponible) -->
+                                <Grid Grid.Column="0">
+                                    
+                                    <!-- Si HAY foto: mostrar imagen completa con AspectFit -->
+                                    <Frame HeightRequest="220"
+                                           CornerRadius="15"
+                                           Padding="0"
+                                           BackgroundColor="#F8F8F8"
+                                           HasShadow="False"
+                                           BorderColor="#E0E0E0"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Center"
+                                           IsVisible="{Binding Equipo.foto, Converter={StaticResource HasImage}}">
+                                        <Image Source="{Binding Equipo.foto, Converter={StaticResource ByteArrayToImage}}"
+                                               Aspect="AspectFit"
+                                               HorizontalOptions="FillAndExpand"
+                                               VerticalOptions="FillAndExpand" />
+                                    </Frame>
+                                    
+                                    <!-- Si NO hay foto: mostrar ícono de grupo -->
+                                    <Frame HeightRequest="220"
+                                           CornerRadius="15"
+                                           Padding="20"
+                                           BackgroundColor="#F5F5F5"
+                                           HasShadow="False"
+                                           BorderColor="#DDDDDD"
+                                           HorizontalOptions="Fill"
+                                           VerticalOptions="Center"
+                                           IsVisible="{Binding Equipo.foto, Converter={StaticResource HasImage}, ConverterParameter=invert}">
+                                        <VerticalStackLayout Spacing="12"
+                                                             HorizontalOptions="Center"
+                                                             VerticalOptions="Center">
+                                            <Label Text="👥"
+                                                   FontSize="80"
+                                                   HorizontalOptions="Center"
+                                                   Opacity="0.25" />
+                                            <Label Text="Sin foto del equipo"
+                                                   FontSize="12"
+                                                   TextColor="#999999"
+                                                   FontAttributes="Italic"
+                                                   HorizontalOptions="Center"
+                                                   HorizontalTextAlignment="Center"
+                                                   Opacity="0.7" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                                
+                                <!-- ✅ ESTADÍSTICAS (Derecha - COMPACTAS como puntos) -->
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Spacing="10"
+                                                     VerticalOptions="Center"
+                                                     HorizontalOptions="End">
+                                    
+                                    <!-- Goles a Favor (GF) - Compacto -->
+                                    <Frame Padding="8,5"
+                                           CornerRadius="10"
+                                           BackgroundColor="#4CAF50"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           WidthRequest="90">
+                                        <HorizontalStackLayout Spacing="4" HorizontalOptions="Center">
+                                            <Label Text="GF:"
+                                                   FontSize="11"
+                                                   TextColor="White"
+                                                   Opacity="0.85"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Equipo.golesfavor}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                    
+                                    <!-- Goles en Contra (GC) - Compacto -->
+                                    <Frame Padding="8,5"
+                                           CornerRadius="10"
+                                           BackgroundColor="#F44336"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           WidthRequest="90">
+                                        <HorizontalStackLayout Spacing="4" HorizontalOptions="Center">
+                                            <Label Text="GC:"
+                                                   FontSize="11"
+                                                   TextColor="White"
+                                                   Opacity="0.85"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Equipo.golescontra}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                    
+                                    <!-- Diferencia de Goles (DIF) - Compacto -->
+                                    <Frame Padding="8,5"
+                                           CornerRadius="10"
+                                           BackgroundColor="#2196F3"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           WidthRequest="90">
+                                        <HorizontalStackLayout Spacing="4" HorizontalOptions="Center">
+                                            <Label Text="DIF:"
+                                                   FontSize="11"
+                                                   TextColor="White"
+                                                   Opacity="0.85"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding Equipo.diferenciagoles}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                    
+                                </VerticalStackLayout>
+                                
+                            </Grid>
+
+                            <!-- Línea separadora -->
+                            <BoxView Grid.Row="3" 
+                                     Color="#E0E0E0" 
+                                     HeightRequest="1" />
+
+                            <!-- Representante -->
+                            <Grid Grid.Row="4" 
+                                  Padding="15,12"
                                   BackgroundColor="White">
                                 <HorizontalStackLayout Spacing="10">
                                     <Frame WidthRequest="36"
@@ -177,83 +317,6 @@
                                                MaxLines="1" />
                                     </VerticalStackLayout>
                                 </HorizontalStackLayout>
-                            </Grid>
-
-                            <!-- Línea separadora -->
-                            <BoxView Grid.Row="3" 
-                                     Color="#E0E0E0" 
-                                     HeightRequest="1" 
-                                     Margin="15,0" />
-
-                            <!-- Estadísticas -->
-                            <Grid Grid.Row="4" 
-                                  Padding="15,12"
-                                  BackgroundColor="White"
-                                  ColumnDefinitions="*,*,*">
-                                
-                                <!-- Goles a favor -->
-                                <VerticalStackLayout Grid.Column="0" 
-                                                     Spacing="4"
-                                                     HorizontalOptions="Center">
-                                    <Label Text="GF"
-                                           FontSize="11"
-                                           TextColor="#999999"
-                                           HorizontalOptions="Center" />
-                                    <Frame Padding="8,4"
-                                           CornerRadius="8"
-                                           BackgroundColor="#4CAF50"
-                                           HasShadow="False"
-                                           BorderColor="Transparent"
-                                           HorizontalOptions="Center">
-                                        <Label Text="{Binding Equipo.golesfavor}"
-                                               FontSize="18"
-                                               FontAttributes="Bold"
-                                               TextColor="White" />
-                                    </Frame>
-                                </VerticalStackLayout>
-                                
-                                <!-- Goles en contra -->
-                                <VerticalStackLayout Grid.Column="1" 
-                                                     Spacing="4"
-                                                     HorizontalOptions="Center">
-                                    <Label Text="GC"
-                                           FontSize="11"
-                                           TextColor="#999999"
-                                           HorizontalOptions="Center" />
-                                    <Frame Padding="8,4"
-                                           CornerRadius="8"
-                                           BackgroundColor="#F44336"
-                                           HasShadow="False"
-                                           BorderColor="Transparent"
-                                           HorizontalOptions="Center">
-                                        <Label Text="{Binding Equipo.golescontra}"
-                                               FontSize="18"
-                                               FontAttributes="Bold"
-                                               TextColor="White" />
-                                    </Frame>
-                                </VerticalStackLayout>
-                                
-                                <!-- Diferencia de goles -->
-                                <VerticalStackLayout Grid.Column="2" 
-                                                     Spacing="4"
-                                                     HorizontalOptions="Center">
-                                    <Label Text="DIF"
-                                           FontSize="11"
-                                           TextColor="#999999"
-                                           HorizontalOptions="Center" />
-                                    <Frame Padding="8,4"
-                                           CornerRadius="8"
-                                           BackgroundColor="{StaticResource azulOscuro}"
-                                           HasShadow="False"
-                                           BorderColor="Transparent"
-                                           HorizontalOptions="Center">
-                                        <Label Text="{Binding Equipo.diferenciagoles}"
-                                               FontSize="18"
-                                               FontAttributes="Bold"
-                                               TextColor="White" />
-                                    </Frame>
-                                </VerticalStackLayout>
-                                
                             </Grid>
                             
                         </Grid>

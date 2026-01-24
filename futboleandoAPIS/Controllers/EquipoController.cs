@@ -27,20 +27,36 @@ namespace futboleandoAPIS.Controllers
                 var consulta = (from j in _bd.Equipos
                                 where j.Habilitado == 1
                                    && j.Nombre.Trim() != "_SIN EQUIPO"  // ✅ Excluir equipos sin asignar
-                                select new EquipoListCLS
+                                select new
                                 {
-                                    idequipo = j.Idequipo,
-                                    nombre = j.Nombre,
-                                    representante = j.Representante,                                   
-                                    golesfavor = j.Golesafavor,
-                                    golescontra = j.Golesencontra,
-                                    diferenciagoles = j.Difgoles,
-                                    puntos = j.Puntos
-                                }).OrderByDescending(e => e.puntos)
-                                .ThenByDescending(e => e.diferenciagoles)
-                                .ThenByDescending(e => e.golesfavor)
+                                    j.Idequipo,
+                                    j.Nombre,
+                                    j.Representante,
+                                    j.Fotoequipo,
+                                    j.Golesafavor,
+                                    j.Golesencontra,
+                                    j.Difgoles,
+                                    j.Puntos
+                                }).AsEnumerable()  // ✅ Ejecutar consulta SQL primero
+                                .OrderByDescending(e => e.Puntos ?? 0)
+                                .ThenByDescending(e => e.Difgoles ?? 0)
+                                .ThenByDescending(e => e.Golesafavor ?? 0)
                                 .ToList();
-                return Ok(consulta);
+
+                // ✅ Convertir a EquipoListCLS devolviendo foto como string Base64
+                var resultado = consulta.Select(e => new EquipoListCLS
+                {
+                    idequipo = e.Idequipo,
+                    nombre = e.Nombre,
+                    representante = e.Representante,
+                    foto = LimpiarFotoBase64(e.Fotoequipo),  // ✅ Devuelve string limpio
+                    golesfavor = e.Golesafavor,
+                    golescontra = e.Golesencontra,
+                    diferenciagoles = e.Difgoles,
+                    puntos = e.Puntos
+                }).ToList();
+
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
@@ -58,25 +74,69 @@ namespace futboleandoAPIS.Controllers
                                 where j.Idtorneo == idTorneo 
                                    && j.Habilitado == 1
                                    && j.Nombre.Trim() != "_SIN EQUIPO"  // ✅ Excluir equipos sin asignar
-                                select new EquipoListCLS
+                                select new
                                 {
-                                    idequipo = j.Idequipo,
-                                    nombre = j.Nombre,
-                                    representante = j.Representante,                                   
-                                    golesfavor = j.Golesafavor,
-                                    golescontra = j.Golesencontra,
-                                    diferenciagoles = j.Difgoles,
-                                    puntos = j.Puntos
-                                }).OrderByDescending(e => e.puntos)  // ✅ ORDENAR POR PUNTOS (mayor a menor)
-                                .ThenByDescending(e => e.diferenciagoles)  // ✅ Desempate por diferencia de goles
-                                .ThenByDescending(e => e.golesfavor)  // ✅ Segundo desempate por goles a favor
+                                    j.Idequipo,
+                                    j.Nombre,
+                                    j.Representante,
+                                    j.Fotoequipo,
+                                    j.Golesafavor,
+                                    j.Golesencontra,
+                                    j.Difgoles,
+                                    j.Puntos
+                                }).AsEnumerable()  // ✅ Ejecutar consulta SQL primero
+                                .OrderByDescending(e => e.Puntos ?? 0)
+                                .ThenByDescending(e => e.Difgoles ?? 0)
+                                .ThenByDescending(e => e.Golesafavor ?? 0)
                                 .ToList();
+
+                // ✅ Convertir a EquipoListCLS devolviendo foto como string Base64
+                var resultado = consulta.Select(e => new EquipoListCLS
+                {
+                    idequipo = e.Idequipo,
+                    nombre = e.Nombre,
+                    representante = e.Representante,
+                    foto = LimpiarFotoBase64(e.Fotoequipo),  // ✅ Devuelve string limpio
+                    golesfavor = e.Golesafavor,
+                    golescontra = e.Golesencontra,
+                    diferenciagoles = e.Difgoles,
+                    puntos = e.Puntos
+                }).ToList();
                 
-                return Ok(consulta);
+                return Ok(resultado);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ Método auxiliar para limpiar foto Base64 (elimina prefijo data:image)
+        private string LimpiarFotoBase64(string fotoBase64)
+        {
+            if (string.IsNullOrWhiteSpace(fotoBase64))
+                return null;
+
+            try
+            {
+                // ✅ Eliminar el prefijo "data:image/jpeg;base64," si existe
+                string base64Limpio = fotoBase64;
+                
+                if (fotoBase64.StartsWith("data:image/"))
+                {
+                    var indexComa = fotoBase64.IndexOf(",");
+                    if (indexComa > 0)
+                    {
+                        base64Limpio = fotoBase64.Substring(indexComa + 1);
+                    }
+                }
+
+                return base64Limpio;
+            }
+            catch (Exception)
+            {
+                // Si falla, devolver null
+                return null;
             }
         }
     }

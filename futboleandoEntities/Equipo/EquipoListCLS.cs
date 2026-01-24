@@ -11,7 +11,7 @@ namespace futboleandoEntities.Equipo
         public int idequipo { get; set; }
         public string nombre { get; set; }
         public string representante { get; set; }
-        public byte[] foto { get; set; }
+        public string foto { get; set; }  // ✅ Cambiado de byte[] a string
         public int? golesfavor { get; set; }
         public int? golescontra { get; set; }
         public int? puntos { get; set; }
