@@ -31,22 +31,24 @@
         </VerticalStackLayout>
 
         <!-- Contenido principal sin scroll -->
-        <Grid Grid.Row="1" Padding="20,0">
-            <Frame Padding="20"
+        <Grid Grid.Row="1" Padding="20,10,20,10">
+            <Frame Padding="18"
                    CornerRadius="25"
                    BackgroundColor="White"
                    HasShadow="True"
                    BorderColor="Transparent"
-                   VerticalOptions="Center">
+                   VerticalOptions="Center"
+                   HeightRequest="540">
                 
                 <Frame.Shadow>
                     <Shadow Brush="Black" Opacity="0.4" Radius="20" Offset="0,8" />
                 </Frame.Shadow>
 
-                <VerticalStackLayout Spacing="15">
+                <ScrollView VerticalScrollBarVisibility="Never">
+                    <VerticalStackLayout Spacing="12">
                     
                     <!-- Picker Estado -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="6">
                         <HorizontalStackLayout Spacing="8">
                             <Frame WidthRequest="28"
                                    HeightRequest="28"
@@ -85,7 +87,7 @@
                     </VerticalStackLayout>
 
                     <!-- Picker Municipio -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="6">
                         <HorizontalStackLayout Spacing="8">
                             <Frame WidthRequest="28"
                                    HeightRequest="28"
@@ -120,12 +122,14 @@
                                     BackgroundColor="Transparent"
                                     Margin="10,5"
                                     IsEnabled="False"
+                                    Opacity="1.0"
+                                    Focused="OnPickerFocused"
                                     SelectedIndexChanged="OnMunicipioSelected" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Picker Liga -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="6">
                         <HorizontalStackLayout Spacing="8">
                             <Frame WidthRequest="28"
                                    HeightRequest="28"
@@ -160,12 +164,13 @@
                                     BackgroundColor="Transparent"
                                     Margin="10,5"
                                     IsEnabled="False"
+                                    Opacity="1.0"
                                     SelectedIndexChanged="OnLigaSelected" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- Picker Torneo -->
-                    <VerticalStackLayout Spacing="8">
+                    <VerticalStackLayout Spacing="6">
                         <HorizontalStackLayout Spacing="8">
                             <Frame WidthRequest="28"
                                    HeightRequest="28"
@@ -200,25 +205,19 @@
                                     BackgroundColor="Transparent"
                                     Margin="10,5"
                                     IsEnabled="False"
+                                    Opacity="1.0"
                                     SelectedIndexChanged="OnTorneoSelected" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <ActivityIndicator x:Name="activityIndicator"
-                                       IsRunning="False"
-                                       IsVisible="False"
-                                       Color="#1e3c72"
-                                       HeightRequest="35"
-                                       Margin="0,5,0,0" />
-
                     <Button x:Name="btnVerTorneo"
                             Text="INGRESAR AL TORNEO"
-                            FontSize="17"
+                            FontSize="16"
                             FontAttributes="Bold"
                             TextColor="White"
                             BackgroundColor="#CCCCCC"
                             CornerRadius="15"
-                            HeightRequest="55"
+                            HeightRequest="50"
                             Margin="0,10,0,0"
                             IsEnabled="False"
                             Clicked="OnVerTorneoClicked">
@@ -228,6 +227,7 @@
                     </Button>
 
                 </VerticalStackLayout>
+                </ScrollView>
             </Frame>
         </Grid>
 

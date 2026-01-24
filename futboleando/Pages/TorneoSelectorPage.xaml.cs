@@ -21,6 +21,12 @@ namespace futboleando.Pages
         private readonly EquipoService equipoService;
         private readonly ComunicadoService comunicadoService;
 
+        // ? Bandera para evitar que eventos se disparen durante la carga/restauración
+        private bool _isRestoring = false;
+        private bool _isFirstLoad = true;
+        private bool _isProcessingEvent = false;  // ? Nueva bandera para evitar eventos concurrentes
+        private bool _allowPickerFocus = false;  // ? NUEVA: Controlar si los pickers pueden tener foco
+
         public TorneoSelectorPage(
             EstadoService _estadoService,
             MunicipioService _municipioService,
@@ -48,16 +54,136 @@ namespace futboleando.Pages
             colaboradorService = _colaboradorService;
             equipoService = _equipoService;
             comunicadoService = _comunicadoService;
+        }
 
-            _ = CargarDatosIniciales();
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // ? BLOQUEAR focus en los pickers
+            _allowPickerFocus = false;
+            
+            // ? Forzar opacidad normal ANTES de deshabilitar
+            pickerMunicipio.Opacity = 1.0;
+            pickerLiga.Opacity = 1.0;
+            pickerTorneo.Opacity = 1.0;
+            
+            pickerMunicipio.IsEnabled = false;
+            pickerLiga.IsEnabled = false;
+            pickerTorneo.IsEnabled = false;
+
+            if (_isFirstLoad)
+            {
+                _isFirstLoad = false;
+                await CargarDatosIniciales();
+            }
+            else
+            {
+                // ? Desregistrar eventos ANTES de recargar
+                pickerEstado.SelectedIndexChanged -= OnEstadoSelected;
+                pickerMunicipio.SelectedIndexChanged -= OnMunicipioSelected;
+                pickerLiga.SelectedIndexChanged -= OnLigaSelected;
+                pickerTorneo.SelectedIndexChanged -= OnTorneoSelected;
+
+                // ? No es primera vez: solo recargar sin eventos
+                await RecargarSinEventos();
+
+                // ? Esperar menos tiempo
+                await Task.Delay(300);  // Reducido de 1000ms a 300ms
+
+                // ? Registrar eventos nuevamente
+                pickerEstado.SelectedIndexChanged += OnEstadoSelected;
+                pickerMunicipio.SelectedIndexChanged += OnMunicipioSelected;
+                pickerLiga.SelectedIndexChanged += OnLigaSelected;
+                pickerTorneo.SelectedIndexChanged += OnTorneoSelected;
+
+                // ? AHORA SÍ permitir que los pickers se puedan abrir
+                _allowPickerFocus = true;
+            }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            
+            // ? CRUCIAL: Resetear banderas y bloquear pickers al salir
+            _allowPickerFocus = false;
+            _isRestoring = false;
+            _isProcessingEvent = false;
+            
+            // ? SOLUCIÓN RADICAL: Forzar unfocus en TODOS los pickers
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    pickerEstado.Unfocus();
+                    pickerMunicipio.Unfocus();
+                    pickerLiga.Unfocus();
+                    pickerTorneo.Unfocus();
+                    
+                    // ? Deshabilitar TODOS los pickers
+                    pickerEstado.IsEnabled = true;  // Estado siempre habilitado
+                    pickerMunicipio.IsEnabled = false;
+                    pickerLiga.IsEnabled = false;
+                    pickerTorneo.IsEnabled = false;
+                }
+                catch { }
+            });
+        }
+
+        private async Task RecargarSinEventos()
+        {
+            try
+            {
+                _isRestoring = true;
+
+                var ultimoEstado = Preferences.Get("UltimoEstado", 0);
+                var ultimoMunicipio = Preferences.Get("UltimoMunicipio", 0);
+                var ultimaLiga = Preferences.Get("UltimaLiga", 0);
+                var ultimoTorneo = Preferences.Get("UltimoTorneo", 0);
+
+                if (ultimoEstado > 0)
+                {
+                    await RestaurarSeleccion(ultimoEstado, ultimoMunicipio, ultimaLiga, ultimoTorneo);
+                }
+
+                // ? Esperar menos tiempo para que se vea más rápido
+                await Task.Delay(300);  // Reducido de 1000ms a 300ms
+                
+                // ? Habilitar los pickers manteniendo opacidad
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    if (pickerMunicipio.ItemsSource != null && (pickerMunicipio.ItemsSource as List<MunicipioListCLS>)?.Count > 0)
+                    {
+                        pickerMunicipio.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerMunicipio.IsEnabled = true;
+                    }
+                        
+                    if (pickerLiga.ItemsSource != null && (pickerLiga.ItemsSource as List<LigaListCLS>)?.Count > 0)
+                    {
+                        pickerLiga.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerLiga.IsEnabled = true;
+                    }
+                        
+                    if (pickerTorneo.ItemsSource != null && (pickerTorneo.ItemsSource as List<TorneoListCLS>)?.Count > 0)
+                    {
+                        pickerTorneo.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerTorneo.IsEnabled = true;
+                    }
+                });
+            }
+            finally
+            {
+                _isRestoring = false;
+            }
         }
 
         private async Task CargarDatosIniciales()
         {
             try
             {
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
+                // ? Activar bandera: estamos cargando/restaurando
+                _isRestoring = true;
 
                 var estados = await estadoService.ListarEstados();
 
@@ -84,6 +210,40 @@ namespace futboleando.Pages
                 {
                     await RestaurarSeleccion(ultimoEstado, ultimoMunicipio, ultimaLiga, ultimoTorneo);
                 }
+
+                // ? Esperar menos tiempo para que se vea más rápido
+                await Task.Delay(300);  // Reducido de 1000ms a 300ms
+
+                // ? Habilitar los pickers manteniendo opacidad
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    if (pickerMunicipio.ItemsSource != null && (pickerMunicipio.ItemsSource as List<MunicipioListCLS>)?.Count > 0)
+                    {
+                        pickerMunicipio.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerMunicipio.IsEnabled = true;
+                    }
+                        
+                    if (pickerLiga.ItemsSource != null && (pickerLiga.ItemsSource as List<LigaListCLS>)?.Count > 0)
+                    {
+                        pickerLiga.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerLiga.IsEnabled = true;
+                    }
+                        
+                    if (pickerTorneo.ItemsSource != null && (pickerTorneo.ItemsSource as List<TorneoListCLS>)?.Count > 0)
+                    {
+                        pickerTorneo.Opacity = 1.0;  // ? Forzar antes de habilitar
+                        pickerTorneo.IsEnabled = true;
+                    }
+                });
+
+                // ? Registrar eventos UNA SOLA VEZ al final
+                pickerEstado.SelectedIndexChanged += OnEstadoSelected;
+                pickerMunicipio.SelectedIndexChanged += OnMunicipioSelected;
+                pickerLiga.SelectedIndexChanged += OnLigaSelected;
+                pickerTorneo.SelectedIndexChanged += OnTorneoSelected;
+
+                // ? Permitir que los pickers se puedan abrir
+                _allowPickerFocus = true;
             }
             catch (Exception ex)
             {
@@ -95,8 +255,8 @@ namespace futboleando.Pages
             }
             finally
             {
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
+                // ? Desactivar bandera: ya terminamos de cargar/restaurar
+                _isRestoring = false;
             }
         }
 
@@ -104,68 +264,86 @@ namespace futboleando.Pages
         {
             try
             {
-                // ? Restaurar Estado
+                // ? Cargar TODO secuencialmente en segundo plano (sin mostrar)
                 var estados = pickerEstado.ItemsSource as List<EstadoListCLS>;
-                var estado = estados?.FirstOrDefault(e => e.idestado == idEstado);
-                if (estado != null)
+                
+                var municipiosObs = await municipioService.ListarPorEstado(idEstado);
+                var municipios = municipiosObs?.ToList() ?? new List<MunicipioListCLS>();
+                
+                var ligasObs = municipios.Count > 0 ? await ligaService.ListarPorMunicipio(idMunicipio) : null;
+                var ligas = ligasObs?.ToList() ?? new List<LigaListCLS>();
+                
+                var torneosObs = ligas.Count > 0 ? await torneoService.ListarPorLiga(idLiga) : null;
+                var torneos = torneosObs?.ToList() ?? new List<TorneoListCLS>();
+
+                // ? TODO está cargado, ahora asignar de una sola vez (sin eventos activos)
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    pickerEstado.SelectedItem = estado;
-                    await Task.Delay(500);
+                    // Asignar Estado
+                    var estado = estados?.FirstOrDefault(e => e.idestado == idEstado);
+                    if (estado != null)
+                        pickerEstado.SelectedItem = estado;
 
-                    // ? Cargar y restaurar Municipio
-                    var municipios = await municipioService.ListarPorEstado(idEstado);
-                    pickerMunicipio.ItemsSource = municipios.ToList();
-                    pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
-                    pickerMunicipio.IsEnabled = municipios.Count > 0;
-
-                    var municipio = municipios?.FirstOrDefault(m => m.idmunicipio == idMunicipio);
-                    if (municipio != null)
+                    // Asignar Municipios - PERO NO HABILITAR AÚN
+                    if (municipios.Count > 0)
                     {
-                        pickerMunicipio.SelectedItem = municipio;
-                        await Task.Delay(500);
+                        pickerMunicipio.ItemsSource = municipios;
+                        pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
+                        pickerMunicipio.Opacity = 1.0;  // ? Opacidad normal aunque esté deshabilitado
+                        // ? NO habilitar aquí - se habilita después del delay
 
-                        // ? Cargar y restaurar Liga
-                        var ligas = await ligaService.ListarPorMunicipio(idMunicipio);
-                        pickerLiga.ItemsSource = ligas.ToList();
-                        pickerLiga.ItemDisplayBinding = new Binding("nombre");
-                        pickerLiga.IsEnabled = ligas.Count > 0;
-
-                        var liga = ligas?.FirstOrDefault(l => l.idliga == idLiga);
-                        if (liga != null)
-                        {
-                            pickerLiga.SelectedItem = liga;
-                            await Task.Delay(500);
-
-                            // ? Cargar y restaurar Torneo
-                            var torneos = await torneoService.ListarPorLiga(idLiga);
-                            pickerTorneo.ItemsSource = torneos.ToList();
-                            pickerTorneo.ItemDisplayBinding = new Binding("nombre");
-                            pickerTorneo.IsEnabled = torneos.Count > 0;
-
-                            var torneo = torneos?.FirstOrDefault(t => t.idtorneo == idTorneo);
-                            if (torneo != null)
-                            {
-                                pickerTorneo.SelectedItem = torneo;
-                            }
-                        }
+                        var municipio = municipios.FirstOrDefault(m => m.idmunicipio == idMunicipio);
+                        if (municipio != null)
+                            pickerMunicipio.SelectedItem = municipio;
                     }
-                }
+
+                    // Asignar Ligas - PERO NO HABILITAR AÚN
+                    if (ligas.Count > 0)
+                    {
+                        pickerLiga.ItemsSource = ligas;
+                        pickerLiga.ItemDisplayBinding = new Binding("nombre");
+                        pickerLiga.Opacity = 1.0;  // ? Opacidad normal aunque esté deshabilitado
+                        // ? NO habilitar aquí - se habilita después del delay
+
+                        var liga = ligas.FirstOrDefault(l => l.idliga == idLiga);
+                        if (liga != null)
+                            pickerLiga.SelectedItem = liga;
+                    }
+
+                    // Asignar Torneos - PERO NO HABILITAR AÚN
+                    if (torneos.Count > 0)
+                    {
+                        pickerTorneo.ItemsSource = torneos;
+                        pickerTorneo.ItemDisplayBinding = new Binding("nombre");
+                        pickerTorneo.Opacity = 1.0;  // ? Opacidad normal aunque esté deshabilitado
+                        // ? NO habilitar aquí - se habilita después del delay
+
+                        var torneo = torneos.FirstOrDefault(t => t.idtorneo == idTorneo);
+                        if (torneo != null)
+                            pickerTorneo.SelectedItem = torneo;
+                    }
+
+                    // Validar botón
+                    ValidarSeleccionCompleta();
+                });
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Aviso", "No se pudo restaurar completamente la última selección", "OK");
+                await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
             }
         }
 
         private async void OnEstadoSelected(object sender, EventArgs e)
         {
+            // ? Si estamos restaurando O procesando otro evento, ignorar
+            if (_isRestoring || _isProcessingEvent) return;
+
             try
             {
+                _isProcessingEvent = true;
+
                 var estadoSeleccionado = pickerEstado.SelectedItem as EstadoListCLS;
                 if (estadoSeleccionado == null) return;
-
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
 
                 pickerMunicipio.ItemsSource = null;
                 pickerMunicipio.SelectedItem = null;
@@ -178,6 +356,7 @@ namespace futboleando.Pages
                 pickerMunicipio.ItemsSource = municipios.ToList();
                 pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
                 pickerMunicipio.IsEnabled = municipios.Count > 0;
+                pickerMunicipio.Opacity = 1.0;  // ? Color normal
 
                 ValidarSeleccionCompleta();
             }
@@ -187,20 +366,21 @@ namespace futboleando.Pages
             }
             finally
             {
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
+                _isProcessingEvent = false;
             }
         }
 
         private async void OnMunicipioSelected(object sender, EventArgs e)
         {
+            // ? Si estamos restaurando O procesando otro evento, ignorar
+            if (_isRestoring || _isProcessingEvent) return;
+
             try
             {
+                _isProcessingEvent = true;
+
                 var municipioSeleccionado = pickerMunicipio.SelectedItem as MunicipioListCLS;
                 if (municipioSeleccionado == null) return;
-
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
 
                 pickerLiga.ItemsSource = null;
                 pickerLiga.SelectedItem = null;
@@ -211,6 +391,7 @@ namespace futboleando.Pages
                 pickerLiga.ItemsSource = ligas.ToList();
                 pickerLiga.ItemDisplayBinding = new Binding("nombre");
                 pickerLiga.IsEnabled = ligas.Count > 0;
+                pickerLiga.Opacity = 1.0;  // ? Color normal
 
                 ValidarSeleccionCompleta();
             }
@@ -220,20 +401,21 @@ namespace futboleando.Pages
             }
             finally
             {
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
+                _isProcessingEvent = false;
             }
         }
 
         private async void OnLigaSelected(object sender, EventArgs e)
         {
+            // ? Si estamos restaurando O procesando otro evento, ignorar
+            if (_isRestoring || _isProcessingEvent) return;
+
             try
             {
+                _isProcessingEvent = true;
+
                 var ligaSeleccionada = pickerLiga.SelectedItem as LigaListCLS;
                 if (ligaSeleccionada == null) return;
-
-                activityIndicator.IsRunning = true;
-                activityIndicator.IsVisible = true;
 
                 pickerTorneo.ItemsSource = null;
                 pickerTorneo.SelectedItem = null;
@@ -242,6 +424,7 @@ namespace futboleando.Pages
                 pickerTorneo.ItemsSource = torneos.ToList();
                 pickerTorneo.ItemDisplayBinding = new Binding("nombre");
                 pickerTorneo.IsEnabled = torneos.Count > 0;
+                pickerTorneo.Opacity = 1.0;  // ? Color normal
 
                 ValidarSeleccionCompleta();
             }
@@ -251,13 +434,15 @@ namespace futboleando.Pages
             }
             finally
             {
-                activityIndicator.IsRunning = false;
-                activityIndicator.IsVisible = false;
+                _isProcessingEvent = false;
             }
         }
 
         private void OnTorneoSelected(object sender, EventArgs e)
         {
+            // ? Si estamos restaurando O procesando otro evento, ignorar
+            if (_isRestoring || _isProcessingEvent) return;
+
             ValidarSeleccionCompleta();
         }
 
@@ -318,15 +503,15 @@ namespace futboleando.Pages
                 Preferences.Set("NombreLiga", ligaSeleccionada.nombre);
                 Preferences.Set("NombreTorneo", torneoSeleccionado.nombre);
 
-                // ? Verificar si estamos en navegación (desde el menú) o es primera vez
+                // Verificar si estamos en navegación (desde el menú) o es primera vez
                 if (Navigation.NavigationStack.Count > 1)
                 {
-                    // ? Estamos en navegación del menú, regresar directamente
+                    // Estamos en navegación del menú, regresar directamente
                     await Navigation.PopAsync();
                 }
                 else
                 {
-                    // ? Es primera vez (login), crear el Flyout
+                    // Es primera vez (login), crear el Flyout
                     Application.Current.MainPage = new Flyout(
                         menuService, loginService, jugadorService,
                         ciudadService, colaboradorService, equipoService, comunicadoService);
@@ -335,6 +520,15 @@ namespace futboleando.Pages
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+            }
+        }
+
+        private void OnPickerFocused(object sender, FocusEventArgs e)
+        {
+            // ? Si NO permitimos focus, desenfocamos inmediatamente el picker
+            if (!_allowPickerFocus && sender is Picker picker)
+            {
+                picker.Unfocus();
             }
         }
     }
