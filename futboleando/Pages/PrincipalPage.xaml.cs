@@ -11,6 +11,30 @@ public partial class PrincipalPage : ContentPage
         InitializeComponent();
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        
+        // ? Cargar el nombre del torneo seleccionado
+        CargarNombreTorneo();
+    }
+
+    private void CargarNombreTorneo()
+    {
+        // ? Obtener el nombre del torneo guardado en Preferences
+        var nombreTorneo = Preferences.Get("NombreTorneo", string.Empty);
+        
+        if (!string.IsNullOrWhiteSpace(nombreTorneo))
+        {
+            // ? Solo el nombre del torneo, sin ícono
+            lblTorneoSeleccionado.Text = nombreTorneo;
+        }
+        else
+        {
+            lblTorneoSeleccionado.Text = "Sin torneo seleccionado";
+        }
+    }
+
     private async void OnComunicadosTapped(object sender, EventArgs e)
     {
         var comunicadoService = MauiProgram.ServiceProvider.GetService<ComunicadoService>();

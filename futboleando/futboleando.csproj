@@ -57,15 +57,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <AndroidResource Remove="Pages\NewFolder\**" />
-	  <Compile Remove="Pages\NewFolder\**" />
-	  <EmbeddedResource Remove="Pages\NewFolder\**" />
-	  <MauiCss Remove="Pages\NewFolder\**" />
-	  <MauiXaml Remove="Pages\NewFolder\**" />
-	  <None Remove="Pages\NewFolder\**" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
@@ -130,6 +121,10 @@
 	  <MauiXaml Update="Pages\TorneoSelectorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Pages\Registro\" />
 	</ItemGroup>
 
 </Project>

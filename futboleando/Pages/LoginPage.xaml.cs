@@ -1,5 +1,6 @@
 using futboleandoEntities.Login;
 using futboleando.Service;
+using futboleando.Pages.Registro;
 
 namespace futboleando.Pages;
 
@@ -45,14 +46,19 @@ public partial class LoginPage : ContentPage
         btnIngresar.IsEnabled = false;
         btnIngresar.Text = "Ingresando...";
 
-        bool exito = await loginService.login(oLoginCLS);
+        // ? Llamar al servicio de login mejorado
+        var loginResponse = await loginService.login(oLoginCLS);
         
-        if (exito == true)
+        if (loginResponse != null && loginResponse.exito == true)
         {
-            // Guardar sesión
+            // ? Guardar sesión con datos del usuario
             Preferences.Set("usuario", "ok");
+            Preferences.Set("IdUsuario", loginResponse.idusuario);
+            Preferences.Set("NombreUsuario", loginResponse.nombre);
+            Preferences.Set("IdTipoUsuario", loginResponse.idtipousuario);
+            Preferences.Set("NombreTipoUsuario", loginResponse.nombretipousuario);
             
-            // ? CAMBIO: Siempre ir al selector de torneo
+            // ? Ir directamente al selector de torneo (sin mensaje de bienvenida)
             var estadoService = MauiProgram.ServiceProvider.GetService<EstadoService>();
             var municipioService = MauiProgram.ServiceProvider.GetService<MunicipioService>();
             var ligaService = MauiProgram.ServiceProvider.GetService<LigaService>();
@@ -66,7 +72,8 @@ public partial class LoginPage : ContentPage
         }
         else
         {
-            await DisplayAlert("Error de Autenticación", "Usuario o contraseña incorrecta. Por favor intente nuevamente.", "OK");
+            string mensajeError = loginResponse?.mensaje ?? "Error de conexión con el servidor";
+            await DisplayAlert("Error de Autenticación", mensajeError, "OK");
             btnIngresar.IsEnabled = true;
             btnIngresar.Text = "INGRESAR";
         }
@@ -74,7 +81,12 @@ public partial class LoginPage : ContentPage
 
     private async void OnRegistrarTapped(object sender, EventArgs e)
     {
-        // Aquí puedes navegar a una página de registro o mostrar un mensaje
-        await DisplayAlert("Registro", "La funcionalidad de registro estará disponible próximamente.", "OK");
+        // ? Navegar a la página de registro usando PushModalAsync (siempre funciona)
+        var registroPage = new RegistroPage(loginService);
+        await Navigation.PushModalAsync(new NavigationPage(registroPage)
+        {
+            BarBackgroundColor = Colors.Transparent,
+            BarTextColor = Colors.White
+        });
     }
 }

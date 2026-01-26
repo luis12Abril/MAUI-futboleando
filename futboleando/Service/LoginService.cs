@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,22 +10,73 @@ namespace futboleando.Service
 {
     public class LoginService
     {
-        public LoginService()
-        {
+        private readonly HttpClient _httpClient;
 
+        public LoginService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
         }
 
-        public async Task<bool> login(LoginCLS oLoginCLS)
+        // ✅ Método mejorado que consume el API
+        public async Task<LoginResponseCLS> login(LoginCLS oLoginCLS)
         {
-            if (oLoginCLS.nombreusuario.Equals("luis") && oLoginCLS.contra.Equals("Labt1970"))
+            try
             {
-                return true;
+                var response = await _httpClient.PostAsJsonAsync("api/Usuario/Login", oLoginCLS);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<LoginResponseCLS>();
+                    return result;
+                }
+                else
+                {
+                    return new LoginResponseCLS
+                    {
+                        exito = false,
+                        mensaje = "Error al conectar con el servidor"
+                    };
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return false;
+                return new LoginResponseCLS
+                {
+                    exito = false,
+                    mensaje = $"Error de conexión: {ex.Message}"
+                };
             }
         }
 
+        // ✅ Método de registro que consume el API
+        public async Task<RegistroResponseCLS> Registrar(RegistroRequestCLS oRegistroRequestCLS)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/Usuario/Registrar", oRegistroRequestCLS);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<RegistroResponseCLS>();
+                    return result;
+                }
+                else
+                {
+                    return new RegistroResponseCLS
+                    {
+                        exito = false,
+                        mensaje = "Error al conectar con el servidor"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new RegistroResponseCLS
+                {
+                    exito = false,
+                    mensaje = $"Error de conexión: {ex.Message}"
+                };
+            }
+        }
     }
 }

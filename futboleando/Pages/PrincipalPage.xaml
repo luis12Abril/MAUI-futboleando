@@ -24,22 +24,31 @@
                     <Shadow Brush="Black" Opacity="0.3" Radius="15" Offset="0,5" />
                 </Frame.Shadow>
                 
-                <VerticalStackLayout Spacing="15">
+                <VerticalStackLayout Spacing="10">
                     <Label Text="⚽"
-                           FontSize="60"
+                           FontSize="50"
                            HorizontalOptions="Center" />
                     
                     <Label Text="¡Bienvenido a Futboleando!"
-                           FontSize="26"
+                           FontSize="24"
                            FontAttributes="Bold"
                            TextColor="White"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center" />
                     
-                    <Label Text="Sistema de gestión de torneos deportivos"
-                           FontSize="16"
+                    <Label x:Name="lblTorneoSeleccionado"
+                           Text="Torneo: Cargando..."
+                           FontSize="15"
+                           FontAttributes="Bold"
                            TextColor="White"
-                           Opacity="0.9"
+                           Opacity="0.95"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                    
+                    <Label Text="Sistema de gestión de torneos deportivos"
+                           FontSize="14"
+                           TextColor="White"
+                           Opacity="0.85"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
