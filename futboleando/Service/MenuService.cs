@@ -19,6 +19,7 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=2 , nombreopcion="Jugador" , nombreicono="🏃"},
                 new MenuCLS{ idmenu=3 , nombreopcion="Equipo" , nombreicono="👥"},
                 new MenuCLS{ idmenu=4 , nombreopcion="Campo" , nombreicono="🏟️"},
+                new MenuCLS{ idmenu=7 , nombreopcion="Juegos" , nombreicono="⚽"},
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
                 new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
                 new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},

@@ -1,6 +1,7 @@
 using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
 using futboleando.Pages.Comunicado;
+using futboleando.Pages.Juego;
 using futboleando.Service;
 using futboleandoEntities.Menu;
 using System.Collections.ObjectModel;
@@ -83,6 +84,13 @@ public partial class MenuPage : ContentPage
             case 6:
                 ComunicadoPage oComunicadoPage = new ComunicadoPage(comunicadoService);
                 App.Navigate.PushAsync(oComunicadoPage); break;
+
+            // ? NUEVO: Juegos
+            case 7:
+                var juegoService = MauiProgram.ServiceProvider.GetService<JuegoService>();
+                JuegoPage oJuegoPage = new JuegoPage(juegoService);
+                App.Navigate.PushAsync(oJuegoPage); 
+                break;
 
             case 20:
                 ColaboradorPage oColaboradorPage = new ColaboradorPage(ciudadService, colaboradorService);
