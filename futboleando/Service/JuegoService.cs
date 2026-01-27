@@ -39,6 +39,21 @@ namespace futboleando.Service
             }
         }
 
+        // ? Obtener detalles de un juego específico
+        public async Task<JuegoDetallesCLS?> ObtenerDetallesJuego(int idJuego)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<JuegoDetallesCLS>($"api/Juego/Detalles/{idJuego}");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error en ObtenerDetallesJuego: {ex.Message}");
+                return null;
+            }
+        }
+
         // ? Listar juegos por torneo y jornada
         public async Task<ObservableCollection<JuegoListCLS>> ListarJuegosPorTorneoYJornada(int idTorneo, int idJornada)
         {

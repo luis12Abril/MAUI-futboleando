@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Juego.JuegoPageVerMas"
+             Title="Detalles del Juego"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+
+            <!-- Encabezado Compacto -->
+            <Frame Padding="12" CornerRadius="10" BackgroundColor="#2C5F7F" HasShadow="True">
+                <VerticalStackLayout Spacing="5">
+                    <Label x:Name="lblJornada"
+                           Text="JORNADA 6"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label x:Name="lblFechaHora"
+                           Text="23/SEP/2023 5:00 PM"
+                           FontSize="12"
+                           TextColor="White"
+                           HorizontalOptions="Center" />
+                    <Label x:Name="lblEstatus"
+                           Text="JUGADO"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="#FFD700"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Marcador Compacto -->
+            <Frame Padding="10" CornerRadius="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="8">
+                    
+                    <!-- Equipo 1 -->
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Frame Grid.Column="0"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               CornerRadius="20"
+                               Padding="0"
+                               BackgroundColor="#F5F5F5"
+                               HasShadow="False">
+                            <Image x:Name="imgEquipo01" Aspect="AspectFit" />
+                        </Frame>
+                        
+                        <Label Grid.Column="1"
+                               x:Name="lblNombreEquipo01"
+                               Text="AGROPECUARIOS"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#2C5F7F"
+                               VerticalOptions="Center"
+                               Margin="8,0,0,0" />
+                        
+                        <Frame Grid.Column="2"
+                               WidthRequest="45"
+                               HeightRequest="45"
+                               CornerRadius="22"
+                               Padding="0"
+                               BackgroundColor="#2C5F7F"
+                               HasShadow="False">
+                            <Label x:Name="lblGolesEquipo01"
+                                   Text="3"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Frame>
+                    </Grid>
+
+                    <BoxView Color="#E0E0E0" HeightRequest="1" />
+
+                    <!-- Equipo 2 -->
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Frame Grid.Column="0"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                               CornerRadius="20"
+                               Padding="0"
+                               BackgroundColor="#F5F5F5"
+                               HasShadow="False">
+                            <Image x:Name="imgEquipo02" Aspect="AspectFit" />
+                        </Frame>
+                        
+                        <Label Grid.Column="1"
+                               x:Name="lblNombreEquipo02"
+                               Text="INSTITUTO DEL NOROESTE"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#C9302C"
+                               VerticalOptions="Center"
+                               Margin="8,0,0,0" />
+                        
+                        <Frame Grid.Column="2"
+                               WidthRequest="45"
+                               HeightRequest="45"
+                               CornerRadius="22"
+                               Padding="0"
+                               BackgroundColor="#C9302C"
+                               HasShadow="False">
+                            <Label x:Name="lblGolesEquipo02"
+                                   Text="1"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Info Partido Compacta -->
+            <Frame Padding="10" CornerRadius="10" BackgroundColor="White" HasShadow="True">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="8" ColumnSpacing="8">
+                    
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
+                        <Label Text="CAMPO" FontSize="9" TextColor="#999999" />
+                        <Label x:Name="lblCampo"
+                               Text="ESTADIO"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#333333" />
+                    </VerticalStackLayout>
+                    
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="2">
+                        <Label Text="ARBITRO" FontSize="9" TextColor="#999999" />
+                        <Label x:Name="lblArbitro"
+                               Text="ANGEL SOTELO"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#333333" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+
+            <!-- Goles Equipo 1 Compacto -->
+            <Frame Padding="10" CornerRadius="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="8">
+                    <Label x:Name="lblTituloGolesEquipo01"
+                           Text="GOLES EQUIPO 1"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="#2C5F7F" />
+                    
+                    <BoxView Color="#E0E0E0" HeightRequest="1" />
+                    
+                    <CollectionView x:Name="collectionGolesEquipo01" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="8,6" ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding nombrejugador}"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="#333333"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding goles}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#2C5F7F"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    
+                    <Label x:Name="lblNoGolesEquipo01"
+                           Text="Sin goles anotados"
+                           FontSize="12"
+                           TextColor="#999999"
+                           FontAttributes="Italic"
+                           HorizontalOptions="Center"
+                           IsVisible="False" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Goles Equipo 2 Compacto -->
+            <Frame Padding="10" CornerRadius="10" BackgroundColor="White" HasShadow="True">
+                <VerticalStackLayout Spacing="8">
+                    <Label x:Name="lblTituloGolesEquipo02"
+                           Text="GOLES EQUIPO 2"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           TextColor="#C9302C" />
+                    
+                    <BoxView Color="#E0E0E0" HeightRequest="1" />
+                    
+                    <CollectionView x:Name="collectionGolesEquipo02" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="8,6" ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding nombrejugador}"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="#333333"
+                                           VerticalOptions="Center" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding goles}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#C9302C"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    
+                    <Label x:Name="lblNoGolesEquipo02"
+                           Text="Sin goles anotados"
+                           FontSize="12"
+                           TextColor="#999999"
+                           FontAttributes="Italic"
+                           HorizontalOptions="Center"
+                           IsVisible="False" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
