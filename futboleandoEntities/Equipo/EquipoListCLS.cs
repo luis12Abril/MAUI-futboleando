@@ -16,6 +16,15 @@ namespace futboleandoEntities.Equipo
         public int? golescontra { get; set; }
         public int? puntos { get; set; }
         public int? diferenciagoles { get; set; }
-
+        
+        // Campos adicionales para tabla de posiciones
+        public int? jugados { get; set; }
+        public int? ganados { get; set; }
+        public int? perdidos { get; set; }
+        public int? empatados { get; set; }
+        public int? empatadosganados { get; set; }
+        public int? golesafavor { get; set; }
+        public int? golesencontra { get; set; }
+        public int? difgoles { get; set; }
     }
 }

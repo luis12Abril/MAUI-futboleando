@@ -115,6 +115,9 @@
 	  <MauiXaml Update="Pages\MenuPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Posiciones\PosicionesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PrincipalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

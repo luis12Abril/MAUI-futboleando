@@ -66,7 +66,7 @@
                   ColumnSpacing="15"
                   RowSpacing="15">
                 
-                <!-- Tarjeta: Comunicados -->
+                <!-- Tarjeta: Juegos -->
                 <Frame Grid.Column="0" Grid.Row="0"
                        Padding="20"
                        CornerRadius="15"
@@ -74,14 +74,14 @@
                        HasShadow="True"
                        BorderColor="Transparent">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnComunicadosTapped" />
+                        <TapGestureRecognizer Tapped="OnJuegosTapped" />
                     </Frame.GestureRecognizers>
                     
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="📢"
+                        <Label Text="⚽"
                                FontSize="40"
                                HorizontalOptions="Center" />
-                        <Label Text="Comunicados"
+                        <Label Text="Juegos"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="{StaticResource azulOscuro}"
@@ -90,8 +90,32 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Tarjeta: Equipos -->
+                <!-- Tarjeta: Posiciones -->
                 <Frame Grid.Column="1" Grid.Row="0"
+                       Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPosicionesTapped" />
+                    </Frame.GestureRecognizers>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="🏆"
+                               FontSize="40"
+                               HorizontalOptions="Center" />
+                        <Label Text="Posiciones"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource rojoOscuro}"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Tarjeta: Equipos -->
+                <Frame Grid.Column="0" Grid.Row="1"
                        Padding="20"
                        CornerRadius="15"
                        BackgroundColor="White"
@@ -108,14 +132,14 @@
                         <Label Text="Equipos"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="{StaticResource rojoOscuro}"
+                               TextColor="{StaticResource verdeOscuro}"
                                HorizontalOptions="Center"
                                HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Frame>
 
                 <!-- Tarjeta: Jugadores -->
-                <Frame Grid.Column="0" Grid.Row="1"
+                <Frame Grid.Column="1" Grid.Row="1"
                        Padding="20"
                        CornerRadius="15"
                        BackgroundColor="White"
@@ -130,30 +154,6 @@
                                FontSize="40"
                                HorizontalOptions="Center" />
                         <Label Text="Jugadores"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="{StaticResource verdeOscuro}"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Tarjeta: Juegos -->
-                <Frame Grid.Column="1" Grid.Row="1"
-                       Padding="20"
-                       CornerRadius="15"
-                       BackgroundColor="White"
-                       HasShadow="True"
-                       BorderColor="Transparent">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnJuegosTapped" />
-                    </Frame.GestureRecognizers>
-                    
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="⚽"
-                               FontSize="40"
-                               HorizontalOptions="Center" />
-                        <Label Text="Juegos"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="#FF9800"

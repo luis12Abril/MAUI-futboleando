@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Posiciones.PosicionesPage"
+             Title="TABLA DE POSICIONES"
+             BackgroundColor="#1E88E5">
+    
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- ========== TABS DE VISTA ========== -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="*,*,*"
+              Padding="0"
+              BackgroundColor="#1E88E5">
+            
+            <!-- VISTA 1 -->
+            <Border Grid.Column="0"
+                    x:Name="vista1Border"
+                    BackgroundColor="White"
+                    Margin="0,0,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0,0,0,0" />
+                </Border.StrokeShape>
+                
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVista1Tapped" />
+                </Border.GestureRecognizers>
+                
+                <Label Text="VISTA 1"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       TextColor="#1E88E5"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="0,12" />
+            </Border>
+
+            <!-- VISTA 2 -->
+            <Border Grid.Column="1"
+                    x:Name="vista2Border"
+                    BackgroundColor="Transparent"
+                    Margin="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0,0,0,0" />
+                </Border.StrokeShape>
+                
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVista2Tapped" />
+                </Border.GestureRecognizers>
+                
+                <Label Text="VISTA 2"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       Opacity="0.7"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="0,12" />
+            </Border>
+
+            <!-- VISTA 3 -->
+            <Border Grid.Column="2"
+                    x:Name="vista3Border"
+                    BackgroundColor="Transparent"
+                    Margin="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="0,0,0,0" />
+                </Border.StrokeShape>
+                
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnVista3Tapped" />
+                </Border.GestureRecognizers>
+                
+                <Label Text="VISTA 3"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       Opacity="0.7"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Padding="0,12" />
+            </Border>
+        </Grid>
+
+        <!-- ========== CONTENIDO (VISTA 1 - TABLA DE POSICIONES) ========== -->
+        <Grid Grid.Row="1" 
+              x:Name="contenidoVista1"
+              BackgroundColor="#F5F5F5">
+            
+            <ScrollView>
+                <VerticalStackLayout Padding="0" Spacing="0">
+                    
+                    <!-- ========== ENCABEZADOS DE LA TABLA ========== -->
+                    <Border BackgroundColor="White"
+                            Margin="0"
+                            Padding="0">
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.1" Radius="4" Offset="0,2" />
+                        </Border.Shadow>
+                        
+                        <Grid ColumnDefinitions="22,3*,28,28,28,28,28,32,32,32,35"
+                              Padding="8,12"
+                              BackgroundColor="White">
+                            
+                            <Label Grid.Column="0" Text="#" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="1" Text="EQUIPOS" FontSize="10" FontAttributes="Bold" TextColor="#666" Margin="4,0,0,0" />
+                            <Label Grid.Column="2" Text="JJ" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="3" Text="JG" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="JP" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="5" Text="JE" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="6" Text="EG" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="7" Text="GF" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="8" Text="GC" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="9" Text="DG" FontSize="10" FontAttributes="Bold" TextColor="#666" HorizontalOptions="Center" />
+                            <Label Grid.Column="10" Text="PT" FontSize="10" FontAttributes="Bold" TextColor="#1E88E5" HorizontalOptions="Center" />
+                        </Grid>
+                    </Border>
+
+                    <!-- ========== LISTA DE EQUIPOS ========== -->
+                    <CollectionView x:Name="listaPosiciones"
+                                    ItemsSource="{Binding ListaPosiciones}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White"
+                                        Margin="0,1,0,0"
+                                        Padding="0">
+                                    
+                                    <Grid ColumnDefinitions="22,3*,28,28,28,28,28,32,32,32,35"
+                                          Padding="8,14"
+                                          BackgroundColor="White">
+                                        
+                                        <!-- Número de posición con círculo -->
+                                        <Border Grid.Column="0"
+                                                BackgroundColor="#1E88E5"
+                                                WidthRequest="22"
+                                                HeightRequest="22"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="11" />
+                                            </Border.StrokeShape>
+                                            
+                                            <Label Text="{Binding Posicion}" 
+                                                   FontSize="11" 
+                                                   FontAttributes="Bold" 
+                                                   TextColor="White" 
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                        
+                                        <!-- Nombre del equipo -->
+                                        <Label Grid.Column="1" 
+                                               Text="{Binding Equipo.nombre}" 
+                                               FontSize="12" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#212121"
+                                               LineBreakMode="TailTruncation"
+                                               VerticalOptions="Center"
+                                               Margin="8,0,4,0" />
+                                        
+                                        <!-- JJ -->
+                                        <Label Grid.Column="2" 
+                                               Text="{Binding Equipo.jugados}" 
+                                               FontSize="11" 
+                                               TextColor="#424242" 
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- JG -->
+                                        <Label Grid.Column="3" 
+                                               Text="{Binding Equipo.ganados}" 
+                                               FontSize="11" 
+                                               TextColor="#4CAF50"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- JP -->
+                                        <Label Grid.Column="4" 
+                                               Text="{Binding Equipo.perdidos}" 
+                                               FontSize="11" 
+                                               TextColor="#F44336"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- JE -->
+                                        <Label Grid.Column="5" 
+                                               Text="{Binding Equipo.empatados}" 
+                                               FontSize="11" 
+                                               TextColor="#FF9800" 
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- EG -->
+                                        <Label Grid.Column="6" 
+                                               Text="{Binding Equipo.empatadosganados}" 
+                                               FontSize="11" 
+                                               TextColor="#424242" 
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- GF -->
+                                        <Label Grid.Column="7" 
+                                               Text="{Binding Equipo.golesafavor}" 
+                                               FontSize="11" 
+                                               TextColor="#424242"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- GC -->
+                                        <Label Grid.Column="8" 
+                                               Text="{Binding Equipo.golesencontra}" 
+                                               FontSize="11" 
+                                               TextColor="#424242" 
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- DG -->
+                                        <Label Grid.Column="9" 
+                                               Text="{Binding Equipo.difgoles}" 
+                                               FontSize="11" 
+                                               TextColor="#424242"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- PT con fondo destacado -->
+                                        <Border Grid.Column="10"
+                                                BackgroundColor="#E3F2FD"
+                                                WidthRequest="32"
+                                                HeightRequest="28"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="6" />
+                                            </Border.StrokeShape>
+                                            
+                                            <Label Text="{Binding Equipo.puntos}" 
+                                                   FontSize="12" 
+                                                   FontAttributes="Bold" 
+                                                   TextColor="#1E88E5" 
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+        <!-- ========== VISTA 2 (PLACEHOLDER) ========== -->
+        <Grid Grid.Row="1" 
+              x:Name="contenidoVista2"
+              IsVisible="False"
+              BackgroundColor="#F5F5F5">
+            <VerticalStackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="20">
+                <Label Text="🏆"
+                       FontSize="60"
+                       HorizontalOptions="Center" />
+                <Label Text="VISTA 2"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#666"
+                       HorizontalOptions="Center" />
+                <Label Text="Próximamente"
+                       FontSize="16"
+                       TextColor="#999"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- ========== VISTA 3 (PLACEHOLDER) ========== -->
+        <Grid Grid.Row="1" 
+              x:Name="contenidoVista3"
+              IsVisible="False"
+              BackgroundColor="#F5F5F5">
+            <VerticalStackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="20">
+                <Label Text="📊"
+                       FontSize="60"
+                       HorizontalOptions="Center" />
+                <Label Text="VISTA 3"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#666"
+                       HorizontalOptions="Center" />
+                <Label Text="Próximamente"
+                       FontSize="16"
+                       TextColor="#999"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+
+    </Grid>
+    
+</ContentPage>

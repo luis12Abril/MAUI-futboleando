@@ -1,6 +1,5 @@
-using futboleando.Pages.Ciudad;
-using futboleando.Pages.Comunicado;
 using futboleando.Pages.Juego;
+using futboleando.Pages.Posiciones;
 using futboleando.Service;
 
 namespace futboleando.Pages;
@@ -36,13 +35,23 @@ public partial class PrincipalPage : ContentPage
         }
     }
 
-    private async void OnComunicadosTapped(object sender, EventArgs e)
+    private async void OnJuegosTapped(object sender, EventArgs e)
     {
-        var comunicadoService = MauiProgram.ServiceProvider.GetService<ComunicadoService>();
-        if (comunicadoService != null)
+        var juegoService = MauiProgram.ServiceProvider.GetService<JuegoService>();
+        if (juegoService != null)
         {
-            var comunicadoPage = new ComunicadoPage(comunicadoService);
-            await App.Navigate.PushAsync(comunicadoPage);
+            var juegoPage = new JuegoPage(juegoService);
+            await App.Navigate.PushAsync(juegoPage);
+        }
+    }
+
+    private async void OnPosicionesTapped(object sender, EventArgs e)
+    {
+        var equipoService = MauiProgram.ServiceProvider.GetService<EquipoService>();
+        if (equipoService != null)
+        {
+            var posicionesPage = new PosicionesPage(equipoService);
+            await App.Navigate.PushAsync(posicionesPage);
         }
     }
 
@@ -63,16 +72,6 @@ public partial class PrincipalPage : ContentPage
         {
             var jugadorPage = new JugadorPage(jugadorService);
             await App.Navigate.PushAsync(jugadorPage);
-        }
-    }
-
-    private async void OnJuegosTapped(object sender, EventArgs e)
-    {
-        var juegoService = MauiProgram.ServiceProvider.GetService<JuegoService>();
-        if (juegoService != null)
-        {
-            var juegoPage = new JuegoPage(juegoService);
-            await App.Navigate.PushAsync(juegoPage);
         }
     }
 }

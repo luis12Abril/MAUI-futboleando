@@ -111,7 +111,7 @@ namespace futboleandoAPIS.Controllers
                                       group g by new { g.Idjugador, jug.Nombre, jug.Appaterno, jug.Apmaterno } into grp
                                       select new GolDetalleCLS
                                       {
-                                          idjugador = grp.Key.Idjugador,
+                                          idjugador = grp.Key.Idjugador ?? 0,
                                           nombrejugador = $"{grp.Key.Nombre} {grp.Key.Appaterno} {grp.Key.Apmaterno}".Trim(),
                                           goles = grp.Sum(x => x.Goles ?? 0)
                                       }).ToList();
@@ -123,7 +123,7 @@ namespace futboleandoAPIS.Controllers
                                       group g by new { g.Idjugador, jug.Nombre, jug.Appaterno, jug.Apmaterno } into grp
                                       select new GolDetalleCLS
                                       {
-                                          idjugador = grp.Key.Idjugador,
+                                          idjugador = grp.Key.Idjugador ?? 0,
                                           nombrejugador = $"{grp.Key.Nombre} {grp.Key.Appaterno} {grp.Key.Apmaterno}".Trim(),
                                           goles = grp.Sum(x => x.Goles ?? 0)
                                       }).ToList();

@@ -36,11 +36,17 @@ namespace futboleandoAPIS.Controllers
                                     j.Golesafavor,
                                     j.Golesencontra,
                                     j.Difgoles,
-                                    j.Puntos
+                                    j.Puntos,
+                                    j.Jugados,
+                                    j.Ganados,
+                                    j.Perdidos,
+                                    j.Empatados,
+                                    j.Empatadosganados
                                 }).AsEnumerable()  // ✅ Ejecutar consulta SQL primero
                                 .OrderByDescending(e => e.Puntos ?? 0)
                                 .ThenByDescending(e => e.Difgoles ?? 0)
                                 .ThenByDescending(e => e.Golesafavor ?? 0)
+                                .ThenBy(e => e.Nombre)
                                 .ToList();
 
                 // ✅ Convertir a EquipoListCLS devolviendo foto como string Base64
@@ -53,7 +59,15 @@ namespace futboleandoAPIS.Controllers
                     golesfavor = e.Golesafavor,
                     golescontra = e.Golesencontra,
                     diferenciagoles = e.Difgoles,
-                    puntos = e.Puntos
+                    puntos = e.Puntos,
+                    jugados = e.Jugados,
+                    ganados = e.Ganados,
+                    perdidos = e.Perdidos,
+                    empatados = e.Empatados,
+                    empatadosganados = e.Empatadosganados,
+                    golesafavor = e.Golesafavor,
+                    golesencontra = e.Golesencontra,
+                    difgoles = e.Difgoles
                 }).ToList();
 
                 return Ok(resultado);
@@ -83,11 +97,17 @@ namespace futboleandoAPIS.Controllers
                                     j.Golesafavor,
                                     j.Golesencontra,
                                     j.Difgoles,
-                                    j.Puntos
+                                    j.Puntos,
+                                    j.Jugados,
+                                    j.Ganados,
+                                    j.Perdidos,
+                                    j.Empatados,
+                                    j.Empatadosganados
                                 }).AsEnumerable()  // ✅ Ejecutar consulta SQL primero
                                 .OrderByDescending(e => e.Puntos ?? 0)
                                 .ThenByDescending(e => e.Difgoles ?? 0)
                                 .ThenByDescending(e => e.Golesafavor ?? 0)
+                                .ThenBy(e => e.Nombre)
                                 .ToList();
 
                 // ✅ Convertir a EquipoListCLS devolviendo foto como string Base64
@@ -100,7 +120,15 @@ namespace futboleandoAPIS.Controllers
                     golesfavor = e.Golesafavor,
                     golescontra = e.Golesencontra,
                     diferenciagoles = e.Difgoles,
-                    puntos = e.Puntos
+                    puntos = e.Puntos,
+                    jugados = e.Jugados,
+                    ganados = e.Ganados,
+                    perdidos = e.Perdidos,
+                    empatados = e.Empatados,
+                    empatadosganados = e.Empatadosganados,
+                    golesafavor = e.Golesafavor,
+                    golesencontra = e.Golesencontra,
+                    difgoles = e.Difgoles
                 }).ToList();
                 
                 return Ok(resultado);
