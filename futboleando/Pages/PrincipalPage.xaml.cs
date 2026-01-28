@@ -1,5 +1,6 @@
 using futboleando.Pages.Ciudad;
 using futboleando.Pages.Comunicado;
+using futboleando.Pages.Juego;
 using futboleando.Service;
 
 namespace futboleando.Pages;
@@ -65,13 +66,13 @@ public partial class PrincipalPage : ContentPage
         }
     }
 
-    private async void OnCiudadesTapped(object sender, EventArgs e)
+    private async void OnJuegosTapped(object sender, EventArgs e)
     {
-        var ciudadService = MauiProgram.ServiceProvider.GetService<CiudadService>();
-        if (ciudadService != null)
+        var juegoService = MauiProgram.ServiceProvider.GetService<JuegoService>();
+        if (juegoService != null)
         {
-            var ciudadPage = new CiudadPage(ciudadService);
-            await App.Navigate.PushAsync(ciudadPage);
+            var juegoPage = new JuegoPage(juegoService);
+            await App.Navigate.PushAsync(juegoPage);
         }
     }
 }

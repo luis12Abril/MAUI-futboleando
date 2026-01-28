@@ -138,7 +138,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Tarjeta: Ciudades -->
+                <!-- Tarjeta: Juegos -->
                 <Frame Grid.Column="1" Grid.Row="1"
                        Padding="20"
                        CornerRadius="15"
@@ -146,14 +146,14 @@
                        HasShadow="True"
                        BorderColor="Transparent">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnCiudadesTapped" />
+                        <TapGestureRecognizer Tapped="OnJuegosTapped" />
                     </Frame.GestureRecognizers>
                     
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="🏙️"
+                        <Label Text="⚽"
                                FontSize="40"
                                HorizontalOptions="Center" />
-                        <Label Text="Ciudades"
+                        <Label Text="Juegos"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="#FF9800"
