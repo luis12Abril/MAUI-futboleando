@@ -203,7 +203,7 @@ public partial class JuegoPage : ContentPage
 
     private void ActualizarContador()
     {
-        lblTotalJuegos.Text = $"Total de juegos: {juegosFiltrados.Count} (mostrando {listajuegos.Count})";
+        lblTotalJuegos.Text = $"Total de juegos: {juegosFiltrados.Count}";
     }
 
     private async void OnVerMasClicked(object sender, EventArgs e)

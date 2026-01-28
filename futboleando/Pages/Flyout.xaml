@@ -6,8 +6,9 @@
 
     <FlyoutPage.Detail>
         <NavigationPage BarBackgroundColor="{StaticResource rojoOscuro}" 
-                        BarTextColor="{StaticResource colorblanco}" 
+                        BarTextColor="{StaticResource colorblanco}"
                         x:Name="Navigate">
+            
             <x:Arguments>
                 <pages:PrincipalPage />
             </x:Arguments>

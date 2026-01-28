@@ -28,20 +28,14 @@
                 </LinearGradientBrush>
             </Frame.Background>
 
-            <VerticalStackLayout Spacing="8">
-                <Label Text="JUEGOS DEL TORNEO"
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center" />
-                
-                <Label x:Name="lblTorneoNombre"
-                       Text="Torneo: Cargando..."
-                       FontSize="14"
-                       TextColor="White"
-                       Opacity="0.9"
-                       HorizontalOptions="Center" />
-            </VerticalStackLayout>
+            <!-- Solo mostrar el nombre del torneo -->
+            <Label x:Name="lblTorneoNombre"
+                   Text="Torneo: Cargando..."
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
         </Frame>
 
         <!-- ========== FILTRO POR JORNADA ========== -->
@@ -53,30 +47,23 @@
                BorderColor="Transparent"
                Margin="15,0,15,10">
             
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Seleccione una Jornada"
-                       FontSize="16"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource azulOscuro}"
-                       HorizontalOptions="Center" />
-                
-                <Border StrokeThickness="2"
-                        Stroke="{StaticResource azulOscuro}"
-                        StrokeShape="RoundRectangle 12"
-                        BackgroundColor="#F8F9FA">
-                    <Picker x:Name="pickerJornada"
-                            Title="-- Todas las Jornadas --"
-                            ItemsSource="{Binding listajornada}"
-                            ItemDisplayBinding="{Binding nombre}"
-                            SelectedItem="{Binding jornadaSeleccionada}"
-                            SelectedIndexChanged="OnJornadaSelected"
-                            FontSize="15"
-                            TextColor="{StaticResource azulOscuro}"
-                            TitleColor="#6c757d"
-                            BackgroundColor="Transparent"
-                            Margin="10,5" />
-                </Border>
-            </VerticalStackLayout>
+            <!-- Solo mostrar el picker sin texto adicional -->
+            <Border StrokeThickness="2"
+                    Stroke="{StaticResource azulOscuro}"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#F8F9FA">
+                <Picker x:Name="pickerJornada"
+                        Title="-- Todas las Jornadas --"
+                        ItemsSource="{Binding listajornada}"
+                        ItemDisplayBinding="{Binding nombre}"
+                        SelectedItem="{Binding jornadaSeleccionada}"
+                        SelectedIndexChanged="OnJornadaSelected"
+                        FontSize="15"
+                        TextColor="{StaticResource azulOscuro}"
+                        TitleColor="#6c757d"
+                        BackgroundColor="Transparent"
+                        Margin="10,5" />
+            </Border>
         </Frame>
 
         <!-- ========== LISTA DE JUEGOS ========== -->
