@@ -80,22 +80,47 @@
         </Frame>
 
         <!-- ========== LISTA DE JUEGOS ========== -->
-        <ScrollView Grid.Row="2">
-            <VerticalStackLayout Padding="15,0,15,15" Spacing="12">
-                <CollectionView x:Name="collectionJuegos"
-                                ItemsSource="{Binding listajuegos}"
-                                SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Padding="0"
-                                   CornerRadius="15"
-                                   HasShadow="True"
-                                   BorderColor="Transparent"
-                                   BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}"
-                                   Margin="0,5">
-                                
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                      Padding="18">
+        <Grid Grid.Row="2">
+            <!-- Indicador de carga -->
+            <ActivityIndicator x:Name="loadingIndicator"
+                             IsRunning="False"
+                             IsVisible="False"
+                             Color="{StaticResource azulOscuro}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             HeightRequest="50"
+                             WidthRequest="50" />
+            
+            <ScrollView>
+                <VerticalStackLayout Padding="15,0,15,15" Spacing="12">
+                    <CollectionView x:Name="collectionJuegos"
+                                    ItemsSource="{Binding listajuegos}"
+                                    SelectionMode="None"
+                                    RemainingItemsThreshold="5"
+                                    RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
+                        
+                        <!-- Configuración de rendimiento -->
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                        </CollectionView.ItemsLayout>
+                        
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="3"
+                                        Stroke="{StaticResource azulOscuro}"
+                                        StrokeShape="RoundRectangle 15"
+                                        Margin="0,5"
+                                        BackgroundColor="Transparent">
+                                    
+                                    <Frame Padding="0"
+                                           CornerRadius="15"
+                                           HasShadow="True"
+                                           BorderColor="Transparent"
+                                           BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}"
+                                           Margin="0">
+                                        
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                              Padding="18">
                                     
                                     <!-- Jornada -->
                                     <Frame Grid.Row="0"
@@ -230,8 +255,9 @@
                                         </Button>
                                     </Grid>
 
-                                </Grid>
-                            </Frame>
+                                    </Grid>
+                                </Frame>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
 
@@ -256,9 +282,22 @@
                                    Margin="0,5,0,0" />
                         </VerticalStackLayout>
                     </CollectionView.EmptyView>
+                    
+                    <!-- Footer con indicador de carga incremental -->
+                    <CollectionView.Footer>
+                        <VerticalStackLayout Padding="10" HorizontalOptions="Center">
+                            <ActivityIndicator x:Name="footerLoadingIndicator"
+                                             IsRunning="False"
+                                             IsVisible="False"
+                                             Color="{StaticResource azulOscuro}"
+                                             HeightRequest="30"
+                                             WidthRequest="30" />
+                        </VerticalStackLayout>
+                    </CollectionView.Footer>
                 </CollectionView>
             </VerticalStackLayout>
         </ScrollView>
+        </Grid>
 
         <!-- ========== PIE DE PÁGINA ========== -->
         <Frame Grid.Row="3"
