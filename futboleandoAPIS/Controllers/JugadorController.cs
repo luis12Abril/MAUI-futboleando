@@ -4,6 +4,7 @@ using futboleandoEntities.Jugador;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using futboleandoEntities.Equipo;
+using futboleandoEntities.Goleador;
 using Microsoft.EntityFrameworkCore;
 
 namespace futboleandoAPIS.Controllers
@@ -125,6 +126,67 @@ namespace futboleandoAPIS.Controllers
                                     appaterno = j.Appaterno
                                 }).ToList();
                 return Ok(consulta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para listar goleadores del torneo
+        [HttpGet("Goleadores/{idTorneo}")]
+        public IActionResult ListarGoleadores(int idTorneo)
+        {
+            try
+            {
+                var consulta = (from j in _bd.Jugadors
+                                join e in _bd.Equipos on j.Idequipo equals e.Idequipo
+                                where j.Idtorneo == idTorneo 
+                                   && j.Habilitado == 1
+                                   && j.Goles > 0  // ✅ Solo jugadores con goles
+                                   && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"  // ✅ Excluir autogoles
+                                   && e.Nombre.Trim() != "_SIN EQUIPO"  // ✅ Excluir jugadores sin equipo
+                                select new
+                                {
+                                    j.Idjugador,
+                                    NombreCompleto = (j.Nombre.Trim() + " " + j.Appaterno.Trim() + " " + j.Apmaterno.Trim()).Trim(),
+                                    j.Goles,
+                                    j.Idequipo,
+                                    NombreEquipo = e.Nombre
+                                })
+                                 .OrderByDescending(j => j.Goles)  // ✅ Primero por goles (mayor a menor)
+                                 .ThenBy(j => j.NombreEquipo)      // ✅ Desempate: orden alfabético del equipo
+                                 .ToList();
+
+                // ✅ Calcular posición considerando empates
+                var goleadoresConPosicion = new List<GoleadorCLS>();
+                int posicionActual = 1;
+                int? golesAnterior = null;
+
+                for (int i = 0; i < consulta.Count; i++)
+                {
+                    var g = consulta[i];
+                    
+                    // Si los goles son diferentes al anterior, actualizamos la posición
+                    if (golesAnterior.HasValue && g.Goles != golesAnterior.Value)
+                    {
+                        posicionActual = i + 1;  // La nueva posición es el índice + 1
+                    }
+                    
+                    goleadoresConPosicion.Add(new GoleadorCLS
+                    {
+                        idjugador = g.Idjugador,
+                        nombrecompleto = g.NombreCompleto,
+                        goles = g.Goles,
+                        idequipo = g.Idequipo,
+                        nombreequipo = g.NombreEquipo,
+                        posicion = posicionActual
+                    });
+                    
+                    golesAnterior = g.Goles;
+                }
+
+                return Ok(goleadoresConPosicion);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.GoleadorVerMas.GoleadorVerMasPage"
+             Title="Detalles del Goleador"
+             BackgroundColor="#F5F5F5">
+    
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- ========== ENCABEZADO ========== -->
+        <Frame Grid.Row="0"
+               Padding="20,15"
+               CornerRadius="0"
+               HasShadow="True"
+               BorderColor="Transparent"
+               Margin="0,0,0,10">
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                    <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
+                </LinearGradientBrush>
+            </Frame.Background>
+
+            <Label Text="📊 Detalles del Goleador"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+        </Frame>
+
+        <!-- ========== CONTENIDO ========== -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="20">
+                
+                <!-- Ícono grande -->
+                <Frame WidthRequest="120"
+                       HeightRequest="120"
+                       CornerRadius="60"
+                       Padding="0"
+                       HasShadow="True"
+                       BorderColor="{StaticResource azulOscuro}"
+                       BackgroundColor="White"
+                       HorizontalOptions="Center">
+                    <Label Text="⚽"
+                           FontSize="80"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Frame>
+
+                <!-- Mensaje de construcción -->
+                <Frame Padding="20"
+                       CornerRadius="15"
+                       BackgroundColor="White"
+                       HasShadow="True"
+                       BorderColor="Transparent">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="🚧 Sección en Construcción"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource azulOscuro}"
+                               HorizontalOptions="Center" />
+                        
+                        <BoxView Color="#E0E0E0"
+                                 HeightRequest="1"
+                                 Margin="0,5" />
+                        
+                        <Label Text="Esta sección mostrará información detallada del goleador:"
+                               FontSize="14"
+                               TextColor="#666666"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+                        
+                        <VerticalStackLayout Spacing="8" Margin="0,10,0,0">
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="✓"
+                                       FontSize="16"
+                                       TextColor="{StaticResource verdeOscuro}"
+                                       VerticalOptions="Center" />
+                                <Label Text="Estadísticas completas del jugador"
+                                       FontSize="13"
+                                       TextColor="#666666"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="✓"
+                                       FontSize="16"
+                                       TextColor="{StaticResource verdeOscuro}"
+                                       VerticalOptions="Center" />
+                                <Label Text="Historial de goles por jornada"
+                                       FontSize="13"
+                                       TextColor="#666666"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="✓"
+                                       FontSize="16"
+                                       TextColor="{StaticResource verdeOscuro}"
+                                       VerticalOptions="Center" />
+                                <Label Text="Información del equipo"
+                                       FontSize="13"
+                                       TextColor="#666666"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="✓"
+                                       FontSize="16"
+                                       TextColor="{StaticResource verdeOscuro}"
+                                       VerticalOptions="Center" />
+                                <Label Text="Gráficas de rendimiento"
+                                       FontSize="13"
+                                       TextColor="#666666"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ID del jugador (temporal para debug) -->
+                <Frame Padding="15"
+                       CornerRadius="10"
+                       BackgroundColor="#FFF3E0"
+                       HasShadow="False"
+                       BorderColor="#FF9800">
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="🔑"
+                               FontSize="16"
+                               VerticalOptions="Center" />
+                        <Label x:Name="lblIdJugador"
+                               Text="ID del Jugador: Cargando..."
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
+        
+    </Grid>
+</ContentPage>

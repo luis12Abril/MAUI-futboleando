@@ -2,6 +2,7 @@ using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
 using futboleando.Pages.Comunicado;
 using futboleando.Pages.Juego;
+using futboleando.Pages.Goleador;
 using futboleando.Pages.Posiciones;
 using futboleando.Service;
 using futboleandoEntities.Menu;
@@ -98,6 +99,13 @@ public partial class MenuPage : ContentPage
                 var equipoServicePosiciones = MauiProgram.ServiceProvider.GetService<EquipoService>();
                 PosicionesPage oPosicionesPage = new PosicionesPage(equipoServicePosiciones);
                 App.Navigate.PushAsync(oPosicionesPage); 
+                break;
+
+            // ? NUEVO: Goleadores
+            case 9:
+                var goleadorService = MauiProgram.ServiceProvider.GetService<GoleadorService>();
+                GoleadorPage oGoleadorPage = new GoleadorPage(goleadorService);
+                App.Navigate.PushAsync(oGoleadorPage); 
                 break;
 
             case 20:

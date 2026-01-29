@@ -110,6 +110,12 @@ either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 	  <MauiXaml Update="Pages\Flyout.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\GoleadorVerMas\GoleadorVerMasPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Goleador\GoleadorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Juego\JuegoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
