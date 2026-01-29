@@ -104,7 +104,8 @@ public partial class MenuPage : ContentPage
             // ? NUEVO: Goleadores
             case 9:
                 var goleadorService = MauiProgram.ServiceProvider.GetService<GoleadorService>();
-                GoleadorPage oGoleadorPage = new GoleadorPage(goleadorService);
+                var equipoServiceGoleador = MauiProgram.ServiceProvider.GetService<EquipoService>();
+                GoleadorPage oGoleadorPage = new GoleadorPage(goleadorService, equipoServiceGoleador);
                 App.Navigate.PushAsync(oGoleadorPage); 
                 break;
 

@@ -17,22 +17,21 @@ namespace futboleando.Service
             _httpClient = httpClient;
         }
 
-        // ? Método para listar goleadores por torneo
+        // ? Método para listar goleadores por torneo (optimizado)
         public async Task<List<GoleadorCLS>> ListarGoleadoresPorTorneo(int idTorneo)
         {
             try
             {
-                var response = await _httpClient.GetAsync($"api/Jugador/Goleadores/{idTorneo}");
+                var startTime = DateTime.Now;
+                System.Diagnostics.Debug.WriteLine($"[GOLEADOR SERVICE] Iniciando petición API...");
                 
-                if (response.IsSuccessStatusCode)
-                {
-                    var goleadores = await response.Content.ReadFromJsonAsync<List<GoleadorCLS>>();
-                    return goleadores ?? new List<GoleadorCLS>();
-                }
-                else
-                {
-                    return new List<GoleadorCLS>();
-                }
+                // Usar GetFromJsonAsync es más eficiente que GetAsync + ReadFromJsonAsync
+                var goleadores = await _httpClient.GetFromJsonAsync<List<GoleadorCLS>>($"api/Jugador/Goleadores/{idTorneo}");
+                
+                var elapsed = (DateTime.Now - startTime).TotalMilliseconds;
+                System.Diagnostics.Debug.WriteLine($"[GOLEADOR SERVICE] API respondió en {elapsed}ms con {goleadores?.Count ?? 0} goleadores");
+                
+                return goleadores ?? new List<GoleadorCLS>();
             }
             catch (Exception ex)
             {

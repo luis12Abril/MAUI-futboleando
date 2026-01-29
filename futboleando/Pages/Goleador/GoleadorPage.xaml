@@ -5,39 +5,67 @@
              Title="Goleadores"
              BackgroundColor="#F5F5F5">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
         
         <!-- ========== ENCABEZADO ========== -->
         <Frame Grid.Row="0"
-               Padding="20,15"
+               Padding="12,10"
                CornerRadius="0"
-               HasShadow="True"
+               HasShadow="False"
                BorderColor="Transparent"
-               Margin="0,0,0,10">
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
-                    <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
-                </LinearGradientBrush>
-            </Frame.Background>
+               BackgroundColor="{StaticResource azulOscuro}"
+               Margin="0,0,0,8">
+            <Label x:Name="lblTorneoNombre"
+                   Text="Torneo: Cargando..."
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Frame>
 
-            <VerticalStackLayout Spacing="5">
-                <Label Text="⚽ GOLEADORES"
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center" />
-                <Label x:Name="lblTorneoNombre"
-                       Text="Torneo: Cargando..."
-                       FontSize="14"
-                       TextColor="White"
-                       Opacity="0.9"
-                       HorizontalOptions="Center" />
-            </VerticalStackLayout>
+        <!-- ========== FILTRO POR EQUIPO ========== -->
+        <Frame Grid.Row="1"
+               Padding="10"
+               CornerRadius="10"
+               BackgroundColor="White"
+               HasShadow="False"
+               BorderColor="Transparent"
+               Margin="12,0,12,8">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Grid.Column="0"
+                        StrokeThickness="1"
+                        Stroke="{StaticResource verdeOscuro}"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#F8F9FA">
+                    <Picker x:Name="pickerEquipo"
+                            Title="-- Todos los Equipos --"
+                            ItemsSource="{Binding listaequipos}"
+                            ItemDisplayBinding="{Binding nombre}"
+                            SelectedIndexChanged="OnEquipoSelected"
+                            FontSize="14"
+                            TextColor="{StaticResource verdeOscuro}"
+                            TitleColor="#6c757d"
+                            BackgroundColor="Transparent"
+                            Margin="8,3" />
+                </Border>
+                <Button Grid.Column="1"
+                        Text="✕"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource rojoOscuro}"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        Clicked="OnLimpiarFiltroClicked"
+                        ToolTipProperties.Text="Limpiar filtro" />
+            </Grid>
         </Frame>
 
         <!-- ========== LISTA DE GOLEADORES ========== -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <!-- Indicador de carga -->
             <ActivityIndicator x:Name="loadingIndicator"
                              IsRunning="False"
@@ -52,29 +80,29 @@
                 <VerticalStackLayout Padding="8,0,8,5" Spacing="0">
                     
                     <!-- Encabezado de la tabla -->
-                    <Border StrokeThickness="3"
+                    <Border StrokeThickness="2"
                             Stroke="{StaticResource azulOscuro}"
-                            StrokeShape="RoundRectangle 15,15,0,0"
+                            StrokeShape="RoundRectangle 10,10,0,0"
                             BackgroundColor="{StaticResource azulOscuro}"
-                            Margin="0,10,0,0">
-                        <Grid ColumnDefinitions="60,*,80"
-                              Padding="15,12"
-                              ColumnSpacing="10">
+                            Margin="0,5,0,0">
+                        <Grid ColumnDefinitions="45,*,60"
+                              Padding="10,8"
+                              ColumnSpacing="8">
                             <Label Grid.Column="0"
                                    Text="#"
-                                   FontSize="14"
+                                   FontSize="12"
                                    FontAttributes="Bold"
                                    TextColor="White"
                                    HorizontalOptions="Center" />
                             <Label Grid.Column="1"
                                    Text="NOMBRE"
-                                   FontSize="14"
+                                   FontSize="12"
                                    FontAttributes="Bold"
                                    TextColor="White"
                                    HorizontalOptions="Start" />
                             <Label Grid.Column="2"
                                    Text="GOLES"
-                                   FontSize="14"
+                                   FontSize="12"
                                    FontAttributes="Bold"
                                    TextColor="White"
                                    HorizontalOptions="Center" />
@@ -87,141 +115,102 @@
                                     SelectionMode="None">
                         
                         <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="-5" />
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="1" />
                         </CollectionView.ItemsLayout>
                         
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border StrokeThickness="0,0,3,3"
-                                        Stroke="{StaticResource azulOscuro}"
-                                        BackgroundColor="White"
-                                        Margin="0">
-                                    
-                                    <Grid RowDefinitions="Auto,Auto,Auto,1"
-                                          Padding="0">
+                                <Grid RowDefinitions="Auto,Auto"
+                                      BackgroundColor="White"
+                                      Padding="0"
+                                      Margin="0,0,0,1">
                                         
-                                        <!-- Contenido principal -->
+                                        <!-- Contenido principal más compacto -->
                                         <Grid Grid.Row="0"
-                                              RowDefinitions="Auto,Auto"
-                                              ColumnDefinitions="Auto,*,Auto"
-                                              Padding="20,18"
-                                              ColumnSpacing="8"
-                                              RowSpacing="8">
+                                              ColumnDefinitions="28,*,60"
+                                              Padding="10,12,10,12"
+                                              ColumnSpacing="8">
                                             
-                                            <!-- Posición pequeña en primera línea -->
-                                            <Frame Grid.Row="0" Grid.Column="0"
-                                                   WidthRequest="24"
-                                                   HeightRequest="24"
-                                                   CornerRadius="12"
-                                                   Padding="0"
-                                                   HasShadow="False"
-                                                   HorizontalOptions="Start"
-                                                   VerticalOptions="Center">
-                                                <Frame.Background>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                        <GradientStop Color="#FFD700" Offset="0.0" />
-                                                        <GradientStop Color="#FFA500" Offset="1.0" />
-                                                    </LinearGradientBrush>
-                                                </Frame.Background>
-                                                <Frame.Triggers>
-                                                    <DataTrigger TargetType="Frame" Binding="{Binding posicion}" Value="2">
-                                                        <Setter Property="Background">
-                                                            <Setter.Value>
-                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                                    <GradientStop Color="#C0C0C0" Offset="0.0" />
-                                                                    <GradientStop Color="#A8A8A8" Offset="1.0" />
-                                                                </LinearGradientBrush>
-                                                            </Setter.Value>
-                                                        </Setter>
+                                            <!-- Posición como badge simple -->
+                                            <Border Grid.Column="0"
+                                                    WidthRequest="22"
+                                                    HeightRequest="22"
+                                                    StrokeThickness="0"
+                                                    BackgroundColor="#FFD700"
+                                                    StrokeShape="RoundRectangle 11"
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="Center">
+                                                <Border.Triggers>
+                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="2">
+                                                        <Setter Property="BackgroundColor" Value="#C0C0C0" />
                                                     </DataTrigger>
-                                                    <DataTrigger TargetType="Frame" Binding="{Binding posicion}" Value="3">
-                                                        <Setter Property="Background">
-                                                            <Setter.Value>
-                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                                    <GradientStop Color="#CD7F32" Offset="0.0" />
-                                                                    <GradientStop Color="#B87333" Offset="1.0" />
-                                                                </LinearGradientBrush>
-                                                            </Setter.Value>
-                                                        </Setter>
+                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="3">
+                                                        <Setter Property="BackgroundColor" Value="#CD7F32" />
                                                     </DataTrigger>
-                                                </Frame.Triggers>
+                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="1">
+                                                        <Setter Property="BackgroundColor" Value="#FFD700" />
+                                                    </DataTrigger>
+                                                </Border.Triggers>
                                                 <Label Text="{Binding posicion}"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
+                                            </Border>
+                                            
+                                            <!-- Información del jugador en vertical compacto -->
+                                            <VerticalStackLayout Grid.Column="1" 
+                                                                 Spacing="2"
+                                                                 VerticalOptions="Center">
+                                                <Label Text="{Binding nombrecompleto}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#333333"
+                                                       LineBreakMode="TailTruncation"
+                                                       MaxLines="1" />
+                                                <Label Text="{Binding nombreequipo}"
                                                        FontSize="11"
-                                                       FontAttributes="Bold"
-                                                       TextColor="White"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
-                                            </Frame>
+                                                       TextColor="#666666"
+                                                       LineBreakMode="TailTruncation"
+                                                       MaxLines="1" />
+                                            </VerticalStackLayout>
                                             
-                                            <!-- Nombre del jugador en primera línea -->
-                                            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
-                                                   Text="{Binding nombrecompleto}"
-                                                   FontSize="17"
-                                                   FontAttributes="Bold"
-                                                   TextColor="#333333"
-                                                   LineBreakMode="WordWrap"
-                                                   MaxLines="2"
-                                                   VerticalOptions="Center"
-                                                   Margin="0,0,0,0" />
-                                            
-                                            <!-- Nombre del equipo alineado a la izquierda -->
-                                            <Label Grid.Row="1" Grid.Column="1"
-                                                   Text="{Binding nombreequipo}"
-                                                   FontSize="13"
-                                                   TextColor="#666666"
-                                                   LineBreakMode="TailTruncation"
-                                                   VerticalOptions="Center"
-                                                   HorizontalOptions="Start"
-                                                   Margin="0,0,0,0" />
-                                            
-                                            <!-- Goles al final de la segunda línea -->
-                                            <Frame Grid.Row="1" Grid.Column="2"
-                                                   WidthRequest="55"
-                                                   HeightRequest="55"
-                                                   CornerRadius="27.5"
-                                                   Padding="0"
-                                                   HasShadow="False"
-                                                   BackgroundColor="{StaticResource verdeOscuro}"
-                                                   HorizontalOptions="End"
-                                                   VerticalOptions="Center">
+                                            <!-- Goles compacto y perfectamente circular -->
+                                            <Border Grid.Column="2"
+                                                    WidthRequest="36"
+                                                    HeightRequest="36"
+                                                    StrokeThickness="0"
+                                                    BackgroundColor="{StaticResource verdeOscuro}"
+                                                    StrokeShape="Ellipse"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Center"
+                                                    Margin="0">
                                                 <Label Text="{Binding goles}"
-                                                       FontSize="24"
+                                                       FontSize="15"
                                                        FontAttributes="Bold"
                                                        TextColor="White"
                                                        HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
-                                            </Frame>
+                                                       VerticalOptions="Center"
+                                                       Margin="0" />
+                                            </Border>
                                         </Grid>
 
-                                        <!-- Botón Ver Más -->
+                                        <!-- Botón Ver Más compacto -->
                                         <Grid Grid.Row="1"
-                                              Padding="15,0,15,15">
+                                              Padding="10,0,10,6">
                                             <Button Text="VER MÁS"
-                                                    FontSize="12"
+                                                    FontSize="10"
                                                     FontAttributes="Bold"
                                                     TextColor="White"
                                                     BackgroundColor="{StaticResource azulOscuro}"
-                                                    CornerRadius="8"
-                                                    Padding="20,10"
+                                                    CornerRadius="6"
+                                                    Padding="8,2"
                                                     Clicked="OnVerMasClicked"
                                                     CommandParameter="{Binding idjugador}"
-                                                    HorizontalOptions="End">
-                                                <Button.Shadow>
-                                                    <Shadow Brush="{StaticResource azulOscuro}" 
-                                                            Opacity="0.3" 
-                                                            Radius="5" 
-                                                            Offset="0,2" />
-                                                </Button.Shadow>
-                                            </Button>
+                                                    HorizontalOptions="End" />
                                         </Grid>
-
-                                        <!-- Separador sutil -->
-                                        <BoxView Grid.Row="3"
-                                                 Color="#E0E0E0"
-                                                 HeightRequest="1"
-                                                 Margin="15,0" />
                                     </Grid>
-                                </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
 
@@ -252,15 +241,15 @@
         </Grid>
 
         <!-- ========== PIE DE PÁGINA ========== -->
-        <Frame Grid.Row="2"
-               Padding="12"
+        <Frame Grid.Row="3"
+               Padding="8"
                CornerRadius="0"
                BackgroundColor="#E8E8E8"
                HasShadow="False"
                BorderColor="Transparent">
             <Label x:Name="lblTotalGoleadores"
                    Text="Total de goleadores: 0"
-                   FontSize="12"
+                   FontSize="11"
                    TextColor="#666666"
                    HorizontalOptions="Center" />
         </Frame>

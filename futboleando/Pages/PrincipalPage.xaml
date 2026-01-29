@@ -138,7 +138,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Tarjeta: Jugadores -->
+                <!-- Tarjeta: Goleadores -->
                 <Frame Grid.Column="1" Grid.Row="1"
                        Padding="20"
                        CornerRadius="15"
@@ -146,17 +146,17 @@
                        HasShadow="True"
                        BorderColor="Transparent">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnJugadoresTapped" />
+                        <TapGestureRecognizer Tapped="OnGoleadoresTapped" />
                     </Frame.GestureRecognizers>
                     
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="🏃"
+                        <Label Text="⚽️"
                                FontSize="40"
                                HorizontalOptions="Center" />
-                        <Label Text="Jugadores"
+                        <Label Text="Goleadores"
                                FontSize="14"
                                FontAttributes="Bold"
-                               TextColor="#FF9800"
+                               TextColor="{StaticResource verdeOscuro}"
                                HorizontalOptions="Center"
                                HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>

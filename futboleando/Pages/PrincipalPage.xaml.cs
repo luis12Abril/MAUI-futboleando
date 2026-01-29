@@ -1,4 +1,5 @@
 using futboleando.Pages.Juego;
+using futboleando.Pages.Goleador;
 using futboleando.Pages.Posiciones;
 using futboleando.Service;
 
@@ -65,13 +66,15 @@ public partial class PrincipalPage : ContentPage
         }
     }
 
-    private async void OnJugadoresTapped(object sender, EventArgs e)
+    private async void OnGoleadoresTapped(object sender, EventArgs e)
     {
-        var jugadorService = MauiProgram.ServiceProvider.GetService<JugadorService>();
-        if (jugadorService != null)
+        var goleadorService = MauiProgram.ServiceProvider.GetService<GoleadorService>();
+        var equipoService = MauiProgram.ServiceProvider.GetService<EquipoService>();
+        
+        if (goleadorService != null && equipoService != null)
         {
-            var jugadorPage = new JugadorPage(jugadorService);
-            await App.Navigate.PushAsync(jugadorPage);
+            var goleadorPage = new GoleadorPage(goleadorService, equipoService);
+            await App.Navigate.PushAsync(goleadorPage);
         }
     }
 }
