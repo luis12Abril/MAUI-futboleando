@@ -30,7 +30,8 @@ namespace futboleando
             builder.Services.AddScoped<EquipoService>();
             builder.Services.AddScoped<ComunicadoService>();
             builder.Services.AddScoped<JuegoService>();
-            builder.Services.AddScoped<GoleadorService>();  // ✅ Nuevo servicio
+            builder.Services.AddScoped<GoleadorService>();
+            builder.Services.AddScoped<CumpleañeroService>();  // ✅ Nuevo servicio
             
             builder.Services.AddScoped<EstadoService>();
             builder.Services.AddScoped<MunicipioService>();
@@ -53,7 +54,7 @@ namespace futboleando
                     //apisfutbleandoMAUI.somee.com
                     // BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
                     BaseAddress = new Uri("http://apisfutbleandoMAUI.somee.com/"),
-                    Timeout = TimeSpan.FromSeconds(30) // Aumentar timeout
+                    Timeout = TimeSpan.FromSeconds(60) // ✅ Aumentar timeout para evitar cortes
                 };
 
                 // Headers recomendados

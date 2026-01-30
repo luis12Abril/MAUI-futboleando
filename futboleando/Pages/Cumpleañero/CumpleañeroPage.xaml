@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Cumpleañero.CumpleañeroPage"
+             Title="Próximos Cumpleañeros"
+             BackgroundColor="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        
+        <!-- ========== ENCABEZADO ========== -->
+        <Frame Grid.Row="0"
+               Padding="12,10"
+               CornerRadius="0"
+               HasShadow="False"
+               BorderColor="Transparent"
+               BackgroundColor="{StaticResource azulOscuro}"
+               Margin="0,0,0,8">
+            <Label Text="PRÓXIMOS CUMPLEAÑEROS"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Frame>
+
+        <!-- ========== FILTRO POR EQUIPO ========== -->
+        <Frame Grid.Row="1"
+               Padding="10"
+               CornerRadius="10"
+               BackgroundColor="White"
+               HasShadow="False"
+               BorderColor="Transparent"
+               Margin="12,0,12,8">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Grid.Column="0"
+                        StrokeThickness="1"
+                        Stroke="{StaticResource verdeOscuro}"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#F8F9FA">
+                    <Picker x:Name="pickerEquipo"
+                            Title="-- SELECCIONE UN EQUIPO --"
+                            ItemsSource="{Binding listaequipos}"
+                            ItemDisplayBinding="{Binding nombre}"
+                            SelectedIndexChanged="OnEquipoSelected"
+                            FontSize="14"
+                            TextColor="{StaticResource verdeOscuro}"
+                            TitleColor="#6c757d"
+                            BackgroundColor="Transparent"
+                            Margin="8,3" />
+                </Border>
+                <Button Grid.Column="1"
+                        Text="✕"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource rojoOscuro}"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        Clicked="OnLimpiarFiltroClicked"
+                        ToolTipProperties.Text="Mostrar todos" />
+            </Grid>
+        </Frame>
+
+        <!-- ========== ENCABEZADO DE TABLA ========== -->
+        <Border Grid.Row="2"
+                StrokeThickness="3"
+                Stroke="#FFD700"
+                StrokeShape="RoundRectangle 12"
+                BackgroundColor="#000000"
+                Margin="12,0,12,5">
+            <Grid ColumnDefinitions="*,Auto,Auto"
+                  Padding="15,10"
+                  ColumnSpacing="10">
+                <Label Grid.Column="0"
+                       Text="NOMBRE"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center" />
+                <Label Grid.Column="1"
+                       Text="F. NAC."
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+                <Label Grid.Column="2"
+                       Text="CUMPL"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,0,10,0" />
+            </Grid>
+        </Border>
+
+        <!-- ========== LISTA DE CUMPLEAÑEROS ========== -->
+        <Grid Grid.Row="3">
+            <CollectionView x:Name="collectionCumpleañeros"
+                            ItemsSource="{Binding listacumpleañeros}"
+                            SelectionMode="None"
+                            Margin="12,0,12,5">
+                
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                        
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="3"
+                                        Stroke="#FFD700"
+                                        StrokeShape="RoundRectangle 12"
+                                        BackgroundColor="#F0F0F0"
+                                        Padding="15,12">
+                                    
+                                    <Grid RowDefinitions="Auto,Auto,Auto"
+                                          ColumnDefinitions="*,Auto,Auto"
+                                          RowSpacing="6"
+                                          ColumnSpacing="10">
+                                        
+                                        <!-- NOMBRE (primera fila, ocupa toda la columna izquierda) -->
+                                        <Label Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding nombrecompleto}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000"
+                                               LineBreakMode="WordWrap"
+                                               MaxLines="2"
+                                               VerticalOptions="Center" />
+                                        
+                                        <!-- FECHA (primera fila, columna central) -->
+                                        <Label Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding fechaDisplay}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding esCumpleañosHoy}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource rojoOscuro}" />
+                                                    <Setter Property="FontSize" Value="18" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                        
+                                        <!-- EDAD (primera fila, columna derecha) -->
+                                        <Label Grid.Row="0" Grid.Column="2"
+                                               Text="{Binding edad}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,10,0" />
+                                        
+                                        <!-- EQUIPO (segunda fila, ocupa todas las columnas) -->
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                               Text="{Binding nombreequipo}"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout Padding="40"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Spacing="10">
+                                <Label Text="🎂"
+                                       FontSize="60"
+                                       HorizontalOptions="Center"
+                                       Opacity="0.3" />
+                                <Label Text="No hay cumpleañeros próximos"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#999999"
+                                       HorizontalOptions="Center"
+                                       Margin="0,10,0,0" />
+                                <Label Text="Los jugadores que cumplan años en las próximas 2 semanas aparecerán aquí"
+                                       FontSize="13"
+                                       TextColor="#CCCCCC"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       Margin="0,5,0,0" />
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+            
+            
+            <!-- Indicador de carga (encima de todo) -->
+            <ActivityIndicator x:Name="loadingIndicator"
+                             IsRunning="False"
+                             IsVisible="False"
+                             Color="{StaticResource azulOscuro}"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             HeightRequest="50"
+                             WidthRequest="50" />
+        </Grid>
+
+        <!-- ========== PIE DE PÁGINA ========== -->
+        <Frame Grid.Row="4"
+               Padding="8"
+               CornerRadius="0"
+               BackgroundColor="#E8E8E8"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <Label x:Name="lblTotalCumpleañeros"
+                   Text="Total de cumpleañeros: 0"
+                   FontSize="11"
+                   TextColor="#666666"
+                   HorizontalOptions="Center" />
+        </Frame>
+
+    </Grid>
+</ContentPage>
