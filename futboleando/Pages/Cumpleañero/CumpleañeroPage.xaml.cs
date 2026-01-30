@@ -36,8 +36,6 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     private int idTorneoSeleccionado;
     private List<CumpleañeroCLS> todosCumpleañeros;
     private bool datosYaCargados = false;
-    private CancellationTokenSource _cts;
-    private bool _isLoading = false;
 
     public CumpleañeroPage(CumpleañeroService _cumpleañeroService, EquipoService _equipoService)
     {
@@ -56,24 +54,19 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     {
         base.OnAppearing();
 
-        if (!datosYaCargados && !_isLoading)
+        if (!datosYaCargados)
         {
-            _isLoading = true;
-            _cts = new CancellationTokenSource();
-            
             try
             {
                 // Mostrar indicador de carga
                 loadingIndicator.IsRunning = true;
                 loadingIndicator.IsVisible = true;
                 
-                await Task.Delay(50, _cts.Token);
-                await Task.WhenAll(CargarEquipos(), CargarCumpleañeros());
+                await Task.Delay(100);
+                await CargarEquipos();
+                await CargarCumpleañeros();
+                
                 datosYaCargados = true;
-            }
-            catch (OperationCanceledException)
-            {
-                System.Diagnostics.Debug.WriteLine($"⚠️ Carga cancelada por el usuario");
             }
             catch (Exception ex)
             {
@@ -86,21 +79,8 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             {
                 loadingIndicator.IsRunning = false;
                 loadingIndicator.IsVisible = false;
-                _isLoading = false;
             }
         }
-    }
-    
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        
-        // Cancelar cualquier tarea en segundo plano
-        _cts?.Cancel();
-        _cts?.Dispose();
-        _cts = null;
-        
-        System.Diagnostics.Debug.WriteLine($"🔄 Página de cumpleañeros cerrada - tareas canceladas");
     }
 
     private async Task CargarEquipos()
@@ -172,95 +152,34 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             // Verificar si hay cumpleañeros
             if (todosCumpleañeros.Count == 0)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    listacumpleañeros.Clear();
-                    lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-                    loadingIndicator.IsRunning = false;
-                    loadingIndicator.IsVisible = false;
-                });
+                listacumpleañeros.Clear();
+                lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
                 System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] No hay cumpleañeros para mostrar");
                 return;
             }
 
-            // Carga progresiva
+            // Cargar todos los cumpleañeros de manera simple
             listacumpleañeros.Clear();
-
-            var primeros = todosCumpleañeros.Take(10).ToList();
-            foreach (var cumpleañero in primeros)
+            
+            foreach (var cumpleañero in todosCumpleañeros)
             {
                 listacumpleañeros.Add(cumpleañero);
             }
 
             lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {todosCumpleañeros.Count}";
 
-            loadingIndicator.IsRunning = false;
-            loadingIndicator.IsVisible = false;
-
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Primeros {primeros.Count} cargados");
-
-            // Cargar el resto en segundo plano con cancelación
-            if (todosCumpleañeros.Count > 10)
-            {
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var resto = todosCumpleañeros.Skip(10).ToList();
-                        int batchSize = 10;
-
-                        for (int i = 0; i < resto.Count; i += batchSize)
-                        {
-                            // Verificar si se canceló
-                            if (_cts?.Token.IsCancellationRequested == true)
-                            {
-                                System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga en segundo plano cancelada");
-                                break;
-                            }
-                            
-                            await Task.Delay(50, _cts?.Token ?? CancellationToken.None);
-                            var batch = resto.Skip(i).Take(batchSize).ToList();
-                            
-                            MainThread.BeginInvokeOnMainThread(() =>
-                            {
-                                try
-                                {
-                                    foreach (var cumpleañero in batch)
-                                    {
-                                        listacumpleañeros.Add(cumpleañero);
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    System.Diagnostics.Debug.WriteLine($"❌ Error agregando batch: {ex.Message}");
-                                }
-                            });
-                        }
-                        
-                        System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga completa en segundo plano");
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga en segundo plano cancelada");
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"❌ Error cargando resto: {ex.Message}");
-                    }
-                }, _cts?.Token ?? CancellationToken.None);
-            }
-
             var elapsed = (DateTime.Now - startTime).TotalMilliseconds;
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga inicial completada en {elapsed}ms");
+            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga completada en {elapsed}ms - {todosCumpleañeros.Count} cumpleañeros");
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"❌ Error en CargarCumpleañeros: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"❌ Stack: {ex.StackTrace}");
             
+            listacumpleañeros.Clear();
+            lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
+            
             await DisplayAlert("Error", $"Error al cargar cumpleañeros: {ex.Message}", "OK");
-            loadingIndicator.IsRunning = false;
-            loadingIndicator.IsVisible = false;
         }
     }
 
@@ -273,27 +192,18 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             if (picker == null || picker.SelectedIndex == -1)
             {
                 // Mostrar todos
-                MainThread.BeginInvokeOnMainThread(() =>
+                listacumpleañeros.Clear();
+                
+                if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
                 {
-                    listacumpleañeros.Clear();
-                    
-                    if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
+                    foreach (var c in todosCumpleañeros)
                     {
-                        foreach (var c in todosCumpleañeros)
-                        {
-                            listacumpleañeros.Add(c);
-                        }
-                        lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
+                        listacumpleañeros.Add(c);
                     }
-                    else
-                    {
-                        lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-                    }
-                    
-                    OnPropertyChanged(nameof(listacumpleañeros));
-                    
-                    System.Diagnostics.Debug.WriteLine($"[FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
-                });
+                }
+                
+                lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
+                System.Diagnostics.Debug.WriteLine($"[FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
                 return;
             }
 
@@ -301,25 +211,17 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 
             if (equipoSeleccionado == null)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
+                listacumpleañeros.Clear();
+                
+                if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
                 {
-                    listacumpleañeros.Clear();
-                    
-                    if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
+                    foreach (var c in todosCumpleañeros)
                     {
-                        foreach (var c in todosCumpleañeros)
-                        {
-                            listacumpleañeros.Add(c);
-                        }
-                        lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
+                        listacumpleañeros.Add(c);
                     }
-                    else
-                    {
-                        lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-                    }
-                    
-                    OnPropertyChanged(nameof(listacumpleañeros));
-                });
+                }
+                
+                lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
             }
             else
             {
@@ -327,27 +229,16 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
                     .Where(c => c.nombreequipo.Equals(equipoSeleccionado.nombre, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
-                MainThread.BeginInvokeOnMainThread(() =>
+                listacumpleañeros.Clear();
+                
+                foreach (var c in filtrados)
                 {
-                    listacumpleañeros.Clear();
-                    
-                    foreach (var c in filtrados)
-                    {
-                        listacumpleañeros.Add(c);
-                    }
-                    
-                    OnPropertyChanged(nameof(listacumpleañeros));
-                    lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
-                    
-                    if (filtrados.Count == 0)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"[FILTRO] Equipo '{equipoSeleccionado.nombre}': Sin cumpleañeros");
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"[FILTRO] Equipo '{equipoSeleccionado.nombre}': {listacumpleañeros.Count} cumpleañeros");
-                    }
-                });
+                    listacumpleañeros.Add(c);
+                }
+                
+                lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
+                
+                System.Diagnostics.Debug.WriteLine($"[FILTRO] Equipo '{equipoSeleccionado.nombre}': {listacumpleañeros.Count} cumpleañeros");
             }
         }
         catch (Exception ex)
@@ -364,34 +255,18 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             pickerEquipo.SelectedIndex = -1;
 
             // Mostrar todos los cumpleañeros
+            listacumpleañeros.Clear();
+            
             if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
+                foreach (var c in todosCumpleañeros)
                 {
-                    listacumpleañeros.Clear();
-                    
-                    foreach (var c in todosCumpleañeros)
-                    {
-                        listacumpleañeros.Add(c);
-                    }
-                    
-                    OnPropertyChanged(nameof(listacumpleañeros));
-                    lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
-                    
-                    System.Diagnostics.Debug.WriteLine($"[LIMPIAR FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
-                });
+                    listacumpleañeros.Add(c);
+                }
             }
-            else
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    listacumpleañeros.Clear();
-                    OnPropertyChanged(nameof(listacumpleañeros));
-                    lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-                    
-                    System.Diagnostics.Debug.WriteLine($"[LIMPIAR FILTRO] No hay cumpleañeros para mostrar");
-                });
-            }
+            
+            lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
+            System.Diagnostics.Debug.WriteLine($"[LIMPIAR FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
         }
         catch (Exception ex)
         {
