@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using futboleandoEntities.Equipo;
 using futboleandoEntities.Goleador;
+using futboleandoEntities.JugadoresPorAño;
 using Microsoft.EntityFrameworkCore;
 
 namespace futboleandoAPIS.Controllers
@@ -220,6 +221,73 @@ namespace futboleandoAPIS.Controllers
                 obJugador.Habilitado = 0;                
                 _bd.SaveChanges();
                 return Ok("Se elimino correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para obtener equipos del torneo (para el picker)
+        [HttpGet("EquiposPorTorneo/{idTorneo}")]
+        public IActionResult ListarEquiposPorTorneo(int idTorneo)
+        {
+            try
+            {
+                var equipos = (from e in _bd.Equipos
+                              where e.Idtorneo == idTorneo 
+                                 && e.Habilitado == 1
+                                 && e.Nombre.Trim() != "_SIN EQUIPO"
+                              orderby e.Nombre
+                              select new EquipoSimpleCLS
+                              {
+                                  idequipo = e.Idequipo,
+                                  nombre = e.Nombre
+                              }).ToList();
+
+                return Ok(equipos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para jugadores por año de nacimiento
+        [HttpGet("JugadoresPorAño/{idTorneo}")]
+        public IActionResult ListarJugadoresPorAño(int idTorneo, [FromQuery] int? idEquipo = null)
+        {
+            try
+            {
+                var query = from j in _bd.Jugadors
+                           join e in _bd.Equipos on j.Idequipo equals e.Idequipo
+                           where j.Idtorneo == idTorneo
+                              && j.Habilitado == 1
+                              && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"
+                              && e.Nombre.Trim() != "_SIN EQUIPO"
+                              && j.Fnacimiento != null
+                           select new { j, e };
+
+                // Filtrar por equipo si se especifica
+                if (idEquipo.HasValue && idEquipo.Value > 0)
+                {
+                    query = query.Where(x => x.j.Idequipo == idEquipo.Value);
+                }
+
+                var jugadores = query.ToList();
+
+                // Agrupar por año de nacimiento
+                var jugadoresPorAño = jugadores
+                    .GroupBy(x => x.j.Fnacimiento.Value.Year)
+                    .Select(g => new JugadoresPorAñoCLS
+                    {
+                        año = g.Key,
+                        cantidad = g.Count()
+                    })
+                    .OrderBy(x => x.año)
+                    .ToList();
+
+                return Ok(jugadoresPorAño);
             }
             catch (Exception ex)
             {
