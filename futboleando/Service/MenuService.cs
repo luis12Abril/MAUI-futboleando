@@ -11,9 +11,12 @@ namespace futboleando.Service
     public class MenuService
     {
         private ObservableCollection<MenuCLS> listamenu;
+        private ObservableCollection<MenuCLS> listamenuCompleta;
+
         public MenuService()
         {
-            listamenu = new ObservableCollection<MenuCLS>
+            // Lista completa de opciones de menú
+            listamenuCompleta = new ObservableCollection<MenuCLS>
             {
                 new MenuCLS{ idmenu=1 , nombreopcion="Usuario" , nombreicono="👤"},
                 new MenuCLS{ idmenu=2 , nombreopcion="Jugador" , nombreicono="🏃"},
@@ -22,19 +25,37 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=7 , nombreopcion="Juegos" , nombreicono="⚽"},
                 new MenuCLS{ idmenu=8 , nombreopcion="Posiciones" , nombreicono="🏆"},
                 new MenuCLS{ idmenu=9 , nombreopcion="Goleadores" , nombreicono="⚽"},
-                new MenuCLS{ idmenu=10 , nombreopcion="Jugadores por Año" , nombreicono="📅"},  // ✅ Nueva opción
+                new MenuCLS{ idmenu=10 , nombreopcion="Jugadores por Año" , nombreicono="📅"},
+                new MenuCLS{ idmenu=11 , nombreopcion="Visitas App" , nombreicono="📊"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
                 new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
                 new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},
                 new MenuCLS{ idmenu=99 , nombreopcion="Seleccionar Torneo" , nombreicono="🏆"},
                 new MenuCLS{ idmenu=1000 , nombreopcion="Cerrar Sesión" , nombreicono="🚪"}
             };
+
+            listamenu = new ObservableCollection<MenuCLS>();
         }
 
         public async Task<ObservableCollection<MenuCLS>> listarMenu()
         {
+            // Obtener el IdUsuario de las preferencias
+            int idUsuario = Preferences.Get("IdUsuario", 0);
+
+            listamenu.Clear();
+
+            foreach (var menu in listamenuCompleta)
+            {
+                // La opción "Visitas App" (id=11) solo se muestra si es administrador (IdUsuario = 1)
+                if (menu.idmenu == 11 && idUsuario != 1)
+                {
+                    continue; // Saltar esta opción para usuarios no administradores
+                }
+
+                listamenu.Add(menu);
+            }
+
             return listamenu;
         }
-
     }
 }

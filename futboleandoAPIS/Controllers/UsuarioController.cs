@@ -3,6 +3,7 @@ using futboleandoEntities;
 using futboleandoEntities.Jugador;
 using futboleandoEntities.Usuario;
 using futboleandoEntities.Login;
+using futboleandoEntities.Visitas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
@@ -273,6 +274,98 @@ namespace futboleandoAPIS.Controllers
                     exito = false,
                     mensaje = $"Error en el servidor: {ex.Message}"
                 });
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para obtener totales de visitas (excluyendo admin IdUsuario = 1)
+        [HttpGet("VisitasTotales")]
+        public IActionResult ObtenerVisitasTotales()
+        {
+            try
+            {
+                var totales = _bd.Usuarios
+                    .Where(u => u.Idusuario != 1)  // Excluir administradores
+                    .Select(u => new
+                    {
+                        visitas = u.Visitas ?? 0,
+                        visitascel = u.Visitascel ?? 0
+                    })
+                    .ToList();
+
+                var resultado = new VisitasTotalesCLS
+                {
+                    totalVisitasWeb = totales.Sum(u => u.visitas),
+                    totalVisitasApp = totales.Sum(u => u.visitascel)
+                };
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para obtener tipos de usuario
+        [HttpGet("TiposUsuario")]
+        public IActionResult ObtenerTiposUsuario()
+        {
+            try
+            {
+                var tipos = (from t in _bd.Tipousuarios
+                            where t.Habilitado == 1
+                            orderby t.Nombre
+                            select new TipoUsuarioSimpleCLS
+                            {
+                                idtipousuario = t.Idtipousuario,
+                                nombre = t.Nombre
+                            }).ToList();
+
+                return Ok(tipos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // ✅ NUEVO: Endpoint para obtener visitas por usuario con filtro opcional
+        [HttpGet("VisitasPorUsuario")]
+        public IActionResult ObtenerVisitasPorUsuario([FromQuery] int? idTipoUsuario = null)
+        {
+            try
+            {
+                var query = from u in _bd.Usuarios
+                           join t in _bd.Tipousuarios on u.Idtipousuario equals t.Idtipousuario
+                           where u.Habilitado == 1
+                           select new { u, t };
+
+                // Filtrar por tipo de usuario si se especifica
+                if (idTipoUsuario.HasValue && idTipoUsuario.Value > 0)
+                {
+                    query = query.Where(x => x.u.Idtipousuario == idTipoUsuario.Value);
+                }
+
+                var usuarios = query
+                    .Select(x => new VisitaUsuarioCLS
+                    {
+                        idusuario = x.u.Idusuario,
+                        nombreusuario = x.u.Nombre,
+                        idtipousuario = x.u.Idtipousuario,
+                        nombretipousuario = x.t.Nombre,
+                        visitasWeb = x.u.Visitas ?? 0,
+                        visitasApp = x.u.Visitascel ?? 0,
+                        totalVisitas = (x.u.Visitas ?? 0) + (x.u.Visitascel ?? 0)
+                    })
+                    .Where(u => u.totalVisitas > 0)  // FILTRAR: Solo usuarios con al menos 1 visita
+                    .OrderByDescending(u => u.totalVisitas)  // Ordenar por total de visitas
+                    .ToList();
+
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

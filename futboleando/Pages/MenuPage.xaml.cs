@@ -5,6 +5,7 @@ using futboleando.Pages.Juego;
 using futboleando.Pages.Goleador;
 using futboleando.Pages.Posiciones;
 using futboleando.Pages.JugadoresPorAño;
+using futboleando.Pages.Visitas;
 using futboleando.Service;
 using futboleandoEntities.Menu;
 using System.Collections.ObjectModel;
@@ -115,6 +116,13 @@ public partial class MenuPage : ContentPage
                 var jugadoresPorAñoService = MauiProgram.ServiceProvider.GetService<JugadoresPorAñoService>();
                 JugadoresPorAñoPage oJugadoresPorAñoPage = new JugadoresPorAñoPage(jugadoresPorAñoService);
                 App.Navigate.PushAsync(oJugadoresPorAñoPage); 
+                break;
+
+            // ? NUEVO: Visitas App (solo para admin)
+            case 11:
+                var visitasService = MauiProgram.ServiceProvider.GetService<VisitasService>();
+                VisitasAppPage oVisitasAppPage = new VisitasAppPage(visitasService);
+                App.Navigate.PushAsync(oVisitasAppPage); 
                 break;
 
             case 20:
