@@ -3,84 +3,137 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Visitas.VisitasAppPage"
              Title="Visitas"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F4F6F2"
+             NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*">
-        
-        <!-- ========== ENCABEZADO ========== -->
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
         <Frame Grid.Row="0"
-               Padding="20,16"
-               CornerRadius="0"
-               HasShadow="True"
-               BorderColor="Transparent"
-               Margin="0,0,0,10">
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
-                    <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
-                </LinearGradientBrush>
-            </Frame.Background>
-
-            <Label Text="📊 VISITAS A WEB Y APP"
-                   FontSize="21"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
-        </Frame>
-
-        <!-- ========== TOTALES ========== -->
-        <Frame Grid.Row="1"
                Padding="18,16"
                CornerRadius="0"
                HasShadow="True"
-               BorderColor="Transparent"
-               Margin="0,0,0,10">
+               BorderColor="Transparent">
             <Frame.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#1a1a1a" Offset="0.0" />
-                    <GradientStop Color="#2d2d2d" Offset="1.0" />
+                    <GradientStop Color="#1ECF4E" Offset="0.0" />
+                    <GradientStop Color="#12B76A" Offset="0.5" />
+                    <GradientStop Color="#0A8F3F" Offset="1.0" />
                 </LinearGradientBrush>
             </Frame.Background>
-
-            <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
-                <!-- Total Visitas Web -->
-                <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="15">
-                    <Label Grid.Column="0"
-                           Text="TOTAL VISITAS WEB"
-                           FontSize="16"
-                           FontAttributes="Bold"
+            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <Frame Grid.Column="1"
+                       WidthRequest="46"
+                       HeightRequest="46"
+                       CornerRadius="23"
+                       Padding="0"
+                       BackgroundColor="#0F172A"
+                       HasShadow="True">
+                    <Label Text="📊"
+                           FontSize="24"
                            TextColor="White"
+                           HorizontalOptions="Center"
                            VerticalOptions="Center" />
-                    <Label Grid.Column="1"
-                           x:Name="lblTotalWeb"
-                           Text="0"
-                           FontSize="22"
+                </Frame>
+                <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
+                    <Label Text="VISITAS A USUARIOS"
+                           FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="#FFD700"
-                           VerticalOptions="Center" />
-                </Grid>
-
-                <!-- Total Visitas App -->
-                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="15">
-                    <Label Grid.Column="0"
-                           Text="TOTAL VISITAS APP"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="White"
-                           VerticalOptions="Center" />
-                    <Label Grid.Column="1"
-                           x:Name="lblTotalApp"
-                           Text="0"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="#FFD700"
-                           VerticalOptions="Center" />
-                </Grid>
+                           TextColor="White" />
+                    <Label Text="Web y App"
+                           FontSize="12"
+                           TextColor="#E6FFEF" />
+                </VerticalStackLayout>
             </Grid>
         </Frame>
 
-        <!-- ========== FILTRO POR TIPO USUARIO ========== -->
-        <Frame Grid.Row="2"
+        <Frame Grid.Row="1"
+               Padding="14"
+               CornerRadius="14"
+               HasShadow="True"
+               BackgroundColor="#0F172A"
+               BorderColor="Transparent"
+               Margin="15,10">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Frame Grid.Column="0"
+                       Padding="12"
+                       CornerRadius="12"
+                       BackgroundColor="#111827"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="TOTAL VISITAS WEB"
+                               FontSize="11"
+                               TextColor="#C7F9CC" />
+                        <Label x:Name="lblTotalWeb"
+                               Text="0"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#22C55E"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1"
+                       Padding="12"
+                       CornerRadius="12"
+                       BackgroundColor="#111827"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="TOTAL VISITAS APP"
+                               FontSize="11"
+                               TextColor="#C7F9CC" />
+                        <Label x:Name="lblTotalApp"
+                               Text="0"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#22C55E"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+        </Frame>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="10" Padding="15,0,15,10">
+            <Frame Grid.Column="0"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#FFFFFF"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="📋" FontSize="16" />
+                    <Label Text="Resumen" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+            <Frame Grid.Column="1"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#ECFDF3"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="👥" FontSize="16" />
+                    <Label Text="Usuarios" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+            <Frame Grid.Column="2"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#FFFFFF"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="📈" FontSize="16" />
+                    <Label Text="Actividad" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+        </Grid>
+
+        <Frame Grid.Row="3"
                Padding="12"
                CornerRadius="14"
                BackgroundColor="White"
@@ -112,48 +165,47 @@
             </Border>
         </Frame>
 
-        <!-- ========== LISTA DE USUARIOS ========== -->
-        <Grid Grid.Row="3" RowDefinitions="Auto,*">
-            <!-- Indicador de carga -->
+        <Grid Grid.Row="4" RowDefinitions="Auto,*" BackgroundColor="#F1F8E8">
             <ActivityIndicator x:Name="loadingIndicator"
                              IsRunning="False"
                              IsVisible="False"
-                             Color="{StaticResource azulOscuro}"
+                             Color="#12B76A"
                              VerticalOptions="Center"
                              HorizontalOptions="Center"
                              HeightRequest="50"
                              WidthRequest="50" />
+
             <Border Grid.Row="0"
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle 12,12,0,0"
-                    BackgroundColor="#2D3142"
-                    Margin="8,6,8,0">
+                    BackgroundColor="#0F172A"
+                    Margin="12,6,12,0">
                 <Grid ColumnDefinitions="1.8*,1.5*,0.8*,0.8*"
-                      Padding="18,14"
+                      Padding="16,12"
                       ColumnSpacing="10">
                     <Label Grid.Column="0"
                            Text="USUARIO"
-                           FontSize="13"
+                           FontSize="12"
                            FontAttributes="Bold"
-                           TextColor="#FFD700"
+                           TextColor="#C7F9CC"
                            HorizontalOptions="Start" />
                     <Label Grid.Column="1"
                            Text="TIPO USUARIO"
-                           FontSize="13"
+                           FontSize="12"
                            FontAttributes="Bold"
-                           TextColor="#FFD700"
+                           TextColor="#C7F9CC"
                            HorizontalOptions="Start" />
                     <Label Grid.Column="2"
                            Text="WEB"
-                           FontSize="13"
+                           FontSize="12"
                            FontAttributes="Bold"
-                           TextColor="#FFD700"
+                           TextColor="#C7F9CC"
                            HorizontalOptions="Center" />
                     <Label Grid.Column="3"
                            Text="APP"
-                           FontSize="13"
+                           FontSize="12"
                            FontAttributes="Bold"
-                           TextColor="#FFD700"
+                           TextColor="#C7F9CC"
                            HorizontalOptions="Center" />
                 </Grid>
             </Border>
@@ -162,11 +214,11 @@
                       x:Name="collectionVisitas"
                       ItemsSource="{Binding listavisitas}"
                       SeparatorVisibility="Default"
-                      SeparatorColor="#E5E7EB"
+                      SeparatorColor="#DDE5D6"
                       HasUnevenRows="False"
                       RowHeight="30"
                       VerticalOptions="FillAndExpand"
-                      BackgroundColor="#F5F5F5"
+                      BackgroundColor="#F1F8E8"
                       CachingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -174,29 +226,29 @@
                             <Grid ColumnDefinitions="1.8*,1.5*,0.8*,0.8*"
                                   Padding="10,4"
                                   ColumnSpacing="8"
-                                  BackgroundColor="#F1F8E8">
+                                  BackgroundColor="#F8FBEF">
                                 <Label Grid.Column="0"
                                        Text="{Binding nombreusuario}"
                                        FontSize="12"
-                                       TextColor="#1F2937"
+                                       TextColor="#0F172A"
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="1"
                                        Text="{Binding nombretipousuario}"
                                        FontSize="12"
-                                       TextColor="#4B5563"
+                                       TextColor="#374151"
                                        LineBreakMode="TailTruncation"
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="2"
                                        Text="{Binding visitasWebFormateado}"
                                        FontSize="12"
                                        TextColor="#111827"
-                                       HorizontalOptions="End"
+                                       HorizontalOptions="Center"
                                        VerticalOptions="Center" />
                                 <Label Grid.Column="3"
                                        Text="{Binding visitasAppFormateado}"
                                        FontSize="12"
                                        TextColor="#111827"
-                                       HorizontalOptions="End"
+                                       HorizontalOptions="Center"
                                        VerticalOptions="Center" />
                             </Grid>
                         </ViewCell>
@@ -205,5 +257,25 @@
             </ListView>
         </Grid>
 
+        <Frame Grid.Row="5"
+               Padding="12"
+               CornerRadius="0"
+               BackgroundColor="#0F172A"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                    <Label Text="🏠" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Inicio" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="📊" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Visitas" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                    <Label Text="⚙️" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Ajustes" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
     </Grid>
 </ContentPage>

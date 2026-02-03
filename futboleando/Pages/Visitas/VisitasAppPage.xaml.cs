@@ -144,4 +144,9 @@ public partial class VisitasAppPage : ContentPage
             await DisplayAlert("Error", $"Error al filtrar: {ex.Message}", "OK");
         }
     }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }
