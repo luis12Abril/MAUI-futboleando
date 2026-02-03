@@ -125,6 +125,13 @@ public partial class MenuPage : ContentPage
                 App.Navigate.PushAsync(oVisitasAppPage); 
                 break;
 
+            // ? NUEVO: Visitas Torneos (solo para admin)
+            case 12:
+                var visitasTorneoService = MauiProgram.ServiceProvider.GetService<VisitasService>();
+                VisitasTorneoPage oVisitasTorneoPage = new VisitasTorneoPage(visitasTorneoService);
+                App.Navigate.PushAsync(oVisitasTorneoPage);
+                break;
+
             case 20:
                 ColaboradorPage oColaboradorPage = new ColaboradorPage(ciudadService, colaboradorService);
                 App.Navigate.PushAsync(oColaboradorPage); break;

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Visitas.VisitasTorneoPage"
+             Title="Visitas Torneos"
+             BackgroundColor="#F4F6F2"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+        <Frame Grid.Row="0"
+               Padding="18,16"
+               CornerRadius="0"
+               HasShadow="True"
+               BorderColor="Transparent">
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1ECF4E" Offset="0.0" />
+                    <GradientStop Color="#12B76A" Offset="0.5" />
+                    <GradientStop Color="#0A8F3F" Offset="1.0" />
+                </LinearGradientBrush>
+            </Frame.Background>
+            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <Frame Grid.Column="1"
+                       WidthRequest="46"
+                       HeightRequest="46"
+                       CornerRadius="23"
+                       Padding="0"
+                       BackgroundColor="#0F172A"
+                       HasShadow="True">
+                    <Label Text="⚽"
+                           FontSize="24"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Frame>
+                <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
+                    <Label Text="VISITAS A TORNEOS"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Web y App"
+                           FontSize="12"
+                           TextColor="#E6FFEF" />
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+
+        <Frame Grid.Row="1"
+               Padding="14"
+               CornerRadius="14"
+               HasShadow="True"
+               BackgroundColor="#0F172A"
+               BorderColor="Transparent"
+               Margin="15,10">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Frame Grid.Column="0"
+                       Padding="12"
+                       CornerRadius="12"
+                       BackgroundColor="#111827"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="TOTAL VISITAS WEB"
+                               FontSize="11"
+                               TextColor="#C7F9CC" />
+                        <Label x:Name="lblTotalWeb"
+                               Text="0"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#22C55E" />
+                    </VerticalStackLayout>
+                </Frame>
+                <Frame Grid.Column="1"
+                       Padding="12"
+                       CornerRadius="12"
+                       BackgroundColor="#111827"
+                       HasShadow="False">
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="TOTAL VISITAS APP"
+                               FontSize="11"
+                               TextColor="#C7F9CC" />
+                        <Label x:Name="lblTotalApp"
+                               Text="0"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#22C55E" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+        </Frame>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="10" Padding="15,0,15,10">
+            <Frame Grid.Column="0"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#FFFFFF"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="📋" FontSize="16" />
+                    <Label Text="Resumen" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+            <Frame Grid.Column="1"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#ECFDF3"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="🏆" FontSize="16" />
+                    <Label Text="Torneos" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+            <Frame Grid.Column="2"
+                   Padding="10,8"
+                   CornerRadius="12"
+                   BackgroundColor="#FFFFFF"
+                   HasShadow="True">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="📈" FontSize="16" />
+                    <Label Text="Actividad" FontSize="12" TextColor="#0F172A" />
+                </HorizontalStackLayout>
+            </Frame>
+        </Grid>
+
+        <Grid Grid.Row="3" RowDefinitions="Auto,*" BackgroundColor="#F1F8E8">
+            <ActivityIndicator x:Name="loadingIndicator"
+                             IsRunning="False"
+                             IsVisible="False"
+                             Color="#12B76A"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             HeightRequest="50"
+                             WidthRequest="50" />
+
+            <Border Grid.Row="0"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12,12,0,0"
+                    BackgroundColor="#0F172A"
+                    Margin="12,6,12,0">
+                <Grid ColumnDefinitions="2.2*,0.8*,0.7*,0.7*"
+                      Padding="16,12"
+                      ColumnSpacing="10">
+                    <Label Grid.Column="0"
+                           Text="TORNEO"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#C7F9CC"
+                           HorizontalOptions="Start" />
+                    <Label Grid.Column="1"
+                           Text="VISIBLE"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#C7F9CC"
+                           HorizontalOptions="Center"
+                           LineBreakMode="TailTruncation" />
+                    <Label Grid.Column="2"
+                           Text="WEB"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#C7F9CC"
+                           HorizontalOptions="Center" />
+                    <Label Grid.Column="3"
+                           Text="APP"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#C7F9CC"
+                           HorizontalOptions="End" />
+                </Grid>
+            </Border>
+
+            <ListView Grid.Row="1"
+                      x:Name="collectionTorneos"
+                      ItemsSource="{Binding listatorneos}"
+                      SeparatorVisibility="Default"
+                      SeparatorColor="#DDE5D6"
+                      HasUnevenRows="True"
+                      VerticalOptions="FillAndExpand"
+                      BackgroundColor="#F1F8E8"
+                      CachingStrategy="RecycleElement">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid ColumnDefinitions="2.4*,0.6*,0.8*,0.8*"
+                                  Padding="12,6"
+                                  ColumnSpacing="6"
+                                  BackgroundColor="#F8FBEF">
+                                <Label Grid.Column="0"
+                                       Text="{Binding nombre}"
+                                       FontSize="12"
+                                       TextColor="#0F172A"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="2"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding visibleTexto}"
+                                       FontSize="12"
+                                       TextColor="#374151"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="2"
+                                       Text="{Binding visitas, StringFormat='{0:N0}'}"
+                                       FontSize="12"
+                                       TextColor="#111827"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="3"
+                                       Text="{Binding visitascel, StringFormat='{0:N0}'}"
+                                       FontSize="12"
+                                       TextColor="#111827"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <Frame Grid.Row="4"
+               Padding="12"
+               CornerRadius="0"
+               BackgroundColor="#0F172A"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                    <Label Text="🏠" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Inicio" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="📊" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Visitas" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                    <Label Text="⚙️" FontSize="18" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                    <Label Text="Ajustes" FontSize="10" TextColor="#C7F9CC" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>

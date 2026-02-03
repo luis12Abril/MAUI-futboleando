@@ -27,6 +27,7 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=9 , nombreopcion="Goleadores" , nombreicono="⚽"},
                 new MenuCLS{ idmenu=10 , nombreopcion="Jugadores por Año" , nombreicono="📅"},
                 new MenuCLS{ idmenu=11 , nombreopcion="Visitas App" , nombreicono="📊"},  // ✅ Solo para admin
+                new MenuCLS{ idmenu=12 , nombreopcion="Visitas Torneos" , nombreicono="🏟️"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
                 new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
                 new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},
@@ -46,8 +47,8 @@ namespace futboleando.Service
 
             foreach (var menu in listamenuCompleta)
             {
-                // La opción "Visitas App" (id=11) solo se muestra si es administrador (IdUsuario = 1)
-                if (menu.idmenu == 11 && idUsuario != 1)
+                // La opción de visitas (id=11/12) solo se muestra si es administrador (IdUsuario = 1)
+                if ((menu.idmenu == 11 || menu.idmenu == 12) && idUsuario != 1)
                 {
                     continue; // Saltar esta opción para usuarios no administradores
                 }

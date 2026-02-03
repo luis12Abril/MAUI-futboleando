@@ -103,6 +103,49 @@ namespace futboleando.Service
                 System.Diagnostics.Debug.WriteLine($"? StackTrace: {ex.StackTrace}");
                 return new List<VisitaUsuarioCLS>();
             }
+
+        }
+
+        public async Task<VisitasTorneoTotalesCLS> ObtenerVisitasTorneoTotales()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Torneo/VisitasTotales");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var totales = await response.Content.ReadFromJsonAsync<VisitasTorneoTotalesCLS>();
+                    return totales ?? new VisitasTorneoTotalesCLS();
+                }
+
+                return new VisitasTorneoTotalesCLS();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al obtener visitas de torneos: {ex.Message}");
+                return new VisitasTorneoTotalesCLS();
+            }
+        }
+
+        public async Task<List<VisitasTorneoCLS>> ObtenerVisitasPorTorneo()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/Torneo/Visitas");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var torneos = await response.Content.ReadFromJsonAsync<List<VisitasTorneoCLS>>();
+                    return torneos ?? new List<VisitasTorneoCLS>();
+                }
+
+                return new List<VisitasTorneoCLS>();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al obtener visitas por torneo: {ex.Message}");
+                return new List<VisitasTorneoCLS>();
+            }
         }
     }
 }

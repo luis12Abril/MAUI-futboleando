@@ -1,5 +1,6 @@
 using futboleandoAPIS.Models;
 using futboleandoEntities.Torneo;
+using futboleandoEntities.Visitas;
 using Microsoft.AspNetCore.Mvc;
 
 namespace futboleandoAPIS.Controllers
@@ -40,6 +41,7 @@ namespace futboleandoAPIS.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+
         }
 
         [HttpGet("PorLiga/{idLiga}")]
@@ -91,6 +93,61 @@ namespace futboleandoAPIS.Controllers
                     return NotFound();
 
                 return Ok(torneo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+        [HttpGet("VisitasTotales")]
+        public IActionResult ObtenerVisitasTotales()
+        {
+            try
+            {
+                var totales = _bd.Torneos
+                    .Select(t => new
+                    {
+                        visitas = t.Visitas ?? 0,
+                        visitascel = t.Visitascel ?? 0
+                    })
+                    .ToList();
+
+                var resultado = new VisitasTorneoTotalesCLS
+                {
+                    totalVisitasWeb = totales.Sum(t => t.visitas),
+                    totalVisitasApp = totales.Sum(t => t.visitascel)
+                };
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("Visitas")]
+        public IActionResult ObtenerVisitasPorTorneo()
+        {
+            try
+            {
+                var torneos = _bd.Torneos
+                    .Select(t => new VisitasTorneoCLS
+                    {
+                        idtorneo = t.Idtorneo,
+                        nombre = t.Nombre ?? string.Empty,
+                        visible = t.Visible ?? 0,
+                        visibleTexto = (t.Visible ?? 0) == 1 ? "Si" : "No",
+                        visitas = t.Visitas ?? 0,
+                        visitascel = t.Visitascel ?? 0,
+                        totalVisitas = (t.Visitas ?? 0) + (t.Visitascel ?? 0)
+                    })
+                    .OrderByDescending(t => t.totalVisitas)
+                    .ToList();
+
+                return Ok(torneos);
             }
             catch (Exception ex)
             {
