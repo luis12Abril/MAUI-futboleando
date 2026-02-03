@@ -81,4 +81,12 @@ public partial class ComunicadoPage : ContentPage
             return;
         }
     }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        if (Navigation != null)
+        {
+            await Navigation.PopAsync();
+        }
+    }
 }

@@ -28,19 +28,13 @@
                         BackgroundColor="Transparent"
                         Padding="4"
                         Clicked="OnBackClicked" />
-                <Frame Grid.Column="1"
-                       WidthRequest="46"
-                       HeightRequest="46"
-                       CornerRadius="23"
-                       Padding="0"
-                       BackgroundColor="#0F172A"
-                       HasShadow="True">
-                    <Label Text="⚽"
-                           FontSize="24"
-                           TextColor="White"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
-                </Frame>
+                <Image Grid.Column="1"
+                       Source="logo_futboleandomenu.png"
+                       HeightRequest="42"
+                       WidthRequest="42"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Aspect="AspectFit" />
                 <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
                     <Label Text="VISITAS A TORNEOS"
                            FontSize="18"
@@ -74,7 +68,9 @@
                                Text="0"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="#22C55E" />
+                               TextColor="#22C55E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Frame>
                 <Frame Grid.Column="1"
@@ -90,7 +86,9 @@
                                Text="0"
                                FontSize="20"
                                FontAttributes="Bold"
-                               TextColor="#22C55E" />
+                               TextColor="#22C55E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Frame>
             </Grid>
