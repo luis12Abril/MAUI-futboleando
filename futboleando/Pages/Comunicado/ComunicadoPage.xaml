@@ -36,9 +36,8 @@
                        Padding="0"
                        BackgroundColor="#0F172A"
                        HasShadow="True">
-                    <Label Text="COM"
-                           FontSize="14"
-                           FontAttributes="Bold"
+                    <Label Text="📢"
+                           FontSize="22"
                            TextColor="White"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
@@ -100,9 +99,8 @@
                                           Padding="15,12,15,8"
                                           BackgroundColor="White">
                                         <HorizontalStackLayout Spacing="8">
-                                            <Label Text="INFO"
-                                                   FontSize="12"
-                                                   FontAttributes="Bold"
+                                            <Label Text="📢"
+                                                   FontSize="14"
                                                    VerticalOptions="Center" />
                                             <Label Text="{Binding comunicadocorto}"
                                                    FontSize="16"
@@ -164,9 +162,8 @@
                            HasShadow="False"
                            HorizontalOptions="Center"
                            BorderColor="Transparent">
-                        <Label Text="INFO"
-                               FontSize="28"
-                               FontAttributes="Bold"
+                        <Label Text="📢"
+                               FontSize="32"
                                HorizontalOptions="Center"
                                VerticalOptions="Center" />
                     </Frame>

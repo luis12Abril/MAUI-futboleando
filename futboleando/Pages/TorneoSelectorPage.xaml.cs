@@ -3,6 +3,7 @@ using futboleandoEntities.Estado;
 using futboleandoEntities.Municipio;
 using futboleandoEntities.Liga;
 using futboleandoEntities.Torneo;
+using Microsoft.Maui.ApplicationModel;
 
 namespace futboleando.Pages
 {
@@ -63,12 +64,27 @@ namespace futboleando.Pages
             _isInitializing = true;
             try
             {
+                DisableAllPickers();
                 await CargarDatosIniciales();
             }
             finally
             {
                 _isInitializing = false;
+                pickerEstado.InputTransparent = true;
+                await Task.Delay(150);
+                EnablePickersBasedOnData();
+                await PostRestoreUnfocusAsync();
+                pickerEstado.InputTransparent = false;
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            pickerEstado?.Unfocus();
+            pickerMunicipio?.Unfocus();
+            pickerLiga?.Unfocus();
+            pickerTorneo?.Unfocus();
         }
 
         private async Task CargarDatosIniciales()
@@ -113,6 +129,20 @@ namespace futboleando.Pages
             }
         }
 
+        private async Task PostRestoreUnfocusAsync()
+        {
+            await Task.Delay(150);
+            pickerEstado?.Unfocus();
+            pickerMunicipio?.Unfocus();
+            pickerLiga?.Unfocus();
+            pickerTorneo?.Unfocus();
+            await Task.Delay(150);
+            pickerEstado?.Unfocus();
+            pickerMunicipio?.Unfocus();
+            pickerLiga?.Unfocus();
+            pickerTorneo?.Unfocus();
+        }
+
         private async Task RestaurarSeleccion(int idEstado, int idMunicipio, int idLiga, int idTorneo)
         {
             try
@@ -130,8 +160,6 @@ namespace futboleando.Pages
                     {
                         pickerMunicipio.ItemsSource = municipios.ToList();
                         pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
-                        pickerMunicipio.IsEnabled = true;
-                        pickerMunicipio.Opacity = 1.0;
 
                         var municipio = municipios.FirstOrDefault(m => m.idmunicipio == idMunicipio);
                         if (municipio != null)
@@ -144,8 +172,6 @@ namespace futboleando.Pages
                             {
                                 pickerLiga.ItemsSource = ligas.ToList();
                                 pickerLiga.ItemDisplayBinding = new Binding("nombre");
-                                pickerLiga.IsEnabled = true;
-                                pickerLiga.Opacity = 1.0;
 
                                 var liga = ligas.FirstOrDefault(l => l.idliga == idLiga);
                                 if (liga != null)
@@ -158,8 +184,6 @@ namespace futboleando.Pages
                                     {
                                         pickerTorneo.ItemsSource = torneos.ToList();
                                         pickerTorneo.ItemDisplayBinding = new Binding("nombre");
-                                        pickerTorneo.IsEnabled = true;
-                                        pickerTorneo.Opacity = 1.0;
 
                                         var torneo = torneos.FirstOrDefault(t => t.idtorneo == idTorneo);
                                         if (torneo != null)
@@ -179,6 +203,41 @@ namespace futboleando.Pages
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Error al restaurar selección: {ex.Message}", "OK");
+            }
+        }
+
+        private void DisableAllPickers()
+        {
+            if (pickerEstado != null) pickerEstado.IsEnabled = false;
+            if (pickerMunicipio != null) pickerMunicipio.IsEnabled = false;
+            if (pickerLiga != null) pickerLiga.IsEnabled = false;
+            if (pickerTorneo != null) pickerTorneo.IsEnabled = false;
+        }
+
+        private void EnablePickersBasedOnData()
+        {
+            if (pickerEstado != null)
+            {
+                pickerEstado.IsEnabled = pickerEstado.ItemsSource != null;
+                pickerEstado.Opacity = pickerEstado.IsEnabled ? 1.0 : 0.6;
+            }
+
+            if (pickerMunicipio != null)
+            {
+                pickerMunicipio.IsEnabled = pickerMunicipio.ItemsSource != null;
+                pickerMunicipio.Opacity = pickerMunicipio.IsEnabled ? 1.0 : 0.6;
+            }
+
+            if (pickerLiga != null)
+            {
+                pickerLiga.IsEnabled = pickerLiga.ItemsSource != null;
+                pickerLiga.Opacity = pickerLiga.IsEnabled ? 1.0 : 0.6;
+            }
+
+            if (pickerTorneo != null)
+            {
+                pickerTorneo.IsEnabled = pickerTorneo.ItemsSource != null;
+                pickerTorneo.Opacity = pickerTorneo.IsEnabled ? 1.0 : 0.6;
             }
         }
 

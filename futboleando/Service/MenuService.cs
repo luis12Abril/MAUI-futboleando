@@ -28,6 +28,7 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=10 , nombreopcion="Jugadores por Año" , nombreicono="📅"},
                 new MenuCLS{ idmenu=11 , nombreopcion="Visitas App" , nombreicono="📊"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=12 , nombreopcion="Visitas Torneos" , nombreicono="🏟️"},  // ✅ Solo para admin
+                new MenuCLS{ idmenu=13 , nombreopcion="Proximos Cumpleañeros" , nombreicono="🎂"},
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
                 new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
                 new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},

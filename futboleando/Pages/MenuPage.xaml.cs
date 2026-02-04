@@ -1,5 +1,6 @@
 using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
+using futboleando.Pages.Cumpleañero;
 using futboleando.Pages.Comunicado;
 using futboleando.Pages.Juego;
 using futboleando.Pages.Goleador;
@@ -130,6 +131,12 @@ public partial class MenuPage : ContentPage
                 var visitasTorneoService = MauiProgram.ServiceProvider.GetService<VisitasService>();
                 VisitasTorneoPage oVisitasTorneoPage = new VisitasTorneoPage(visitasTorneoService);
                 App.Navigate.PushAsync(oVisitasTorneoPage);
+                break;
+
+            case 13:
+                var cumpleañeroService = MauiProgram.ServiceProvider.GetService<CumpleañeroService>();
+                CumpleañeroPage oCumpleañeroPage = new CumpleañeroPage(cumpleañeroService, equipoService);
+                App.Navigate.PushAsync(oCumpleañeroPage);
                 break;
 
             case 20:

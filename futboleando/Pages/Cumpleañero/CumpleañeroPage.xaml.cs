@@ -10,6 +10,7 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 {
     private readonly CumpleañeroService cumpleañeroService;
     private readonly EquipoService equipoService;
+    private bool _isNavigatingBack;
     
     private ObservableCollection<CumpleañeroCLS> _listacumpleañeros;
     public ObservableCollection<CumpleañeroCLS> listacumpleañeros
@@ -19,6 +20,32 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
         {
             _listacumpleañeros = value;
             OnPropertyChanged(nameof(listacumpleañeros));
+        }
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        if (_isNavigatingBack)
+        {
+            return;
+        }
+
+        try
+        {
+            _isNavigatingBack = true;
+
+            if (Navigation?.NavigationStack?.Count > 1)
+            {
+                await Navigation.PopAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"❌ Error al regresar: {ex.Message}");
+        }
+        finally
+        {
+            _isNavigatingBack = false;
         }
     }
     
@@ -159,12 +186,7 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             }
 
             // Cargar todos los cumpleañeros de manera simple
-            listacumpleañeros.Clear();
-            
-            foreach (var cumpleañero in todosCumpleañeros)
-            {
-                listacumpleañeros.Add(cumpleañero);
-            }
+            listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
 
             lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {todosCumpleañeros.Count}";
 

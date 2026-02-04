@@ -33,6 +33,7 @@ namespace futboleando
             builder.Services.AddScoped<GoleadorService>();
             builder.Services.AddScoped<JugadoresPorAñoService>();
             builder.Services.AddScoped<VisitasService>();  // ✅ Nuevo servicio
+            builder.Services.AddScoped<CumpleañeroService>();
             
             builder.Services.AddScoped<EstadoService>();
             builder.Services.AddScoped<MunicipioService>();
