@@ -18,22 +18,19 @@ namespace futboleando.Service
             // Lista completa de opciones de menú
             listamenuCompleta = new ObservableCollection<MenuCLS>
             {
-                new MenuCLS{ idmenu=1 , nombreopcion="Usuario" , nombreicono="👤"},
-                new MenuCLS{ idmenu=2 , nombreopcion="Jugador" , nombreicono="🏃"},
-                new MenuCLS{ idmenu=3 , nombreopcion="Equipo" , nombreicono="👥"},
-                new MenuCLS{ idmenu=4 , nombreopcion="Campo" , nombreicono="🏟️"},
+                new MenuCLS{ idmenu=3 , nombreopcion="Equipos" , nombreicono="👥"},
+                new MenuCLS{ idmenu=2 , nombreopcion="Jugadores" , nombreicono="🏃"},
                 new MenuCLS{ idmenu=7 , nombreopcion="Juegos" , nombreicono="⚽"},
                 new MenuCLS{ idmenu=8 , nombreopcion="Posiciones" , nombreicono="🏆"},
+                new MenuCLS{ idmenu=14 , nombreopcion="Últimos Cinco Juegos" , nombreicono="📋"},
                 new MenuCLS{ idmenu=9 , nombreopcion="Goleadores" , nombreicono="⚽"},
-                new MenuCLS{ idmenu=14 , nombreopcion="Últimos cinco juegos" , nombreicono="📋"},
-                new MenuCLS{ idmenu=10 , nombreopcion="Jugadores por Año" , nombreicono="📅"},
+                new MenuCLS{ idmenu=10 , nombreopcion="Jugadores Por Año" , nombreicono="📅"},
+                new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
+                new MenuCLS{ idmenu=13 , nombreopcion="Proximos Cumpleañeros" , nombreicono="🎂"},
                 new MenuCLS{ idmenu=11 , nombreopcion="Visitas App" , nombreicono="📊"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=12 , nombreopcion="Visitas Torneos" , nombreicono="🏟️"},  // ✅ Solo para admin
-                new MenuCLS{ idmenu=13 , nombreopcion="Proximos Cumpleañeros" , nombreicono="🎂"},
-                new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
-                new MenuCLS{ idmenu=5 , nombreopcion="Ciudad" , nombreicono="🏙️"},
-                new MenuCLS{ idmenu=20 , nombreopcion="Colaborador" , nombreicono="🤝"},
-                new MenuCLS{ idmenu=99 , nombreopcion="Seleccionar Torneo" , nombreicono="🏆"},
+                new MenuCLS{ idmenu=15 , nombreopcion="Contacto" , nombreicono="☎️"},
+                new MenuCLS{ idmenu=99 , nombreopcion="Seleccionar Otro Torneo" , nombreicono="🏆"},
                 new MenuCLS{ idmenu=1000 , nombreopcion="Cerrar Sesión" , nombreicono="🚪"}
             };
 

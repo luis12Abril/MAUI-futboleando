@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="futboleando.Pages.Contacto.ContactoPage"
+             Title="Contacto"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Grid Padding="20"
+                  ColumnDefinitions="Auto,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="12">
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                        <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <Frame Grid.Column="0"
+                       WidthRequest="80"
+                       HeightRequest="80"
+                       CornerRadius="40"
+                       Padding="0"
+                       HasShadow="True"
+                       BorderColor="White"
+                       BackgroundColor="White"
+                       VerticalOptions="Start">
+                    <Image Source="logo_futboleando"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Frame>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                    <Label Text="Futboleando"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Tu administrador de torneos"
+                           FontSize="14"
+                           TextColor="White"
+                           Opacity="0.9" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Label Text="Servicios"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="#333333" />
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="• Futbol Soccer" FontSize="14" TextColor="#333333" />
+                <Label Text="• Futbol 7" FontSize="14" TextColor="#333333" />
+                <Label Text="• Futbol 5" FontSize="14" TextColor="#333333" />
+                <Label Text="• Torneos personalizados" FontSize="14" TextColor="#333333" />
+            </VerticalStackLayout>
+
+            <Frame CornerRadius="12"
+                   Padding="16"
+                   BackgroundColor="White"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Contacto"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#333333" />
+                    <Label Text="https://futboleando.com.mx" FontSize="14" TextColor="#333333" />
+                    <Label Text="admin@futboleando.com.mx" FontSize="14" TextColor="#333333" />
+                    <Label Text="{Binding Telefono, StringFormat='Cel. {0}'}" FontSize="14" TextColor="#333333" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="Abrir sitio web"
+                    Style="{StaticResource botonAzul}"
+                    TextColor="White"
+                    Clicked="OnWebClicked" />
+
+            <Button Text="Enviar correo"
+                    Style="{StaticResource botonVerde}"
+                    TextColor="White"
+                    Clicked="OnEmailClicked" />
+
+            <Button Text="Llamar"
+                    Style="{StaticResource botonRojo}"
+                    TextColor="White"
+                    Clicked="OnCallClicked" />
+
+            <Label Text="¡Pide tu torneo!"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="#666666"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

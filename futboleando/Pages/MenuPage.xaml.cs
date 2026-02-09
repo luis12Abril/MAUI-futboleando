@@ -2,6 +2,7 @@ using futboleando.Pages.Ciudad;
 using futboleando.Pages.Colaborador;
 using futboleando.Pages.Cumpleañero;
 using futboleando.Pages.Comunicado;
+using futboleando.Pages.Contacto;
 using futboleando.Pages.Juego;
 using futboleando.Pages.Goleador;
 using futboleando.Pages.Posiciones;
@@ -10,6 +11,7 @@ using futboleando.Pages.Visitas;
 using futboleando.Service;
 using futboleandoEntities.Menu;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace futboleando.Pages;
 
@@ -51,7 +53,7 @@ public partial class MenuPage : ContentPage
         listamenu = await menuService.listarMenu();
     }
 
-    private void lstMenu_ItemTapped(object sender, ItemTappedEventArgs e)
+    private async void lstMenu_ItemTapped(object sender, ItemTappedEventArgs e)
     {
 
         //DisplayAlert("Aviso", oMenuCLS.nombreopcion, "Salir");
@@ -144,6 +146,18 @@ public partial class MenuPage : ContentPage
                 var cumpleañeroService = MauiProgram.ServiceProvider.GetService<CumpleañeroService>();
                 CumpleañeroPage oCumpleañeroPage = new CumpleañeroPage(cumpleañeroService, equipoService);
                 App.Navigate.PushAsync(oCumpleañeroPage);
+                break;
+
+            case 15:
+                var avisoFutboleandoService = MauiProgram.ServiceProvider.GetService<AvisoFutboleandoService>();
+                if (avisoFutboleandoService == null)
+                {
+                    await DisplayAlert("Contacto", "No se pudo cargar la información de contacto.", "OK");
+                    break;
+                }
+
+                ContactoPage oContactoPage = new ContactoPage(avisoFutboleandoService);
+                App.Navigate.PushAsync(oContactoPage);
                 break;
 
             case 20:

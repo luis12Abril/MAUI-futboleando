@@ -22,28 +22,33 @@
             </Grid.Shadow>
             
             <VerticalStackLayout Spacing="8">
-                <!-- Avatar/Logo del usuario -->
-                <Frame WidthRequest="80"
-                       HeightRequest="80"
-                       CornerRadius="40"
-                       Padding="0"
-                       HasShadow="True"
-                       BorderColor="White"
-                       BackgroundColor="White"
-                       HorizontalOptions="Start">
-                    <Label Text="⚽"
-                           FontSize="50"
-                           HorizontalOptions="Center"
+                <Grid ColumnDefinitions="Auto,Auto"
+                      ColumnSpacing="10">
+                    <Frame Grid.Column="0"
+                           WidthRequest="80"
+                           HeightRequest="80"
+                           CornerRadius="40"
+                           Padding="0"
+                           HasShadow="True"
+                           BorderColor="White"
+                           BackgroundColor="White"
+                           HorizontalOptions="Start"
+                           VerticalOptions="Start">
+                        <Image Source="logo_futboleando"
+                               Aspect="AspectFit"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
+
+                    <Label Grid.Column="1"
+                           Text="Futboleando"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White"
                            VerticalOptions="Center" />
-                </Frame>
-                
-                <!-- Nombre del usuario -->
-                <Label Text="Luis"
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="White" />
-                
-                <Label Text="Administrador"
+                </Grid>
+
+                <Label Text="Estadísticas y gestión de tu liga al instante"
                        FontSize="14"
                        TextColor="White"
                        Opacity="0.9" />

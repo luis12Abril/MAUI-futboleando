@@ -34,6 +34,7 @@ namespace futboleando
             builder.Services.AddScoped<JugadoresPorAñoService>();
             builder.Services.AddScoped<VisitasService>();  // ✅ Nuevo servicio
             builder.Services.AddScoped<CumpleañeroService>();
+            builder.Services.AddScoped<AvisoFutboleandoService>();
             
             builder.Services.AddScoped<EstadoService>();
             builder.Services.AddScoped<MunicipioService>();
@@ -53,9 +54,7 @@ namespace futboleando
 
                 var httpClient = new HttpClient(handler)
                 {
-                    //apisfutbleandoMAUI.somee.com
-                    // BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
-                    BaseAddress = new Uri("http://apisfutbleandoMAUI.somee.com/"),
+                    BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
                     Timeout = TimeSpan.FromSeconds(60) // ✅ Aumentar timeout para evitar cortes
                 };
 
