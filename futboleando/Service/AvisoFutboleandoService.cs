@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using futboleandoEntities.Aviso;
 
 namespace futboleando.Service
@@ -28,12 +29,41 @@ namespace futboleando.Service
         {
             try
             {
-                var telefono = await _httpClient.GetFromJsonAsync<string>("api/AvisoFutboleando/Telefono");
-                return string.IsNullOrWhiteSpace(telefono) ? null : telefono;
+                var response = await _httpClient.GetAsync("api/AvisoFutboleando/Telefono");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var telefono = NormalizarTelefonoRespuesta(content);
+                    if (!string.IsNullOrWhiteSpace(telefono))
+                    {
+                        return telefono;
+                    }
+                }
             }
             catch
             {
+            }
+
+            var aviso = await ObtenerAvisoAsync();
+            return string.IsNullOrWhiteSpace(aviso?.titulomensaje) ? null : aviso.titulomensaje;
+        }
+
+        private static string? NormalizarTelefonoRespuesta(string? contenido)
+        {
+            if (string.IsNullOrWhiteSpace(contenido))
+            {
                 return null;
+            }
+
+            try
+            {
+                var valor = JsonSerializer.Deserialize<string>(contenido);
+                return string.IsNullOrWhiteSpace(valor) ? null : valor;
+            }
+            catch
+            {
+                var recortado = contenido.Trim().Trim('"');
+                return string.IsNullOrWhiteSpace(recortado) ? null : recortado;
             }
         }
     }

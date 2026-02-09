@@ -52,6 +52,7 @@ namespace futboleando
                 handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate;
 #endif
 
+                //  BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
                 var httpClient = new HttpClient(handler)
                 {
                     BaseAddress = new Uri("http://futboleandoapp.somee.com/"),

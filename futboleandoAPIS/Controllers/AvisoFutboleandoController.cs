@@ -23,8 +23,7 @@ namespace futboleandoAPIS.Controllers
             try
             {
                 var aviso = _bd.Avisofutboleandos
-                    .Where(a => a.Habilitado == 1)
-                    .OrderByDescending(a => a.Fechamensaje)
+                    .OrderByDescending(a => a.Idavisofutboleando)
                     .Select(a => new AvisoFutboleandoCLS
                     {
                         idavisofutboleando = a.Idavisofutboleando,
@@ -56,8 +55,7 @@ namespace futboleandoAPIS.Controllers
             try
             {
                 var telefono = _bd.Avisofutboleandos
-                    .Where(a => a.Habilitado == 1)
-                    .OrderByDescending(a => a.Fechamensaje)
+                    .OrderByDescending(a => a.Idavisofutboleando)
                     .Select(a => a.Titulomensaje)
                     .FirstOrDefault();
 
