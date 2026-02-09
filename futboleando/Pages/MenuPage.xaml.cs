@@ -112,6 +112,13 @@ public partial class MenuPage : ContentPage
                 App.Navigate.PushAsync(oGoleadorPage); 
                 break;
 
+            case 14:
+                var equipoServiceUltimos = MauiProgram.ServiceProvider.GetService<EquipoService>();
+                var juegoServiceUltimos = MauiProgram.ServiceProvider.GetService<JuegoService>();
+                UltimosCincoJuegosPage oUltimosCincoJuegosPage = new UltimosCincoJuegosPage(equipoServiceUltimos, juegoServiceUltimos);
+                App.Navigate.PushAsync(oUltimosCincoJuegosPage);
+                break;
+
             // ? NUEVO: Jugadores por Año
             case 10:
                 var jugadoresPorAñoService = MauiProgram.ServiceProvider.GetService<JugadoresPorAñoService>();

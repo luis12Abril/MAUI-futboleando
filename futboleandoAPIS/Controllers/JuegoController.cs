@@ -48,6 +48,8 @@ namespace futboleandoAPIS.Controllers
                                  nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
                                  idestatusjuego = j.Idestatusjuego,
                                  nombreestatusjuego = estatus != null ? estatus.Nombre : "Sin estatus",
+                                 resequipo01 = j.Resequipo01,
+                                 resequipo02 = j.Resequipo02,
                                  idtorneo = j.Idtorneo ?? 0
                              }).ToList();
 
@@ -168,6 +170,8 @@ namespace futboleandoAPIS.Controllers
                                  nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
                                  idestatusjuego = j.Idestatusjuego,
                                  nombreestatusjuego = estatus != null ? estatus.Nombre : "Sin estatus",
+                                 resequipo01 = j.Resequipo01,
+                                 resequipo02 = j.Resequipo02,
                                  idtorneo = j.Idtorneo ?? 0
                              }).ToList();
 

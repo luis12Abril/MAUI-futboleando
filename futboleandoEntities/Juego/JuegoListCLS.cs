@@ -18,6 +18,8 @@ namespace futboleandoEntities.Juego
         public string nombrecampo { get; set; } = string.Empty;
         public int? idestatusjuego { get; set; }
         public string nombreestatusjuego { get; set; } = string.Empty;
+        public string? resequipo01 { get; set; }
+        public string? resequipo02 { get; set; }
         public int idtorneo { get; set; }
     }
 }
