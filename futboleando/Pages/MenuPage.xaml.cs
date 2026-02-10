@@ -77,7 +77,7 @@ public partial class MenuPage : ContentPage
             //    UsuarioPage oUsuarioPage = new UsuarioPage();
             //    App.Navigate.PushAsync(oUsuarioPage); break;
             case 2:
-                JugadorPage oJugadorPage = new JugadorPage(jugadorService);
+                JugadorPage oJugadorPage = new JugadorPage(jugadorService, equipoService);
                 App.Navigate.PushAsync(oJugadorPage); break;
 
             case 3:

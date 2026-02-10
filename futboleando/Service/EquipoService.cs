@@ -52,6 +52,24 @@ namespace futboleando.Service
             }          
         }
 
+        public async Task<ObservableCollection<EquipoListCLS>> listarEquipoResumen()
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<EquipoListCLS>>("api/Equipo/Resumen");
+                if (response != null)
+                {
+                    return new ObservableCollection<EquipoListCLS>(response);
+                }
+
+                return new ObservableCollection<EquipoListCLS>();
+            }
+            catch (Exception)
+            {
+                return new ObservableCollection<EquipoListCLS>();
+            }
+        }
+
         // ✅ Nuevo método - devuelve equipos por torneo
         public async Task<ObservableCollection<EquipoListCLS>> listarEquipoPorTorneo(int idTorneo)
         {
@@ -67,6 +85,36 @@ namespace futboleando.Service
             catch (Exception ex)
             {
                 return new ObservableCollection<EquipoListCLS>();
+            }
+        }
+
+        public async Task<ObservableCollection<EquipoListCLS>> listarEquipoPorTorneoResumen(int idTorneo)
+        {
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<List<EquipoListCLS>>($"api/Equipo/PorTorneo/{idTorneo}/Resumen");
+                if (response != null)
+                {
+                    return new ObservableCollection<EquipoListCLS>(response);
+                }
+
+                return new ObservableCollection<EquipoListCLS>();
+            }
+            catch (Exception)
+            {
+                return new ObservableCollection<EquipoListCLS>();
+            }
+        }
+
+        public async Task<string> ObtenerFotoEquipo(int idEquipo)
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<string>($"api/Equipo/{idEquipo}/Foto");
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
     }

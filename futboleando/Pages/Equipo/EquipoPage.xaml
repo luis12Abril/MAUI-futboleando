@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:futboleando.Converters"
+             xmlns:models="clr-namespace:futboleando.Models"
              x:Class="futboleando.Pages.EquipoPage"
              Title="Equipos"
-             BackgroundColor="#F5F5F5">
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:ByteArrayToImageConverter x:Key="ByteArrayToImage" />
-            <converters:HasImageConverter x:Key="HasImage" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
     
     <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="0">
         
         <!-- Encabezado -->
         <Grid Grid.Row="0" 
               BackgroundColor="{StaticResource verdeOscuro}"
-              Padding="20,15">
+              Padding="12,14">
             <Grid.Shadow>
                 <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
             </Grid.Shadow>
-            
-            <VerticalStackLayout>
-                <Label Text="Tabla de Posiciones" 
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Start" />
-                <Label Text="Clasificación general del torneo"
-                       FontSize="14"
-                       TextColor="White"
-                       Opacity="0.9"
-                       Margin="0,5,0,0" />
-            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding NombreTorneoSeleccionado}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
         </Grid>
 
         <!-- Línea separadora -->
@@ -68,10 +68,11 @@
         <CollectionView Grid.Row="3"
                         ItemsSource="{Binding listaequipo}"
                         SelectionMode="None"
+                        ItemSizingStrategy="MeasureFirstItem"
                         Margin="10,0,10,10">
             
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:EquipoIndexed">
                     <Frame Margin="5,5,5,10"
                            Padding="0"
                            CornerRadius="15"
@@ -172,8 +173,9 @@
                                            BorderColor="#E0E0E0"
                                            HorizontalOptions="Fill"
                                            VerticalOptions="Center"
-                                           IsVisible="{Binding Equipo.foto, Converter={StaticResource HasImage}}">
-                                        <Image Source="{Binding Equipo.foto, Converter={StaticResource ByteArrayToImage}}"
+                                           IsClippedToBounds="True"
+                                           IsVisible="{Binding TieneFoto}">
+                                        <Image Source="{Binding FotoSource}"
                                                Aspect="AspectFit"
                                                HorizontalOptions="FillAndExpand"
                                                VerticalOptions="FillAndExpand" />
@@ -188,7 +190,13 @@
                                            BorderColor="#DDDDDD"
                                            HorizontalOptions="Fill"
                                            VerticalOptions="Center"
-                                           IsVisible="{Binding Equipo.foto, Converter={StaticResource HasImage}, ConverterParameter=invert}">
+                                           IsClippedToBounds="True"
+                                           IsVisible="True">
+                                        <Frame.Triggers>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding TieneFoto}" Value="True">
+                                                <Setter Property="IsVisible" Value="False" />
+                                            </DataTrigger>
+                                        </Frame.Triggers>
                                         <VerticalStackLayout Spacing="12"
                                                              HorizontalOptions="Center"
                                                              VerticalOptions="Center">

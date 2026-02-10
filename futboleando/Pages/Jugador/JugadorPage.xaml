@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:futboleando.Models"
              x:Class="futboleando.Pages.JugadorPage"
              Title="Jugadores"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
     
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="0">
         
         <!-- ========== ENCABEZADO ========== -->
         <Grid Grid.Row="0" 
               BackgroundColor="{StaticResource verdeOscuro}"
-              Padding="20,15">
+              Padding="12,14">
             <Grid.Shadow>
                 <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
             </Grid.Shadow>
-            
-            <VerticalStackLayout>
-                <Label Text="🏃 Jugadores del Torneo" 
-                       FontSize="22"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Start" />
-                <Label Text="Gestiona y consulta los jugadores"
-                       FontSize="14"
-                       TextColor="White"
-                       Opacity="0.9"
-                       Margin="0,5,0,0" />
-            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding NombreTorneoSeleccionado}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
         </Grid>
 
         <!-- ========== LÍNEA SEPARADORA ========== -->
@@ -34,36 +42,44 @@
                  Color="{StaticResource azulOscuro}"
                  HeightRequest="4" />
 
-        <!-- ========== BARRA DE BÚSQUEDA ========== -->
+        <!-- ========== FILTRO POR EQUIPO ========== -->
         <Frame Grid.Row="2"
-               Padding="15"
-               Margin="15,15,15,10"
-               CornerRadius="12"
+               Padding="10"
+               CornerRadius="10"
                BackgroundColor="White"
                HasShadow="True"
-               BorderColor="Transparent">
-            
-            <VerticalStackLayout Spacing="8">
-                <Label Text="🔍 Buscar Jugador"
-                       FontSize="14"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource azulOscuro}" />
-                
-                <Border StrokeThickness="2"
+               BorderColor="Transparent"
+               Margin="15,15,15,10">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Grid.Column="0"
+                        StrokeThickness="1"
                         Stroke="{StaticResource verdeOscuro}"
-                        StrokeShape="RoundRectangle 10"
-                        BackgroundColor="White">
-                    
-                    <Entry x:Name="entryNombreJugador"
-                           Placeholder="Escribe el nombre del jugador..."
-                           FontSize="16"
-                           TextColor="#000000"
-                           PlaceholderColor="#999999"
-                           BackgroundColor="Transparent"
-                           TextChanged="entryNombreJugador_TextChanged_1"
-                           Margin="10,5" />
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#F8F9FA">
+                    <Picker x:Name="pickerEquipo"
+                            Title="-- Todos los Equipos --"
+                            ItemsSource="{Binding listaequipos}"
+                            ItemDisplayBinding="{Binding nombre}"
+                            SelectedIndexChanged="OnEquipoSelected"
+                            FontSize="14"
+                            TextColor="{StaticResource verdeOscuro}"
+                            TitleColor="#6c757d"
+                            BackgroundColor="Transparent"
+                            Margin="8,3" />
                 </Border>
-            </VerticalStackLayout>
+                <Button Grid.Column="1"
+                        Text="✕"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource rojoOscuro}"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        Clicked="OnLimpiarFiltroClicked"
+                        ToolTipProperties.Text="Limpiar filtro" />
+            </Grid>
         </Frame>
 
         <!-- ========== CONTADOR TOTAL DE JUGADORES ========== -->
@@ -91,10 +107,11 @@
         <CollectionView Grid.Row="4"
                         ItemsSource="{Binding listajugador}"
                         SelectionMode="None"
+                        ItemSizingStrategy="MeasureFirstItem"
                         Margin="10,0,10,10">
             
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:JugadorIndexed">
                     <!-- Contenedor de la tarjeta -->
                     <Frame Margin="5,5,5,10"
                            Padding="0"
