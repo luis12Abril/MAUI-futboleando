@@ -42,8 +42,8 @@ namespace futboleandoAPIS.Controllers
                                     fnacimiento = (DateOnly)j.Fnacimiento,
                                     goles = j.Goles ?? 0
                                 })
-                                .OrderByDescending(j => j.goles)
-                                .ThenBy(j => j.nombrecompleto)
+                                .OrderByDescending(j => j.fnacimiento)   // ✅ Ordenar por fecha de nacimiento  (los mas chicos primero)
+                                .ThenBy(j => j.nombrecompleto)           // ✅ Desempate alfabético
                                 .ToList();
                 
                 return Ok(consulta);
@@ -77,7 +77,7 @@ namespace futboleandoAPIS.Controllers
                                     fnacimiento = (DateOnly)j.Fnacimiento,
                                     goles = j.Goles ?? 0
                                 })
-                                .OrderByDescending(j => j.goles)  // ✅ Ordenar por goles (goleadores primero)
+                                .OrderByDescending(j => j.fnacimiento)  // ✅ Ordenar por fecha de nacimiento  (los mas chicos primero)
                                 .ThenBy(j => j.nombrecompleto)    // ✅ Desempate alfabético
                                 .ToList();
                 

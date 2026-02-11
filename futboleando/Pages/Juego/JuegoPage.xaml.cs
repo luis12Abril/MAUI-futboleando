@@ -1,16 +1,32 @@
 using futboleando.Service;
 using futboleandoEntities.Juego;
 using futboleandoEntities.Jornada;
+using futboleandoEntities.Equipo;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace futboleando.Pages.Juego;
 
-public partial class JuegoPage : ContentPage
+public partial class JuegoPage : ContentPage, INotifyPropertyChanged
 {
     private readonly JuegoService juegoService;
+    private readonly EquipoService equipoService;
     public ObservableCollection<JuegoListCLS> listajuegos { get; set; }
     public ObservableCollection<JornadaListCLS> listajornada { get; set; }
     public JornadaListCLS jornadaSeleccionada { get; set; }
+
+    private string _nombreTorneoSeleccionado = "";
+    public string NombreTorneoSeleccionado
+    {
+        get => _nombreTorneoSeleccionado;
+        set
+        {
+            _nombreTorneoSeleccionado = value;
+            OnPropertyChanged(nameof(NombreTorneoSeleccionado));
+        }
+    }
     
     private List<JuegoListCLS> todosLosJuegos;
     private List<JuegoListCLS> juegosFiltrados;
@@ -24,6 +40,7 @@ public partial class JuegoPage : ContentPage
     {
         InitializeComponent();
         juegoService = _juegoService;
+        equipoService = MauiProgram.ServiceProvider.GetService<EquipoService>();
         listajuegos = new ObservableCollection<JuegoListCLS>();
         listajornada = new ObservableCollection<JornadaListCLS>();
         todosLosJuegos = new List<JuegoListCLS>();
@@ -51,8 +68,7 @@ public partial class JuegoPage : ContentPage
 
             idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
             var nombreTorneo = Preferences.Get("NombreTorneo", "Sin torneo");
-
-            lblTorneoNombre.Text = $"Torneo: {nombreTorneo}";
+            NombreTorneoSeleccionado = nombreTorneo;
 
             if (idTorneoSeleccionado == 0)
             {
@@ -63,23 +79,23 @@ public partial class JuegoPage : ContentPage
             pickerJornada.SelectedIndexChanged -= OnJornadaSelected;
 
             var jornadas = await juegoService.ListarJornadasPorTorneo(idTorneoSeleccionado);
-            listajornada.Clear();
-            
-            listajornada.Add(new JornadaListCLS 
-            { 
-                idjornada = 0, 
-                nombre = "-- Todas las Jornadas --", 
-                idtorneo = idTorneoSeleccionado 
-            });
-            
-            foreach (var jornada in jornadas)
-            {
-                listajornada.Add(jornada);
-            }
+            var jornadasFiltradas = jornadas
+                .Where(j => !string.Equals(j.nombre?.Trim(), "-- Todas las Jornadas --", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            listajornada = new ObservableCollection<JornadaListCLS>(jornadasFiltradas);
+            OnPropertyChanged(nameof(listajornada));
             
             // Cargar TODOS los juegos en memoria de una sola vez
             var juegos = await juegoService.ListarJuegosPorTorneo(idTorneoSeleccionado);
             todosLosJuegos = juegos.ToList();
+
+            ObservableCollection<EquipoListCLS> equipos = new();
+            if (equipoService != null)
+            {
+                equipos = await equipoService.listarEquipoPorTorneoResumen(idTorneoSeleccionado);
+            }
+
+            NormalizarNombresEquipos(todosLosJuegos, equipos);
             juegosFiltrados = todosLosJuegos;
 
             // Limpiar y cargar SOLO el primer lote
@@ -87,8 +103,8 @@ public partial class JuegoPage : ContentPage
             _currentLoadedIndex = 0;
             CargarSiguienteLote();
 
-            jornadaSeleccionada = listajornada.FirstOrDefault();
-            pickerJornada.SelectedItem = jornadaSeleccionada;
+            jornadaSeleccionada = null;
+            pickerJornada.SelectedIndex = -1;
 
             ActualizarContador();
 
@@ -98,6 +114,7 @@ public partial class JuegoPage : ContentPage
             loadingIndicator.IsRunning = false;
             loadingIndicator.IsVisible = false;
         }
+
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"Error al cargar juegos: {ex.Message}", "OK");
@@ -108,6 +125,75 @@ public partial class JuegoPage : ContentPage
         {
             _isLoading = false;
         }
+
+    }
+
+    private static void NormalizarNombresEquipos(List<JuegoListCLS> juegos, IEnumerable<EquipoListCLS> equipos)
+    {
+        if (juegos == null || juegos.Count == 0)
+        {
+            return;
+        }
+
+        var nombresPorEquipo = new Dictionary<int, string>();
+
+        if (equipos != null)
+        {
+            foreach (var equipo in equipos)
+            {
+                if (equipo.idequipo > 0 && !string.IsNullOrWhiteSpace(equipo.nombre))
+                {
+                    nombresPorEquipo[equipo.idequipo] = equipo.nombre.Trim();
+                }
+            }
+        }
+
+        foreach (var juego in juegos)
+        {
+            if (juego.idequipo01 > 0 && !string.IsNullOrWhiteSpace(juego.nombreequipo01))
+            {
+                nombresPorEquipo[juego.idequipo01] = juego.nombreequipo01.Trim();
+            }
+
+            if (juego.idequipo02 > 0 && !string.IsNullOrWhiteSpace(juego.nombreequipo02))
+            {
+                nombresPorEquipo[juego.idequipo02] = juego.nombreequipo02.Trim();
+            }
+        }
+
+        foreach (var juego in juegos)
+        {
+            juego.nombreequipo01 = ResolverNombreEquipo(juego.idequipo01, juego.nombreequipo01, nombresPorEquipo);
+            juego.nombreequipo02 = ResolverNombreEquipo(juego.idequipo02, juego.nombreequipo02, nombresPorEquipo);
+        }
+    }
+
+    private static string ResolverNombreEquipo(int idEquipo, string nombreActual, IReadOnlyDictionary<int, string> nombresPorEquipo)
+    {
+        if (idEquipo > 0 && nombresPorEquipo.TryGetValue(idEquipo, out var nombreCatalogo))
+        {
+            return nombreCatalogo;
+        }
+
+        var nombre = nombreActual?.Trim();
+        return string.IsNullOrWhiteSpace(nombre) ? "SIN EQUIPO" : nombre;
+    }
+
+    private void OnLimpiarFiltroClicked(object sender, EventArgs e)
+    {
+        if (listajornada == null || listajornada.Count == 0)
+        {
+            return;
+        }
+
+        jornadaSeleccionada = null;
+        pickerJornada.SelectedIndex = -1;
+        _ = FiltrarJuegosAsync();
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 
     // Método para cargar el siguiente lote de items

@@ -2,68 +2,88 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:futboleando.Converters"
+             xmlns:entities="clr-namespace:futboleandoEntities.Juego;assembly=futboleandoEntities"
              x:Class="futboleando.Pages.Juego.JuegoPage"
              Title="Juegos del Torneo"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:EstatusJuegoToColorConverter x:Key="EstatusToColor" />
+            <converters:EstatusJuegoToTextColorConverter x:Key="EstatusToTextColor" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         
         <!-- ========== ENCABEZADO ========== -->
-        <Frame Grid.Row="0"
-               Padding="20,15"
-               CornerRadius="0"
-               HasShadow="True"
-               BorderColor="Transparent"
-               Margin="0,0,0,10">
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
-                    <GradientStop Color="{StaticResource rojoOscuro}" Offset="1.0" />
-                </LinearGradientBrush>
-            </Frame.Background>
+        <Grid Grid.Row="0"
+              BackgroundColor="{StaticResource verdeOscuro}"
+              Padding="12,14">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
 
-            <!-- Solo mostrar el nombre del torneo -->
-            <Label x:Name="lblTorneoNombre"
-                   Text="Torneo: Cargando..."
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
-        </Frame>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding NombreTorneoSeleccionado}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
 
         <!-- ========== FILTRO POR JORNADA ========== -->
         <Frame Grid.Row="1"
-               Padding="15"
-               CornerRadius="15"
+               Padding="10"
+               CornerRadius="10"
                BackgroundColor="White"
                HasShadow="True"
                BorderColor="Transparent"
                Margin="15,0,15,10">
-            
-            <!-- Solo mostrar el picker sin texto adicional -->
-            <Border StrokeThickness="2"
-                    Stroke="{StaticResource azulOscuro}"
-                    StrokeShape="RoundRectangle 12"
-                    BackgroundColor="#F8F9FA">
-                <Picker x:Name="pickerJornada"
-                        Title="-- Todas las Jornadas --"
-                        ItemsSource="{Binding listajornada}"
-                        ItemDisplayBinding="{Binding nombre}"
-                        SelectedItem="{Binding jornadaSeleccionada}"
-                        SelectedIndexChanged="OnJornadaSelected"
-                        FontSize="15"
-                        TextColor="{StaticResource azulOscuro}"
-                        TitleColor="#6c757d"
-                        BackgroundColor="Transparent"
-                        Margin="10,5" />
-            </Border>
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Border Grid.Column="0"
+                        StrokeThickness="1"
+                        Stroke="{StaticResource verdeOscuro}"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#F8F9FA">
+                    <Picker x:Name="pickerJornada"
+                            Title="-- Todas las Jornadas --"
+                            ItemsSource="{Binding listajornada}"
+                            ItemDisplayBinding="{Binding nombre}"
+                            SelectedItem="{Binding jornadaSeleccionada}"
+                            SelectedIndexChanged="OnJornadaSelected"
+                            FontSize="14"
+                            TextColor="{StaticResource verdeOscuro}"
+                            TitleColor="#6c757d"
+                            BackgroundColor="Transparent"
+                            Margin="8,3" />
+                </Border>
+                <Button Grid.Column="1"
+                        Text="✕"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource rojoOscuro}"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Padding="0"
+                        Clicked="OnLimpiarFiltroClicked"
+                        ToolTipProperties.Text="Limpiar filtro" />
+            </Grid>
         </Frame>
 
         <!-- ========== LISTA DE JUEGOS ========== -->
@@ -78,50 +98,43 @@
                              HeightRequest="50"
                              WidthRequest="50" />
             
-            <ScrollView>
-                <VerticalStackLayout Padding="15,0,15,15" Spacing="12">
-                    <CollectionView x:Name="collectionJuegos"
-                                    ItemsSource="{Binding listajuegos}"
-                                    SelectionMode="None"
-                                    RemainingItemsThreshold="5"
-                                    RemainingItemsThresholdReached="OnRemainingItemsThresholdReached">
-                        
-                        <!-- Configuración de rendimiento -->
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
-                        </CollectionView.ItemsLayout>
-                        
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Border StrokeThickness="3"
-                                        Stroke="{StaticResource azulOscuro}"
-                                        StrokeShape="RoundRectangle 15"
-                                        Margin="0,5"
-                                        BackgroundColor="Transparent">
+            <CollectionView x:Name="collectionJuegos"
+                            ItemsSource="{Binding listajuegos}"
+                            SelectionMode="None"
+                            ItemSizingStrategy="MeasureAllItems"
+                            RemainingItemsThreshold="5"
+                            RemainingItemsThresholdReached="OnRemainingItemsThresholdReached"
+                            Margin="15,0,15,15">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:JuegoListCLS">
+                        <Border StrokeThickness="3"
+                                Stroke="{StaticResource verdeOscuro}"
+                                StrokeShape="RoundRectangle 15"
+                                Margin="0,5"
+                                BackgroundColor="Transparent">
                                     
-                                    <Frame Padding="0"
-                                           CornerRadius="15"
-                                           HasShadow="True"
-                                           BorderColor="Transparent"
-                                           BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}"
-                                           Margin="0">
-                                        
-                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                              Padding="18">
+                            <Frame Padding="0"
+                                   CornerRadius="15"
+                                   HasShadow="True"
+                                   BorderColor="Transparent"
+                                   BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}"
+                                   Margin="0">
+                                
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                      Padding="18,18,18,22">
                                     
                                     <!-- Jornada -->
-                                    <Frame Grid.Row="0"
-                                           Padding="10,5"
-                                           CornerRadius="10"
-                                           BackgroundColor="{StaticResource azulOscuro}"
-                                           HasShadow="False"
+                                    <Label Grid.Row="0"
+                                           Text="{Binding nombrejornada}"
+                                           FontSize="13"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToTextColor}}"
                                            HorizontalOptions="End"
-                                           Margin="0,0,0,10">
-                                        <Label Text="{Binding nombrejornada}"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
-                                               TextColor="White" />
-                                    </Frame>
+                                           Margin="0,0,0,10" />
 
                                     <!-- Equipos y Marcador -->
                                     <Grid Grid.Row="1"
@@ -135,9 +148,14 @@
                                                Text="{Binding nombreequipo01}"
                                                FontSize="16"
                                                FontAttributes="Bold"
-                                               TextColor="#333333"
+                                               TextColor="#0F172A"
+                                               LineBreakMode="WordWrap"
+                                               MaxLines="2"
+                                               HorizontalOptions="FillAndExpand"
                                                HorizontalTextAlignment="End"
-                                               VerticalOptions="Center" />
+                                               VerticalOptions="Start"
+                                               Margin="0,4,0,0"
+                                               ZIndex="1" />
                                         
                                         <!-- Marcador -->
                                         <Frame Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
@@ -160,7 +178,7 @@
                                                 <Label Text="{Binding golesequipo02}"
                                                        FontSize="24"
                                                        FontAttributes="Bold"
-                                                       TextColor="{StaticResource rojoOscuro}"
+                                                       TextColor="{StaticResource verdeOscuro}"
                                                        VerticalOptions="Center" />
                                             </HorizontalStackLayout>
                                         </Frame>
@@ -170,9 +188,14 @@
                                                Text="{Binding nombreequipo02}"
                                                FontSize="16"
                                                FontAttributes="Bold"
-                                               TextColor="#333333"
+                                               TextColor="#0F172A"
+                                               LineBreakMode="WordWrap"
+                                               MaxLines="2"
+                                               HorizontalOptions="FillAndExpand"
                                                HorizontalTextAlignment="Start"
-                                               VerticalOptions="Center" />
+                                               VerticalOptions="Start"
+                                               Margin="0,4,0,0"
+                                               ZIndex="1" />
                                     </Grid>
 
                                     <!-- Separador -->
@@ -213,7 +236,7 @@
                                           Margin="0,8,0,0">
                                         
                                         <HorizontalStackLayout Grid.Column="0" Spacing="6">
-                                            <Label Text="⚽"
+                                            <Label Text="🏟️"
                                                    FontSize="16"
                                                    VerticalOptions="Center" />
                                             <Label Text="{Binding nombrecampo}"
@@ -245,58 +268,55 @@
                                     </Grid>
                                 </Frame>
                             </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-                    <CollectionView.EmptyView>
-                        <VerticalStackLayout Padding="40"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
-                            <Label Text="⚽"
-                                   FontSize="60"
-                                   HorizontalOptions="Center"
-                                   Opacity="0.3" />
-                            <Label Text="No hay juegos programados"
-                                   FontSize="16"
-                                   TextColor="#999999"
-                                   HorizontalOptions="Center"
-                                   Margin="0,10,0,0" />
-                            <Label Text="Seleccione otra jornada o espere nuevos juegos"
-                                   FontSize="13"
-                                   TextColor="#CCCCCC"
-                                   HorizontalOptions="Center"
-                                   HorizontalTextAlignment="Center"
-                                   Margin="0,5,0,0" />
-                        </VerticalStackLayout>
-                    </CollectionView.EmptyView>
-                    
-                    <!-- Footer con indicador de carga incremental -->
-                    <CollectionView.Footer>
-                        <VerticalStackLayout Padding="10" HorizontalOptions="Center">
-                            <ActivityIndicator x:Name="footerLoadingIndicator"
-                                             IsRunning="False"
-                                             IsVisible="False"
-                                             Color="{StaticResource azulOscuro}"
-                                             HeightRequest="30"
-                                             WidthRequest="30" />
-                        </VerticalStackLayout>
-                    </CollectionView.Footer>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="40"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
+                        <Label Text="⚽"
+                               FontSize="60"
+                               HorizontalOptions="Center"
+                               Opacity="0.3" />
+                        <Label Text="No hay juegos programados"
+                               FontSize="16"
+                               TextColor="#999999"
+                               HorizontalOptions="Center"
+                               Margin="0,10,0,0" />
+                        <Label Text="Seleccione otra jornada o espere nuevos juegos"
+                               FontSize="13"
+                               TextColor="#CCCCCC"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,5,0,0" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                
+                <CollectionView.Footer>
+                    <VerticalStackLayout Padding="10" HorizontalOptions="Center">
+                        <ActivityIndicator x:Name="footerLoadingIndicator"
+                                         IsRunning="False"
+                                         IsVisible="False"
+                                         Color="{StaticResource verdeOscuro}"
+                                         HeightRequest="30"
+                                         WidthRequest="30" />
+                    </VerticalStackLayout>
+                </CollectionView.Footer>
+            </CollectionView>
         </Grid>
 
         <!-- ========== PIE DE PÁGINA ========== -->
         <Frame Grid.Row="3"
                Padding="12"
                CornerRadius="0"
-               BackgroundColor="#E8E8E8"
+               BackgroundColor="{StaticResource verdeOscuro}"
                HasShadow="False"
                BorderColor="Transparent">
             <Label x:Name="lblTotalJuegos"
                    Text="Total de juegos: 0"
                    FontSize="12"
-                   TextColor="#666666"
+                   TextColor="White"
                    HorizontalOptions="Center" />
         </Frame>
 
