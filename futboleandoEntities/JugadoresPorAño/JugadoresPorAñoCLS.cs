@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace futboleandoEntities.JugadoresPorAño
@@ -9,7 +10,14 @@ namespace futboleandoEntities.JugadoresPorAño
     // Clase para el resumen por año
     public class JugadoresPorAñoCLS
     {
-        public int año { get; set; }
+        [JsonPropertyName("año")]
+        public int Anio { get; set; }
+        [JsonIgnore]
+        public int año
+        {
+            get => Anio;
+            set => Anio = value;
+        }
         public int cantidad { get; set; }
     }
 

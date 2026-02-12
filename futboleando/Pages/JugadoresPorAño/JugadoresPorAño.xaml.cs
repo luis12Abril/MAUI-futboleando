@@ -1,16 +1,52 @@
 using futboleando.Service;
 using futboleandoEntities.JugadoresPorAño;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 
 namespace futboleando.Pages.JugadoresPorAño;
 
-public partial class JugadoresPorAñoPage : ContentPage
+public partial class JugadoresPorAñoPage : ContentPage, INotifyPropertyChanged
 {
     private readonly JugadoresPorAñoService jugadoresPorAñoService;
-    public ObservableCollection<JugadoresPorAñoCLS> listajugadoresporaño { get; set; }
-    public ObservableCollection<EquipoSimpleCLS> listaequipos { get; set; }
+    private ObservableCollection<JugadoresPorAñoCLS> _listajugadoresporaño;
+    public ObservableCollection<JugadoresPorAñoCLS> listajugadoresporaño
+    {
+        get => _listajugadoresporaño;
+        set
+        {
+            _listajugadoresporaño = value;
+            OnPropertyChanged(nameof(listajugadoresporaño));
+        }
+    }
+
+    private ObservableCollection<EquipoSimpleCLS> _listaequipos;
+    public ObservableCollection<EquipoSimpleCLS> listaequipos
+    {
+        get => _listaequipos;
+        set
+        {
+            _listaequipos = value;
+            OnPropertyChanged(nameof(listaequipos));
+        }
+    }
+
     public EquipoSimpleCLS equipoSeleccionado { get; set; }
     private int idTorneoSeleccionado;
+    private bool _isLoading;
+    private bool _datosCargados;
+
+    private string _nombreTorneoSeleccionado = "";
+    public string NombreTorneoSeleccionado
+    {
+        get => _nombreTorneoSeleccionado;
+        set
+        {
+            _nombreTorneoSeleccionado = value;
+            OnPropertyChanged(nameof(NombreTorneoSeleccionado));
+        }
+    }
 
     public JugadoresPorAñoPage(JugadoresPorAñoService _jugadoresPorAñoService)
     {
@@ -19,16 +55,23 @@ public partial class JugadoresPorAñoPage : ContentPage
         listajugadoresporaño = new ObservableCollection<JugadoresPorAñoCLS>();
         listaequipos = new ObservableCollection<EquipoSimpleCLS>();
         BindingContext = this;
-    }
-
-    protected override async void OnAppearing()
-    {
-        base.OnAppearing();
-        await CargarDatos();
+        _ = CargarDatos();
     }
 
     private async Task CargarDatos()
     {
+        if (_isLoading)
+        {
+            return;
+        }
+
+        if (_datosCargados)
+        {
+            return;
+        }
+
+        _isLoading = true;
+
         try
         {
             // Mostrar indicador de carga
@@ -38,8 +81,7 @@ public partial class JugadoresPorAñoPage : ContentPage
             // Obtener torneo seleccionado
             idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
             var nombreTorneo = Preferences.Get("NombreTorneo", "Sin torneo");
-
-            lblTorneoNombre.Text = $"Torneo: {nombreTorneo}";
+            NombreTorneoSeleccionado = nombreTorneo;
 
             if (idTorneoSeleccionado == 0)
             {
@@ -49,43 +91,43 @@ public partial class JugadoresPorAñoPage : ContentPage
                 return;
             }
 
-            // Deshabilitar el evento del picker temporalmente
             pickerEquipo.SelectedIndexChanged -= OnEquipoSelected;
 
-            // Cargar equipos para el picker
-            var equipos = await jugadoresPorAñoService.ListarEquiposPorTorneo(idTorneoSeleccionado);
-            
-            listaequipos.Clear();
-            listaequipos.Add(new EquipoSimpleCLS 
-            { 
-                idequipo = 0, 
-                nombre = "-- TODOS LOS EQUIPOS --" 
-            });
-            
-            foreach (var equipo in equipos)
+            var equiposTask = jugadoresPorAñoService.ListarEquiposPorTorneo(idTorneoSeleccionado);
+            var stopwatch = Stopwatch.StartNew();
+            var jugadoresTask = jugadoresPorAñoService.ListarJugadoresPorAño(idTorneoSeleccionado, null);
+
+            await Task.WhenAll(equiposTask, jugadoresTask);
+            stopwatch.Stop();
+
+            var equipos = equiposTask.Result;
+            var jugadores = jugadoresTask.Result;
+            var total = jugadores.Sum(j => j.cantidad);
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                listaequipos.Add(equipo);
-            }
+                listaequipos = new ObservableCollection<EquipoSimpleCLS>(equipos);
+                equipoSeleccionado = null;
+                pickerEquipo.SelectedIndex = -1;
+                listajugadoresporaño = new ObservableCollection<JugadoresPorAñoCLS>(jugadores);
+                lblTotalJugadores.Text = total.ToString();
+                loadingIndicator.IsRunning = false;
+                loadingIndicator.IsVisible = false;
+            });
 
-            // Seleccionar "Todos los equipos" por defecto
-            equipoSeleccionado = listaequipos.FirstOrDefault();
-            pickerEquipo.SelectedItem = equipoSeleccionado;
-
-            // Cargar jugadores por año (todos los equipos)
-            await CargarJugadoresPorAño(null);
-
-            // Rehabilitar el evento del picker
             pickerEquipo.SelectedIndexChanged += OnEquipoSelected;
 
-            // Ocultar indicador de carga
-            loadingIndicator.IsRunning = false;
-            loadingIndicator.IsVisible = false;
+            _datosCargados = true;
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"Error al cargar datos: {ex.Message}", "OK");
             loadingIndicator.IsRunning = false;
             loadingIndicator.IsVisible = false;
+        }
+        finally
+        {
+            _isLoading = false;
         }
     }
 
@@ -98,21 +140,19 @@ public partial class JugadoresPorAñoPage : ContentPage
             loadingIndicator.IsVisible = true;
 
             // Obtener jugadores agrupados por año
+            var stopwatch = Stopwatch.StartNew();
             var jugadores = await jugadoresPorAñoService.ListarJugadoresPorAño(idTorneoSeleccionado, idEquipo);
+            stopwatch.Stop();
+            var total = jugadores.Sum(j => j.cantidad);
 
-            listajugadoresporaño.Clear();
-            foreach (var grupo in jugadores)
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                listajugadoresporaño.Add(grupo);
-            }
+                listajugadoresporaño = new ObservableCollection<JugadoresPorAñoCLS>(jugadores);
+                lblTotalJugadores.Text = total.ToString();
+                loadingIndicator.IsRunning = false;
+                loadingIndicator.IsVisible = false;
+            });
 
-            // Calcular y mostrar total
-            int total = jugadores.Sum(j => j.cantidad);
-            lblTotalJugadores.Text = total.ToString();
-
-            // Ocultar indicador de carga
-            loadingIndicator.IsRunning = false;
-            loadingIndicator.IsVisible = false;
         }
         catch (Exception ex)
         {
@@ -126,7 +166,14 @@ public partial class JugadoresPorAñoPage : ContentPage
     {
         try
         {
-            var equipoSeleccionado = pickerEquipo.SelectedItem as EquipoSimpleCLS;
+            var picker = sender as Picker;
+            if (picker == null || picker.SelectedIndex == -1)
+            {
+                await CargarJugadoresPorAño(null);
+                return;
+            }
+
+            var equipoSeleccionado = picker.SelectedItem as EquipoSimpleCLS;
             if (equipoSeleccionado == null) return;
 
             // Si es "Todos los equipos" (id = 0), pasar null
@@ -138,5 +185,16 @@ public partial class JugadoresPorAñoPage : ContentPage
         {
             await DisplayAlert("Error", $"Error al filtrar: {ex.Message}", "OK");
         }
+    }
+
+    private void OnLimpiarFiltroClicked(object sender, EventArgs e)
+    {
+        pickerEquipo.SelectedIndex = -1;
+        _ = CargarJugadoresPorAño(null);
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

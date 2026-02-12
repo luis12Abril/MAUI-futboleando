@@ -22,17 +22,9 @@ namespace futboleando.Service
         {
             try
             {
-                var response = await _httpClient.GetAsync($"api/Jugador/EquiposPorTorneo/{idTorneo}");
-                
-                if (response.IsSuccessStatusCode)
-                {
-                    var equipos = await response.Content.ReadFromJsonAsync<List<EquipoSimpleCLS>>();
-                    return equipos ?? new List<EquipoSimpleCLS>();
-                }
-                else
-                {
-                    return new List<EquipoSimpleCLS>();
-                }
+                var equipos = await _httpClient.GetFromJsonAsync<List<EquipoSimpleCLS>>(
+                    $"api/Jugador/EquiposPorTorneo/{idTorneo}");
+                return equipos ?? new List<EquipoSimpleCLS>();
             }
             catch (Exception ex)
             {
@@ -46,7 +38,7 @@ namespace futboleando.Service
         {
             try
             {
-                string url = $"api/Jugador/JugadoresPorAño/{idTorneo}";
+                string url = $"api/Jugador/JugadoresPorAno/{idTorneo}";
                 
                 // Agregar parámetro de equipo si existe
                 if (idEquipo.HasValue && idEquipo.Value > 0)

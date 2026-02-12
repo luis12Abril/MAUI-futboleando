@@ -255,18 +255,19 @@ namespace futboleandoAPIS.Controllers
 
         // ✅ NUEVO: Endpoint para jugadores por año de nacimiento
         [HttpGet("JugadoresPorAño/{idTorneo}")]
+        [HttpGet("JugadoresPorAno/{idTorneo}")]
         public IActionResult ListarJugadoresPorAño(int idTorneo, [FromQuery] int? idEquipo = null)
         {
             try
             {
-                var query = from j in _bd.Jugadors
-                           join e in _bd.Equipos on j.Idequipo equals e.Idequipo
-                           where j.Idtorneo == idTorneo
-                              && j.Habilitado == 1
-                              && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"
-                              && e.Nombre.Trim() != "_SIN EQUIPO"
-                              && j.Fnacimiento != null
-                           select new { j, e };
+                var query = from j in _bd.Jugadors.AsNoTracking()
+                            join e in _bd.Equipos.AsNoTracking() on j.Idequipo equals e.Idequipo
+                            where j.Idtorneo == idTorneo
+                               && j.Habilitado == 1
+                               && j.Nombre.Trim() != "GOL A FAVOR DEL EQUIPO"
+                               && e.Nombre.Trim() != "_SIN EQUIPO"
+                               && j.Fnacimiento != null
+                            select new { j, e };
 
                 // Filtrar por equipo si se especifica
                 if (idEquipo.HasValue && idEquipo.Value > 0)
@@ -274,17 +275,15 @@ namespace futboleandoAPIS.Controllers
                     query = query.Where(x => x.j.Idequipo == idEquipo.Value);
                 }
 
-                var jugadores = query.ToList();
-
-                // Agrupar por año de nacimiento
-                var jugadoresPorAño = jugadores
+                // Agrupar por año de nacimiento en la base de datos
+                var jugadoresPorAño = query
                     .GroupBy(x => x.j.Fnacimiento.Value.Year)
                     .Select(g => new JugadoresPorAñoCLS
                     {
-                        año = g.Key,
+                        Anio = g.Key,
                         cantidad = g.Count()
                     })
-                    .OrderBy(x => x.año)
+                    .OrderBy(x => x.Anio)
                     .ToList();
 
                 return Ok(jugadoresPorAño);
