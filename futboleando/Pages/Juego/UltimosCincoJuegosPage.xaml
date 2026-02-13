@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:futboleando.Models"
              x:Class="futboleando.Pages.Juego.UltimosCincoJuegosPage"
              Title="Ultimos cinco juegos"
-             BackgroundColor="#F4F6F2"
+             BackgroundColor="#F5F5F5"
              NavigationPage.HasNavigationBar="False">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto">
 
         <!-- ========== ENCABEZADO ========== -->
-        <Frame Grid.Row="0"
-               Padding="18,16"
-               CornerRadius="0"
-               HasShadow="True"
-               BorderColor="Transparent">
-            <Frame.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#1ECF4E" Offset="0.0" />
-                    <GradientStop Color="#12B76A" Offset="0.5" />
-                    <GradientStop Color="#0A8F3F" Offset="1.0" />
-                </LinearGradientBrush>
-            </Frame.Background>
-            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
+        <Grid Grid.Row="0"
+              BackgroundColor="{StaticResource verdeOscuro}"
+              Padding="12,14">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Button Grid.Column="0"
                         Text="←"
                         FontSize="26"
@@ -30,40 +26,31 @@
                         BackgroundColor="Transparent"
                         Padding="4"
                         Clicked="OnBackClicked" />
-                <Image Grid.Column="1"
-                       Source="logo_futboleandomenu.png"
-                       HeightRequest="42"
-                       WidthRequest="42"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Aspect="AspectFit" />
-                <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
-                    <Label Text="ÚLTIMOS CINCO JUEGOS"
-                           FontSize="18"
-                           FontAttributes="Bold"
-                           TextColor="White" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                     <Label x:Name="lblTorneoNombre"
                            Text="Torneo: Sin torneo"
-                           FontSize="12"
-                           TextColor="#E6FFEF" />
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
             </Grid>
-        </Frame>
+        </Grid>
 
-        <!-- ========== ENCABEZADO DE TABLA ========== -->
         <Border Grid.Row="1"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 12,12,0,0"
-                BackgroundColor="#0F172A"
-                Margin="12,10,12,5">
-            <Grid ColumnDefinitions="2*,42,34,34,34,34,34"
+                BackgroundColor="{StaticResource azulOscuro}"
+                Margin="15,12,15,5">
+            <Grid ColumnDefinitions="*,40,32,32,32,32,32"
                   Padding="12,10"
                   ColumnSpacing="8">
                 <Label Grid.Column="0"
                        Text="EQUIPOS"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
+                       TextColor="White"
                        LineBreakMode="NoWrap"
                        HorizontalOptions="Start"
                        VerticalOptions="Center" />
@@ -71,118 +58,118 @@
                        Text="PTOS"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
                 <Label Grid.Column="2"
                        Text="ULT."
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
                 <Label Grid.Column="3"
                        Text="J2"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
                 <Label Grid.Column="4"
                        Text="J3"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
                 <Label Grid.Column="5"
                        Text="J4"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
                 <Label Grid.Column="6"
                        Text="J5"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       HorizontalOptions="FillAndExpand"
                        VerticalOptions="Center" />
             </Grid>
         </Border>
 
         <!-- ========== LISTA DE ÚLTIMOS CINCO ========== -->
-        <Grid Grid.Row="2" BackgroundColor="#F1F8E8">
+        <Grid Grid.Row="2">
             <CollectionView x:Name="collectionUltimosCinco"
                             ItemsSource="{Binding ListaUltimosCinco}"
                             SelectionMode="None"
-                            Margin="12,0,12,5">
+                            ItemSizingStrategy="MeasureFirstItem"
+                            RemainingItemsThreshold="5"
+                            RemainingItemsThresholdReached="OnRemainingItemsThresholdReached"
+                            Margin="15,0,15,5">
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="6" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border StrokeThickness="0"
-                                StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FBEF"
-                                Padding="12,10">
-                            <Grid ColumnDefinitions="2*,42,34,34,34,34,34"
-                                  ColumnSpacing="8"
-                                  VerticalOptions="Center">
-                                <Label Grid.Column="0"
-                                       Text="{Binding EquipoNombre}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       LineBreakMode="WordWrap"
-                                       MaxLines="2" />
-                                <Label Grid.Column="1"
-                                       Text="{Binding Puntos}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0A8F3F"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="2"
-                                       Text="{Binding Ultimo}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="3"
-                                       Text="{Binding Juego2}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="4"
-                                       Text="{Binding Juego3}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="5"
-                                       Text="{Binding Juego4}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                                <Label Grid.Column="6"
-                                       Text="{Binding Juego5}"
-                                       FontSize="13"
-                                       FontAttributes="Bold"
-                                       TextColor="#0F172A"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </Border>
+                    <DataTemplate x:DataType="models:UltimosCincoJuegosEquipoModel">
+                        <Grid BackgroundColor="White"
+                              Padding="10,8"
+                              ColumnDefinitions="*,40,32,32,32,32,32"
+                              ColumnSpacing="8"
+                              HeightRequest="36">
+                            <Label Grid.Column="0"
+                                   Text="{Binding EquipoNombre}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="Black"
+                                   LineBreakMode="TailTruncation"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Puntos}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="2"
+                                   Text="{Binding Ultimo}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="3"
+                                   Text="{Binding Juego2}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="4"
+                                   Text="{Binding Juego3}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="5"
+                                   Text="{Binding Juego4}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                            <Label Grid.Column="6"
+                                   Text="{Binding Juego5}"
+                                   FontSize="12"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalOptions="Center" />
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 
@@ -225,13 +212,13 @@
         <Frame Grid.Row="3"
                Padding="12"
                CornerRadius="0"
-               BackgroundColor="#0F172A"
+               BackgroundColor="{StaticResource verdeOscuro}"
                HasShadow="True"
                BorderColor="Transparent">
             <Label x:Name="lblTotalEquipos"
                    Text="Total equipos: 0"
-                   FontSize="11"
-                   TextColor="#C7F9CC"
+                   FontSize="12"
+                   TextColor="White"
                    HorizontalOptions="Center" />
         </Frame>
 
