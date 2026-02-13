@@ -250,4 +250,9 @@ public partial class GoleadorPage : ContentPage
             DisplayAlert("Error", $"Error al limpiar filtro: {ex.Message}", "OK");
         }
     }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
 }

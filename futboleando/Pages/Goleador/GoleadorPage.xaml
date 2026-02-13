@@ -1,37 +1,56 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:entities="clr-namespace:futboleandoEntities.Goleador;assembly=futboleandoEntities"
              x:Class="futboleando.Pages.Goleador.GoleadorPage"
              Title="Goleadores"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
         
         <!-- ========== ENCABEZADO ========== -->
-        <Frame Grid.Row="0"
-               Padding="12,10"
-               CornerRadius="0"
-               HasShadow="False"
-               BorderColor="Transparent"
-               BackgroundColor="{StaticResource azulOscuro}"
-               Margin="0,0,0,8">
-            <Label x:Name="lblTorneoNombre"
-                   Text="Torneo: Cargando..."
-                   FontSize="16"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
-        </Frame>
+        <Grid Grid.Row="0"
+              BackgroundColor="{StaticResource azulOscuro}"
+              Padding="12,14">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="26"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="4"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label x:Name="lblTorneoNombre"
+                           Text="Torneo: Cargando..."
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- ========== LÍNEA SEPARADORA ========== -->
+        <BoxView Grid.Row="1"
+                 Color="{StaticResource verdeOscuro}"
+                 HeightRequest="4" />
 
         <!-- ========== FILTRO POR EQUIPO ========== -->
-        <Frame Grid.Row="1"
+        <Frame Grid.Row="2"
                Padding="10"
                CornerRadius="10"
                BackgroundColor="White"
-               HasShadow="False"
+               HasShadow="True"
                BorderColor="Transparent"
-               Margin="12,0,12,8">
+               Margin="15,15,15,10">
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                 <Border Grid.Column="0"
                         StrokeThickness="1"
@@ -65,7 +84,7 @@
         </Frame>
 
         <!-- ========== LISTA DE GOLEADORES ========== -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <!-- Indicador de carga -->
             <ActivityIndicator x:Name="loadingIndicator"
                              IsRunning="False"
@@ -75,11 +94,14 @@
                              HorizontalOptions="Center"
                              HeightRequest="50"
                              WidthRequest="50" />
-            
-            <ScrollView>
-                <VerticalStackLayout Padding="8,0,8,5" Spacing="0">
-                    
-                    <!-- Encabezado de la tabla -->
+
+            <CollectionView x:Name="collectionGoleadores"
+                            ItemsSource="{Binding listagoleadores}"
+                            SelectionMode="None"
+                            ItemSizingStrategy="MeasureFirstItem"
+                            Margin="10,0,10,10">
+
+                <CollectionView.Header>
                     <Border StrokeThickness="2"
                             Stroke="{StaticResource azulOscuro}"
                             StrokeShape="RoundRectangle 10,10,0,0"
@@ -108,149 +130,142 @@
                                    HorizontalOptions="Center" />
                         </Grid>
                     </Border>
+                </CollectionView.Header>
 
-                    <!-- Lista de goleadores -->
-                    <CollectionView x:Name="collectionGoleadores"
-                                    ItemsSource="{Binding listagoleadores}"
-                                    SelectionMode="None">
-                        
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="1" />
-                        </CollectionView.ItemsLayout>
-                        
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid RowDefinitions="Auto,Auto"
-                                      BackgroundColor="White"
-                                      Padding="0"
-                                      Margin="0,0,0,1">
-                                        
-                                        <!-- Contenido principal más compacto -->
-                                        <Grid Grid.Row="0"
-                                              ColumnDefinitions="28,*,60"
-                                              Padding="10,12,10,12"
-                                              ColumnSpacing="8">
-                                            
-                                            <!-- Posición como badge simple -->
-                                            <Border Grid.Column="0"
-                                                    WidthRequest="22"
-                                                    HeightRequest="22"
-                                                    StrokeThickness="0"
-                                                    BackgroundColor="#FFD700"
-                                                    StrokeShape="RoundRectangle 11"
-                                                    HorizontalOptions="Start"
-                                                    VerticalOptions="Center">
-                                                <Border.Triggers>
-                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="2">
-                                                        <Setter Property="BackgroundColor" Value="#C0C0C0" />
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="3">
-                                                        <Setter Property="BackgroundColor" Value="#CD7F32" />
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="1">
-                                                        <Setter Property="BackgroundColor" Value="#FFD700" />
-                                                    </DataTrigger>
-                                                </Border.Triggers>
-                                                <Label Text="{Binding posicion}"
-                                                       FontSize="10"
-                                                       FontAttributes="Bold"
-                                                       TextColor="White"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
-                                            </Border>
-                                            
-                                            <!-- Información del jugador en vertical compacto -->
-                                            <VerticalStackLayout Grid.Column="1" 
-                                                                 Spacing="2"
-                                                                 VerticalOptions="Center">
-                                                <Label Text="{Binding nombrecompleto}"
-                                                       FontSize="14"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#333333"
-                                                       LineBreakMode="TailTruncation"
-                                                       MaxLines="1" />
-                                                <Label Text="{Binding nombreequipo}"
-                                                       FontSize="11"
-                                                       TextColor="#666666"
-                                                       LineBreakMode="TailTruncation"
-                                                       MaxLines="1" />
-                                            </VerticalStackLayout>
-                                            
-                                            <!-- Goles compacto y perfectamente circular -->
-                                            <Border Grid.Column="2"
-                                                    WidthRequest="36"
-                                                    HeightRequest="36"
-                                                    StrokeThickness="0"
-                                                    BackgroundColor="{StaticResource verdeOscuro}"
-                                                    StrokeShape="Ellipse"
-                                                    HorizontalOptions="Center"
-                                                    VerticalOptions="Center"
-                                                    Margin="0">
-                                                <Label Text="{Binding goles}"
-                                                       FontSize="15"
-                                                       FontAttributes="Bold"
-                                                       TextColor="White"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center"
-                                                       Margin="0" />
-                                            </Border>
-                                        </Grid>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="6" />
+                </CollectionView.ItemsLayout>
 
-                                        <!-- Botón Ver Más compacto -->
-                                        <Grid Grid.Row="1"
-                                              Padding="10,0,10,6">
-                                            <Button Text="VER MÁS"
-                                                    FontSize="10"
-                                                    FontAttributes="Bold"
-                                                    TextColor="White"
-                                                    BackgroundColor="{StaticResource azulOscuro}"
-                                                    CornerRadius="6"
-                                                    Padding="8,2"
-                                                    Clicked="OnVerMasClicked"
-                                                    CommandParameter="{Binding idjugador}"
-                                                    HorizontalOptions="End" />
-                                        </Grid>
-                                    </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:GoleadorCLS">
+                        <Frame Margin="0,0,0,6"
+                               Padding="0"
+                               CornerRadius="12"
+                               BackgroundColor="White"
+                               HasShadow="True"
+                               BorderColor="Transparent">
 
-                        <CollectionView.EmptyView>
-                            <VerticalStackLayout Padding="40"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="Center">
-                                <Label Text="⚽"
-                                       FontSize="60"
-                                       HorizontalOptions="Center"
-                                       Opacity="0.3" />
-                                <Label Text="No hay goleadores registrados"
-                                       FontSize="16"
-                                       TextColor="#999999"
-                                       HorizontalOptions="Center"
-                                       Margin="0,10,0,0" />
-                                <Label Text="Los jugadores con goles aparecerán aquí"
-                                       FontSize="13"
-                                       TextColor="#CCCCCC"
-                                       HorizontalOptions="Center"
-                                       HorizontalTextAlignment="Center"
-                                       Margin="0,5,0,0" />
-                            </VerticalStackLayout>
-                        </CollectionView.EmptyView>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </ScrollView>
+                            <Grid RowDefinitions="Auto,Auto"
+                                  Padding="0">
+
+                                <Grid Grid.Row="0"
+                                      ColumnDefinitions="28,*,60"
+                                      Padding="12,12,12,10"
+                                      ColumnSpacing="10">
+
+                                    <Border Grid.Column="0"
+                                            WidthRequest="22"
+                                            HeightRequest="22"
+                                            StrokeThickness="0"
+                                            BackgroundColor="#FFD700"
+                                            StrokeShape="RoundRectangle 11"
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center">
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="2">
+                                                <Setter Property="BackgroundColor" Value="#C0C0C0" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="3">
+                                                <Setter Property="BackgroundColor" Value="#CD7F32" />
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="1">
+                                                <Setter Property="BackgroundColor" Value="#FFD700" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+                                        <Label Text="{Binding posicion}"
+                                               FontSize="10"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding nombrecompleto}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="#1E293B"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                        <Label Text="{Binding nombreequipo}"
+                                               FontSize="11"
+                                               TextColor="#64748B"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="2"
+                                            WidthRequest="36"
+                                            HeightRequest="36"
+                                            StrokeThickness="0"
+                                            BackgroundColor="{StaticResource verdeOscuro}"
+                                            StrokeShape="Ellipse"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center">
+                                        <Label Text="{Binding goles}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="White"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Grid.Row="1"
+                                      Padding="12,0,12,10">
+                                    <Button Text="VER MÁS"
+                                            FontSize="10"
+                                            FontAttributes="Bold"
+                                            TextColor="White"
+                                            BackgroundColor="{StaticResource azulOscuro}"
+                                            CornerRadius="6"
+                                            Padding="8,2"
+                                            Clicked="OnVerMasClicked"
+                                            CommandParameter="{Binding idjugador}"
+                                            HorizontalOptions="End" />
+                                </Grid>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="40"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
+                        <Label Text="⚽"
+                               FontSize="60"
+                               HorizontalOptions="Center"
+                               Opacity="0.3" />
+                        <Label Text="No hay goleadores registrados"
+                               FontSize="16"
+                               TextColor="#999999"
+                               HorizontalOptions="Center"
+                               Margin="0,10,0,0" />
+                        <Label Text="Los jugadores con goles aparecerán aquí"
+                               FontSize="13"
+                               TextColor="#CCCCCC"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="0,5,0,0" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
         </Grid>
 
         <!-- ========== PIE DE PÁGINA ========== -->
-        <Frame Grid.Row="3"
-               Padding="8"
+        <Frame Grid.Row="4"
+               Padding="10"
                CornerRadius="0"
-               BackgroundColor="#E8E8E8"
+               BackgroundColor="{StaticResource verdeOscuro}"
                HasShadow="False"
                BorderColor="Transparent">
             <Label x:Name="lblTotalGoleadores"
                    Text="Total de goleadores: 0"
-                   FontSize="11"
-                   TextColor="#666666"
+                   FontSize="12"
+                   TextColor="White"
                    HorizontalOptions="Center" />
         </Frame>
 
