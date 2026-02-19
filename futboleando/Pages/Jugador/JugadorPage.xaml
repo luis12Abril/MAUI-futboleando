@@ -46,42 +46,48 @@
 
         <!-- ========== FILTRO POR EQUIPO ========== -->
         <Frame Grid.Row="1"
-               Padding="10"
-               CornerRadius="10"
+               Padding="12"
+               CornerRadius="14"
                BackgroundColor="White"
                HasShadow="True"
                BorderColor="Transparent"
                Margin="15,15,15,10">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                <Border Grid.Column="0"
-                        StrokeThickness="1"
-                        Stroke="{StaticResource verdeOscuro}"
-                        StrokeShape="RoundRectangle 8"
-                        BackgroundColor="#F8F9FA">
-                    <Picker x:Name="pickerEquipo"
-                            Title="-- Todos los Equipos --"
-                            ItemsSource="{Binding listaequipos}"
-                            ItemDisplayBinding="{Binding nombre}"
-                            SelectedIndexChanged="OnEquipoSelected"
-                            FontSize="14"
-                            TextColor="{StaticResource verdeOscuro}"
-                            TitleColor="#6c757d"
-                            BackgroundColor="Transparent"
-                            Margin="8,3" />
-                </Border>
-                <Button Grid.Column="1"
-                        Text="✕"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="White"
-                        BackgroundColor="{StaticResource rojoOscuro}"
-                        CornerRadius="8"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        Clicked="OnLimpiarFiltroClicked"
-                        ToolTipProperties.Text="Limpiar filtro" />
-            </Grid>
+            <Border StrokeThickness="1.5"
+                    Stroke="#D0D7DE"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#F8F9FA">
+                <Grid Padding="10,4" ColumnDefinitions="*,Auto">
+                    <Grid Grid.Column="0" ColumnDefinitions="Auto,*">
+                        <Label Grid.Column="0"
+                               Text="🔍"
+                               FontSize="16"
+                               VerticalOptions="Center"
+                               Margin="6,0,8,0" />
+                        <Picker Grid.Column="1"
+                                x:Name="pickerEquipo"
+                                Title="-- Todos los Equipos --"
+                                ItemsSource="{Binding listaequipos}"
+                                ItemDisplayBinding="{Binding nombre}"
+                                SelectedIndexChanged="OnEquipoSelected"
+                                FontSize="14"
+                                TextColor="{StaticResource verdeOscuro}"
+                                TitleColor="#6c757d"
+                                BackgroundColor="Transparent" />
+                    </Grid>
+                    <Button Grid.Column="1"
+                            Text="✕"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="{StaticResource rojoOscuro}"
+                            CornerRadius="8"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Padding="0"
+                            Clicked="OnLimpiarFiltroClicked"
+                            ToolTipProperties.Text="Limpiar filtro" />
+                </Grid>
+            </Border>
         </Frame>
 
         <!-- ========== CONTADOR TOTAL DE JUGADORES ========== -->

@@ -57,17 +57,14 @@ public partial class VisitasAppPage : ContentPage
                 System.Diagnostics.Debug.WriteLine($"  - {tipo.nombre} (ID: {tipo.idtipousuario})");
             }
 
-            // ? Seleccionar el PRIMER tipo de usuario por defecto
-            tipoUsuarioSeleccionado = listatiposusuarios.FirstOrDefault();
-            pickerTipoUsuario.SelectedItem = tipoUsuarioSeleccionado;
+            // Mostrar todos los datos al entrar (sin selección en el picker)
+            tipoUsuarioSeleccionado = null;
+            pickerTipoUsuario.SelectedItem = null;
 
-            System.Diagnostics.Debug.WriteLine($"?? Tipo seleccionado: {tipoUsuarioSeleccionado?.nombre}");
+            System.Diagnostics.Debug.WriteLine("?? Tipo seleccionado: (ninguno)");
 
-            // ? Cargar visitas del primer tipo de usuario
-            if (tipoUsuarioSeleccionado != null)
-            {
-                await CargarVisitasPorUsuario(tipoUsuarioSeleccionado.idtipousuario);
-            }
+            // Cargar visitas de todos los usuarios
+            await CargarVisitasPorUsuario(null);
 
             // Rehabilitar el evento del picker
             pickerTipoUsuario.SelectedIndexChanged += OnTipoUsuarioSelected;
@@ -148,5 +145,23 @@ public partial class VisitasAppPage : ContentPage
     private async void OnBackClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
+    }
+
+    private async void OnLimpiarFiltroClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            pickerTipoUsuario.SelectedIndexChanged -= OnTipoUsuarioSelected;
+            tipoUsuarioSeleccionado = null;
+            pickerTipoUsuario.SelectedItem = null;
+            pickerTipoUsuario.SelectedIndexChanged += OnTipoUsuarioSelected;
+
+            await CargarVisitasPorUsuario(null);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"? Error en OnLimpiarFiltroClicked: {ex.Message}");
+            await DisplayAlert("Error", $"Error al limpiar filtro: {ex.Message}", "OK");
+        }
     }
 }

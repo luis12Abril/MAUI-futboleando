@@ -17,6 +17,7 @@ public partial class GoleadorPage : ContentPage
     private int idTorneoSeleccionado;
     private List<GoleadorCLS> todosLosGoleadores; // Lista completa para filtrar
     private bool datosYaCargados = false; // Flag para evitar recargas innecesarias
+    private bool equiposYaCargados = false;
 
     public GoleadorPage(GoleadorService _goleadorService, EquipoService _equipoService)
     {
@@ -42,14 +43,10 @@ public partial class GoleadorPage : ContentPage
         {
             // OPTIMIZACIÓN CRÍTICA: Permitir que la UI se renderice primero
             await Task.Delay(50); // Dar tiempo a que se muestre la página
-            
-            // Cargar equipos y goleadores en paralelo
-            var tareaEquipos = CargarEquipos();
-            var tareaGoleadores = CargarGoleadores();
-            
-            // Esperar ambas tareas
-            await Task.WhenAll(tareaEquipos, tareaGoleadores);
-            
+
+            _ = CargarEquipos();
+            await CargarGoleadores();
+
             datosYaCargados = true;
         }
     }
@@ -58,6 +55,11 @@ public partial class GoleadorPage : ContentPage
     {
         try
         {
+            if (equiposYaCargados)
+            {
+                return;
+            }
+
             // Obtener torneo seleccionado
             idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
 
@@ -66,12 +68,13 @@ public partial class GoleadorPage : ContentPage
                 return;
             }
 
-            // Cargar equipos del torneo
-            var equipos = await equipoService.listarEquipoPorTorneo(idTorneoSeleccionado);
+            // Cargar equipos del torneo (resumen para mejor rendimiento)
+            var equipos = await equipoService.listarEquipoPorTorneoResumen(idTorneoSeleccionado);
 
             // Recrear la ObservableCollection (más rápido que Clear + foreach)
             listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
             OnPropertyChanged(nameof(listaequipos));
+            equiposYaCargados = true;
         }
         catch (Exception ex)
         {
@@ -111,39 +114,14 @@ public partial class GoleadorPage : ContentPage
 
             System.Diagnostics.Debug.WriteLine($"[GOLEADORES] Lista guardada en {(DateTime.Now - startTime).TotalMilliseconds}ms");
 
-            // OPTIMIZACIÓN RADICAL: Cargar en lotes para renderizado progresivo
-            listagoleadores = new ObservableCollection<GoleadorCLS>();
-            
-            // Cargar primeros 10 inmediatamente
-            var primerosLotes = todosLosGoleadores.Take(10).ToList();
-            foreach (var goleador in primerosLotes)
-            {
-                listagoleadores.Add(goleador);
-            }
-            
+            // Cargar toda la lista de una vez para mostrar resultados rápido
+            listagoleadores = new ObservableCollection<GoleadorCLS>(todosLosGoleadores);
             OnPropertyChanged(nameof(listagoleadores));
             lblTotalGoleadores.Text = $"Total de goleadores: {todosLosGoleadores.Count}";
-            
-            // Ocultar indicador ANTES de cargar el resto
+
+            // Ocultar indicador después de cargar la lista
             loadingIndicator.IsRunning = false;
             loadingIndicator.IsVisible = false;
-            
-            System.Diagnostics.Debug.WriteLine($"[GOLEADORES] Primeros 10 cargados en {(DateTime.Now - startTime).TotalMilliseconds}ms");
-            
-            // Cargar el resto en lotes de 10 con delay
-            var resto = todosLosGoleadores.Skip(10).ToList();
-            int batchSize = 10;
-            
-            for (int i = 0; i < resto.Count; i += batchSize)
-            {
-                await Task.Delay(50); // Dar tiempo al renderizado
-                
-                var batch = resto.Skip(i).Take(batchSize).ToList();
-                foreach (var goleador in batch)
-                {
-                    listagoleadores.Add(goleador);
-                }
-            }
             
             System.Diagnostics.Debug.WriteLine($"[GOLEADORES] Carga completada en {(DateTime.Now - startTime).TotalMilliseconds}ms");
         }
