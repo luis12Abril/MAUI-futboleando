@@ -4,6 +4,7 @@ using futboleandoEntities.Municipio;
 using futboleandoEntities.Liga;
 using futboleandoEntities.Torneo;
 using Microsoft.Maui.ApplicationModel;
+using System.Collections.ObjectModel;
 
 namespace futboleando.Pages
 {
@@ -24,6 +25,7 @@ namespace futboleando.Pages
 
         // ? Solo UNA bandera necesaria
         private bool _isInitializing = false;
+        private bool _suppressSelectionEvents = false;
 
         public TorneoSelectorPage(
             EstadoService _estadoService,
@@ -69,12 +71,12 @@ namespace futboleando.Pages
             }
             finally
             {
-                _isInitializing = false;
                 pickerEstado.InputTransparent = true;
                 await Task.Delay(150);
                 EnablePickersBasedOnData();
                 await PostRestoreUnfocusAsync();
                 pickerEstado.InputTransparent = false;
+                _isInitializing = false;
             }
         }
 
@@ -149,59 +151,70 @@ namespace futboleando.Pages
             {
                 var estados = pickerEstado.ItemsSource as List<EstadoListCLS>;
                 var estado = estados?.FirstOrDefault(e => e.idestado == idEstado);
-                
-                if (estado != null)
+
+                if (estado == null)
                 {
-                    pickerEstado.SelectedItem = estado;
-                    
-                    // ? Cargar municipios
-                    var municipios = await municipioService.ListarPorEstado(idEstado);
-                    if (municipios != null && municipios.Count > 0)
+                    ValidarSeleccionCompleta();
+                    return;
+                }
+
+                _suppressSelectionEvents = true;
+                pickerEstado.SelectedItem = estado;
+
+                var municipiosTask = municipioService.ListarPorEstado(idEstado);
+                var ligasTask = idMunicipio > 0
+                    ? ligaService.ListarPorMunicipio(idMunicipio)
+                    : Task.FromResult(new ObservableCollection<LigaListCLS>());
+
+                var torneosTask = idLiga > 0
+                    ? torneoService.ListarPorLiga(idLiga)
+                    : Task.FromResult(new ObservableCollection<TorneoListCLS>());
+
+                await Task.WhenAll(municipiosTask, ligasTask, torneosTask);
+
+                var municipios = municipiosTask.Result;
+                if (municipios != null && municipios.Count > 0)
+                {
+                    pickerMunicipio.ItemsSource = municipios.ToList();
+                    pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
+                    var municipio = municipios.FirstOrDefault(m => m.idmunicipio == idMunicipio);
+                    if (municipio != null)
                     {
-                        pickerMunicipio.ItemsSource = municipios.ToList();
-                        pickerMunicipio.ItemDisplayBinding = new Binding("nombre");
-
-                        var municipio = municipios.FirstOrDefault(m => m.idmunicipio == idMunicipio);
-                        if (municipio != null)
-                        {
-                            pickerMunicipio.SelectedItem = municipio;
-
-                            // ? Cargar ligas
-                            var ligas = await ligaService.ListarPorMunicipio(idMunicipio);
-                            if (ligas != null && ligas.Count > 0)
-                            {
-                                pickerLiga.ItemsSource = ligas.ToList();
-                                pickerLiga.ItemDisplayBinding = new Binding("nombre");
-
-                                var liga = ligas.FirstOrDefault(l => l.idliga == idLiga);
-                                if (liga != null)
-                                {
-                                    pickerLiga.SelectedItem = liga;
-
-                                    // ? Cargar torneos
-                                    var torneos = await torneoService.ListarPorLiga(idLiga);
-                                    if (torneos != null && torneos.Count > 0)
-                                    {
-                                        pickerTorneo.ItemsSource = torneos.ToList();
-                                        pickerTorneo.ItemDisplayBinding = new Binding("nombre");
-
-                                        var torneo = torneos.FirstOrDefault(t => t.idtorneo == idTorneo);
-                                        if (torneo != null)
-                                        {
-                                            pickerTorneo.SelectedItem = torneo;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        pickerMunicipio.SelectedItem = municipio;
                     }
                 }
 
-                // ? Validar botón al final
+                var ligas = ligasTask.Result;
+                if (ligas != null && ligas.Count > 0)
+                {
+                    pickerLiga.ItemsSource = ligas.ToList();
+                    pickerLiga.ItemDisplayBinding = new Binding("nombre");
+                    var liga = ligas.FirstOrDefault(l => l.idliga == idLiga);
+                    if (liga != null)
+                    {
+                        pickerLiga.SelectedItem = liga;
+                    }
+                }
+
+                var torneos = torneosTask.Result;
+                if (torneos != null && torneos.Count > 0)
+                {
+                    pickerTorneo.ItemsSource = torneos.ToList();
+                    pickerTorneo.ItemDisplayBinding = new Binding("nombre");
+                    var torneo = torneos.FirstOrDefault(t => t.idtorneo == idTorneo);
+                    if (torneo != null)
+                    {
+                        pickerTorneo.SelectedItem = torneo;
+                    }
+                }
+
+                EnablePickersBasedOnData();
                 ValidarSeleccionCompleta();
+                _suppressSelectionEvents = false;
             }
             catch (Exception ex)
             {
+                _suppressSelectionEvents = false;
                 await DisplayAlert("Error", $"Error al restaurar selección: {ex.Message}", "OK");
             }
         }
@@ -243,7 +256,7 @@ namespace futboleando.Pages
 
         private async void OnEstadoSelected(object sender, EventArgs e)
         {
-            if (_isInitializing) return;
+            if (_isInitializing || _suppressSelectionEvents) return;
 
             var estadoSeleccionado = pickerEstado.SelectedItem as EstadoListCLS;
             if (estadoSeleccionado == null) return;
@@ -283,7 +296,7 @@ namespace futboleando.Pages
 
         private async void OnMunicipioSelected(object sender, EventArgs e)
         {
-            if (_isInitializing) return;
+            if (_isInitializing || _suppressSelectionEvents) return;
 
             var municipioSeleccionado = pickerMunicipio.SelectedItem as MunicipioListCLS;
             if (municipioSeleccionado == null) return;
@@ -319,7 +332,7 @@ namespace futboleando.Pages
 
         private async void OnLigaSelected(object sender, EventArgs e)
         {
-            if (_isInitializing) return;
+            if (_isInitializing || _suppressSelectionEvents) return;
 
             var ligaSeleccionada = pickerLiga.SelectedItem as LigaListCLS;
             if (ligaSeleccionada == null) return;
@@ -351,7 +364,7 @@ namespace futboleando.Pages
 
         private void OnTorneoSelected(object sender, EventArgs e)
         {
-            if (_isInitializing) return;
+            if (_isInitializing || _suppressSelectionEvents) return;
             ValidarSeleccionCompleta();
         }
 
