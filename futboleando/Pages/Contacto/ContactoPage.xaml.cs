@@ -66,6 +66,11 @@ public partial class ContactoPage : ContentPage
         await Launcher.Default.OpenAsync(new Uri($"tel:{telefonoLlamada}"));
     }
 
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
+
     private static string LimpiarTelefono(string telefonoActual)
     {
         if (string.IsNullOrWhiteSpace(telefonoActual))

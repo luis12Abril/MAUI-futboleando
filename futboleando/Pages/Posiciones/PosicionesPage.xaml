@@ -3,12 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Posiciones.PosicionesPage"
              Title="TABLA DE POSICIONES"
-             BackgroundColor="#1E88E5">
+             BackgroundColor="#1E88E5"
+             NavigationPage.HasNavigationBar="False">
     
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- ========== ENCABEZADO ========== -->
+        <Grid Grid.Row="0"
+              Padding="1,2">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1ECF4E" Offset="0.0" />
+                    <GradientStop Color="#12B76A" Offset="0.55" />
+                    <GradientStop Color="#F6C945" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="6,4"
+                        Margin="0,-8,0,0"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="TABLA DE POSICIONES"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
         
         <!-- ========== TABS DE VISTA ========== -->
-        <Grid Grid.Row="0" 
+        <Grid Grid.Row="1" 
               ColumnDefinitions="*,*,*"
               Padding="0"
               BackgroundColor="#1E88E5">
@@ -83,7 +119,7 @@
         </Grid>
 
         <!-- ========== CONTENIDO (VISTA 1 - TABLA DE POSICIONES) ========== -->
-        <Grid Grid.Row="1" 
+        <Grid Grid.Row="2" 
               x:Name="contenidoVista1"
               BackgroundColor="#F5F5F5">
             
@@ -256,7 +292,7 @@
         </Grid>
 
         <!-- ========== VISTA 2 (PLACEHOLDER) ========== -->
-        <Grid Grid.Row="1" 
+        <Grid Grid.Row="2" 
               x:Name="contenidoVista2"
               IsVisible="False"
               BackgroundColor="#F5F5F5">
@@ -279,7 +315,7 @@
         </Grid>
 
         <!-- ========== VISTA 3 (PLACEHOLDER) ========== -->
-        <Grid Grid.Row="1" 
+        <Grid Grid.Row="2" 
               x:Name="contenidoVista3"
               IsVisible="False"
               BackgroundColor="#F5F5F5">

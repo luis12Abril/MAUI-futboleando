@@ -86,6 +86,11 @@ public partial class PosicionesPage : ContentPage, INotifyPropertyChanged
         _ = CargarTablaPosiciones();
     }
 
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
+
     // ========== EVENTOS DE TABS ==========
     
     private void OnVista1Tapped(object sender, EventArgs e)

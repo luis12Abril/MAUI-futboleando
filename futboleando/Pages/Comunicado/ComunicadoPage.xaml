@@ -8,26 +8,27 @@
 
     <Grid RowDefinitions="Auto,*" Padding="0">
 
-        <Frame Grid.Row="0"
-               Padding="18,16"
-               CornerRadius="0"
-               HasShadow="True"
-               BorderColor="Transparent">
-            <Frame.Background>
+        <Grid Grid.Row="0"
+              Padding="1,2">
+            <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="#1ECF4E" Offset="0.0" />
-                    <GradientStop Color="#12B76A" Offset="0.5" />
-                    <GradientStop Color="#0A8F3F" Offset="1.0" />
+                    <GradientStop Color="#12B76A" Offset="0.55" />
+                    <GradientStop Color="#F6C945" Offset="1.0" />
                 </LinearGradientBrush>
-            </Frame.Background>
+            </Grid.Background>
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
             <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
                 <Button Grid.Column="0"
                         Text="&#x2190;"
-                        FontSize="26"
+                        FontSize="30"
                         FontAttributes="Bold"
                         TextColor="White"
                         BackgroundColor="Transparent"
-                        Padding="4"
+                        Padding="6,4"
+                        Margin="0,-8,0,0"
                         Clicked="OnBackClicked" />
                 <Frame Grid.Column="1"
                        WidthRequest="46"
@@ -52,7 +53,7 @@
                            TextColor="#E6FFEF" />
                 </VerticalStackLayout>
             </Grid>
-        </Frame>
+        </Grid>
 
         <Grid Grid.Row="1" BackgroundColor="#F1F8E8">
             <ListView x:Name="listViewComunicados"

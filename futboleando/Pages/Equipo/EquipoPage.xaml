@@ -7,12 +7,18 @@
              BackgroundColor="#F5F5F5"
              NavigationPage.HasNavigationBar="False">
     
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="0">
+    <Grid RowDefinitions="Auto,*,Auto" Padding="0">
         
         <!-- Encabezado -->
         <Grid Grid.Row="0" 
-              BackgroundColor="{StaticResource verdeOscuro}"
-              Padding="12,14">
+              Padding="1,2">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1ECF4E" Offset="0.0" />
+                    <GradientStop Color="#12B76A" Offset="0.55" />
+                    <GradientStop Color="#F6C945" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
             <Grid.Shadow>
                 <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
             </Grid.Shadow>
@@ -20,11 +26,12 @@
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Button Grid.Column="0"
                         Text="←"
-                        FontSize="26"
+                        FontSize="30"
                         FontAttributes="Bold"
                         TextColor="White"
                         BackgroundColor="Transparent"
-                        Padding="4"
+                        Padding="6,4"
+                        Margin="0,-8,0,0"
                         Clicked="OnBackClicked" />
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                     <Label Text="{Binding NombreTorneoSeleccionado}"
@@ -37,35 +44,8 @@
             </Grid>
         </Grid>
 
-        <!-- Línea separadora -->
-        <BoxView Grid.Row="1"
-                 Color="{StaticResource azulOscuro}"
-                 HeightRequest="4" />
-
-        <!-- Contador total de equipos -->
-        <Frame Grid.Row="2"
-               Padding="12,8"
-               Margin="15,10,15,10"
-               CornerRadius="8"
-               BackgroundColor="{StaticResource azulOscuro}"
-               HasShadow="False"
-               BorderColor="Transparent">
-            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
-                <Label Text="Equipos participantes:"
-                       FontSize="14"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       VerticalOptions="Center" />
-                <Label Text="{Binding TotalEquipos}"
-                       FontSize="14"
-                       FontAttributes="Bold"
-                       TextColor="#FFD700"
-                       VerticalOptions="Center" />
-            </HorizontalStackLayout>
-        </Frame>
-
         <!-- Lista de equipos -->
-        <CollectionView Grid.Row="3"
+        <CollectionView Grid.Row="1"
                         ItemsSource="{Binding listaequipo}"
                         SelectionMode="None"
                         ItemSizingStrategy="MeasureFirstItem"
@@ -338,6 +318,28 @@
             </CollectionView.Footer>
             
         </CollectionView>
+
+        <!-- Contador total de equipos -->
+        <Frame Grid.Row="2"
+               Padding="12,8"
+               Margin="15,10,15,10"
+               CornerRadius="8"
+               BackgroundColor="{StaticResource azulOscuro}"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Label Text="Equipos participantes:"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="Center" />
+                <Label Text="{Binding TotalEquipos}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="#FFD700"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Frame>
         
     </Grid>
 </ContentPage>

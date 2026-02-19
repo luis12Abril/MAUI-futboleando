@@ -3,10 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="futboleando.Pages.Contacto.ContactoPage"
              Title="Contacto"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F5F5F5"
+             NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="16">
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Encabezado -->
+        <Grid Grid.Row="0"
+              Padding="1,2">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1ECF4E" Offset="0.0" />
+                    <GradientStop Color="#12B76A" Offset="0.55" />
+                    <GradientStop Color="#F6C945" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Grid.Column="0"
+                        Text="←"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Padding="6,4"
+                        Margin="0,-8,0,0"
+                        Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="Contacto"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="16">
 
             <Grid Padding="20"
                   ColumnDefinitions="Auto,*"
@@ -93,6 +131,7 @@
                    FontAttributes="Bold"
                    TextColor="#666666"
                    HorizontalOptions="Center" />
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
