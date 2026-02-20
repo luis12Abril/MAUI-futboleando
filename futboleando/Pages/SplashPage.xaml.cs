@@ -62,7 +62,7 @@ namespace futboleando.Pages
             await activityIndicator.FadeTo(1, 400);
 
             // Simular carga de datos (puedes agregar lógica real aquí)
-            await Task.Delay(1500);
+            //await Task.Delay(1500);
 
             // Navegar según el estado del login
             await NavigateToMainPage();

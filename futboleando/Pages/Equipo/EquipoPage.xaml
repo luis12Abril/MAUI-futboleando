@@ -72,7 +72,7 @@
                             
                             <!-- Franja superior con nombre del equipo y puntos -->
                             <Grid Grid.Row="0" 
-                                  BackgroundColor="{StaticResource verdeOscuro}"
+                                  BackgroundColor="{StaticResource azulOscuro}"
                                   Padding="15,12"
                                   ColumnDefinitions="Auto,*,Auto">
                                 
@@ -321,10 +321,9 @@
 
         <!-- Contador total de equipos -->
         <Frame Grid.Row="2"
-               Padding="12,8"
-               Margin="15,10,15,10"
-               CornerRadius="8"
-               BackgroundColor="{StaticResource azulOscuro}"
+               Padding="12"
+               CornerRadius="0"
+               BackgroundColor="{StaticResource verdeOscuro}"
                HasShadow="False"
                BorderColor="Transparent">
             <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
@@ -336,7 +335,7 @@
                 <Label Text="{Binding TotalEquipos}"
                        FontSize="14"
                        FontAttributes="Bold"
-                       TextColor="#FFD700"
+                       TextColor="White"
                        VerticalOptions="Center" />
             </HorizontalStackLayout>
         </Frame>

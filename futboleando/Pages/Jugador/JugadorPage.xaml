@@ -7,7 +7,7 @@
              BackgroundColor="#F5F5F5"
              NavigationPage.HasNavigationBar="False">
     
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="0">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="0">
         
         <!-- ========== ENCABEZADO ========== -->
         <Grid Grid.Row="0" 
@@ -90,29 +90,8 @@
             </Border>
         </Frame>
 
-        <!-- ========== CONTADOR TOTAL DE JUGADORES ========== -->
-        <Frame Grid.Row="2"
-               Padding="12,8"
-               Margin="15,0,15,10"
-               CornerRadius="8"
-               BackgroundColor="{StaticResource azulOscuro}"
-               HasShadow="False"
-               BorderColor="Transparent">
-            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
-                <Label Text="👥"
-                       FontSize="16"
-                       TextColor="White"
-                       VerticalOptions="Center" />
-                <Label Text="{Binding TotalJugadoresTexto}"
-                       FontSize="14"
-                       FontAttributes="Bold"
-                       TextColor="White"
-                       VerticalOptions="Center" />
-            </HorizontalStackLayout>
-        </Frame>
-
         <!-- ========== LISTA DE JUGADORES (CollectionView optimizado) ========== -->
-        <CollectionView Grid.Row="3"
+        <CollectionView Grid.Row="2"
                         ItemsSource="{Binding listajugador}"
                         SelectionMode="None"
                         ItemSizingStrategy="MeasureFirstItem"
@@ -140,7 +119,7 @@
                             
                             <!-- Franja superior con número y nombre completo -->
                             <Grid Grid.Row="0" 
-                                  BackgroundColor="{StaticResource verdeOscuro}"
+                                  BackgroundColor="{StaticResource azulOscuro}"
                                   Padding="15,12"
                                   ColumnDefinitions="Auto,Auto,*">
                                 
@@ -287,6 +266,19 @@
             </CollectionView.Footer>
             
         </CollectionView>
+
+        <!-- ========== PIE DE PÁGINA ========== -->
+        <Frame Grid.Row="3"
+               Padding="12"
+               CornerRadius="0"
+               BackgroundColor="{StaticResource verdeOscuro}"
+               HasShadow="False"
+               BorderColor="Transparent">
+            <Label Text="{Binding TotalJugadoresTexto}"
+                   FontSize="12"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+        </Frame>
         
     </Grid>
 </ContentPage>
