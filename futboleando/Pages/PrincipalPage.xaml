@@ -78,7 +78,7 @@
                     </Frame.GestureRecognizers>
                     
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="⚽"
+                        <Label Text="🗓️"
                                FontSize="40"
                                HorizontalOptions="Center" />
                         <Label Text="Juegos"
@@ -200,16 +200,67 @@
                                TextColor="#666666"
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
-                    
+
                     <HorizontalStackLayout Spacing="8">
-                        <Label Text="📱"
+                        <Label Text="📈"
                                FontSize="18"
                                VerticalOptions="Center" />
-                        <Label Text="Acceso desde cualquier dispositivo"
+                        <Label Text="Historial completo del torneo"
                                FontSize="13"
                                TextColor="#666666"
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🗓️"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Calendario de jornadas actualizado"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🏟️"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Campos y horarios organizados"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🔍"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Búsqueda rápida de jugadores"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🥅"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Goleadores destacados"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="📢"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Avisos y comunicados del torneo"
+                               FontSize="13"
+                               TextColor="#666666"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>                    
+
                 </VerticalStackLayout>
             </Frame>
 
