@@ -16,9 +16,6 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
     private bool _isNavigatingBack;
     private int _ultimoTorneoCargado;
     private List<UltimosCincoJuegosEquipoModel> _todosUltimosCinco = new();
-    private int _currentLoadedIndex;
-    private const int InitialBatchSize = 12;
-    private const int IncrementalBatchSize = 20;
 
     private ObservableCollection<UltimosCincoJuegosEquipoModel> _listaUltimosCinco;
     public ObservableCollection<UltimosCincoJuegosEquipoModel> ListaUltimosCinco
@@ -62,7 +59,7 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
 
             var idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
             var nombreTorneo = Preferences.Get("NombreTorneo", "Sin torneo");
-            lblTorneoNombre.Text = $"Torneo: {nombreTorneo}";
+            lblTorneoNombre.Text = nombreTorneo;
 
             if (datosYaCargados && _ultimoTorneoCargado == idTorneoSeleccionado)
             {
@@ -76,14 +73,13 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
                 await DisplayAlert("Aviso", "No hay un torneo seleccionado", "OK");
                 ListaUltimosCinco.Clear();
                 _todosUltimosCinco.Clear();
-                _currentLoadedIndex = 0;
                 lblTotalEquipos.Text = "Total equipos: 0";
                 return;
             }
 
             var stopwatchApi = Stopwatch.StartNew();
 
-            var equiposTask = equipoService.listarEquipoPorTorneo(idTorneoSeleccionado);
+            var equiposTask = equipoService.listarEquipoPorTorneoResumen(idTorneoSeleccionado);
             var juegosTask = juegoService.ListarJuegosPorTorneo(idTorneoSeleccionado);
 
             await Task.WhenAll(equiposTask, juegosTask);
@@ -100,32 +96,21 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
                 var juegosJugados = juegos
                     .Where(j => !string.IsNullOrWhiteSpace(j.nombreestatusjuego)
                         && j.nombreestatusjuego.Trim().Contains("JUGADO", StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(j => j.fhorario ?? DateTime.MinValue)
                     .ToList();
 
-                var juegosPorEquipo = new Dictionary<int, List<JuegoListCLS>>();
+                var resultadosPorEquipo = new Dictionary<int, List<string>>(equipos.Count);
+                var equiposConResultados = 0;
 
                 foreach (var juego in juegosJugados)
                 {
-                    if (!juegosPorEquipo.TryGetValue(juego.idequipo01, out var listaEquipo1))
+                    AgregarResultado(juego, juego.idequipo01);
+                    AgregarResultado(juego, juego.idequipo02);
+
+                    if (equiposConResultados >= equipos.Count)
                     {
-                        listaEquipo1 = new List<JuegoListCLS>();
-                        juegosPorEquipo[juego.idequipo01] = listaEquipo1;
+                        break;
                     }
-
-                    listaEquipo1.Add(juego);
-
-                    if (!juegosPorEquipo.TryGetValue(juego.idequipo02, out var listaEquipo2))
-                    {
-                        listaEquipo2 = new List<JuegoListCLS>();
-                        juegosPorEquipo[juego.idequipo02] = listaEquipo2;
-                    }
-
-                    listaEquipo2.Add(juego);
-                }
-
-                foreach (var listaJuegos in juegosPorEquipo.Values)
-                {
-                    listaJuegos.Sort((a, b) => (b.fhorario ?? DateTime.MinValue).CompareTo(a.fhorario ?? DateTime.MinValue));
                 }
 
                 var equiposOrdenados = equipos
@@ -137,17 +122,17 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
 
                 foreach (var equipo in equiposOrdenados)
                 {
-                    juegosPorEquipo.TryGetValue(equipo.idequipo, out var juegosEquipo);
+                    resultadosPorEquipo.TryGetValue(equipo.idequipo, out var resultadosEquipo);
 
                     var resultados = new string[5] { "-", "-", "-", "-", "-" };
 
-                    if (juegosEquipo is { Count: > 0 })
+                    if (resultadosEquipo is { Count: > 0 })
                     {
-                        var cantidad = Math.Min(5, juegosEquipo.Count);
+                        var cantidad = Math.Min(5, resultadosEquipo.Count);
 
                         for (var i = 0; i < cantidad; i++)
                         {
-                            resultados[i] = ObtenerResultadoEquipo(juegosEquipo[i], equipo.idequipo);
+                            resultados[i] = resultadosEquipo[i];
                         }
                     }
 
@@ -164,18 +149,42 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
                 }
 
                 return lista;
+
+                void AgregarResultado(JuegoListCLS juego, int idEquipo)
+                {
+                    if (idEquipo <= 0)
+                    {
+                        return;
+                    }
+
+                    if (!resultadosPorEquipo.TryGetValue(idEquipo, out var resultados))
+                    {
+                        resultados = new List<string>(5);
+                        resultadosPorEquipo[idEquipo] = resultados;
+                    }
+
+                    if (resultados.Count >= 5)
+                    {
+                        return;
+                    }
+
+                    resultados.Add(ObtenerResultadoEquipo(juego, idEquipo));
+
+                    if (resultados.Count == 5)
+                    {
+                        equiposConResultados++;
+                    }
+                }
             });
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                ListaUltimosCinco.Clear();
                 _todosUltimosCinco = ultimosCinco;
-                _currentLoadedIndex = 0;
-                CargarSiguienteLote();
+                ListaUltimosCinco = new ObservableCollection<UltimosCincoJuegosEquipoModel>(_todosUltimosCinco);
                 lblTotalEquipos.Text = $"Total equipos: {_todosUltimosCinco.Count}";
-            });
 
-            stopwatchUi.Stop();
+                stopwatchUi.Stop();
+            });
             _ultimoTorneoCargado = idTorneoSeleccionado;
             datosYaCargados = true;
         }
@@ -205,31 +214,6 @@ public partial class UltimosCincoJuegosPage : ContentPage, INotifyPropertyChange
         }
 
         return "-";
-    }
-
-    private void CargarSiguienteLote()
-    {
-        if (_currentLoadedIndex >= _todosUltimosCinco.Count)
-        {
-            return;
-        }
-
-        var batchSize = _currentLoadedIndex == 0 ? InitialBatchSize : IncrementalBatchSize;
-        var itemsToLoad = Math.Min(batchSize, _todosUltimosCinco.Count - _currentLoadedIndex);
-
-        for (var i = 0; i < itemsToLoad; i++)
-        {
-            ListaUltimosCinco.Add(_todosUltimosCinco[_currentLoadedIndex]);
-            _currentLoadedIndex++;
-        }
-    }
-
-    private void OnRemainingItemsThresholdReached(object sender, EventArgs e)
-    {
-        if (_currentLoadedIndex < _todosUltimosCinco.Count)
-        {
-            CargarSiguienteLote();
-        }
     }
 
     private static string NormalizarResultado(string? resultado, int? golesFavor, int? golesContra)

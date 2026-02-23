@@ -118,8 +118,6 @@
                             ItemsSource="{Binding ListaUltimosCinco}"
                             SelectionMode="None"
                             ItemSizingStrategy="MeasureFirstItem"
-                            RemainingItemsThreshold="5"
-                            RemainingItemsThresholdReached="OnRemainingItemsThresholdReached"
                             Margin="15,0,15,5">
 
                 <CollectionView.ItemsLayout>
