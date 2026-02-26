@@ -13,9 +13,8 @@
               Padding="1,2">
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#1ECF4E" Offset="0.0" />
-                    <GradientStop Color="#12B76A" Offset="0.55" />
-                    <GradientStop Color="#F6C945" Offset="1.0" />
+                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                    <GradientStop Color="{StaticResource verdeOscuro}" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.Shadow>
