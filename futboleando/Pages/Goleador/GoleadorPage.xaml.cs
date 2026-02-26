@@ -92,7 +92,7 @@ public partial class GoleadorPage : ContentPage
             idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
             var nombreTorneo = Preferences.Get("NombreTorneo", "Sin torneo");
 
-            lblTorneoNombre.Text = $"Torneo: {nombreTorneo}";
+            lblTorneoNombre.Text = nombreTorneo;
 
             if (idTorneoSeleccionado == 0)
             {

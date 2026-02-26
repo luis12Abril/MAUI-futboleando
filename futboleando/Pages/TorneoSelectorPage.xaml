@@ -252,7 +252,7 @@
                        TextColor="#00ff88"
                        HorizontalOptions="Center"
                        Margin="0,3,0,0" />
-                <Label Text="v1.62"
+                <Label Text="v2.0"
                        FontSize="10"
                        TextColor="#808080"
                        HorizontalOptions="Center"
