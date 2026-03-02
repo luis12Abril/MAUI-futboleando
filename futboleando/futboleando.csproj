@@ -48,6 +48,10 @@ either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+  </PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />

@@ -11,6 +11,9 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     private readonly CumpleañeroService cumpleañeroService;
     private readonly EquipoService equipoService;
     private bool _isNavigatingBack;
+    private bool _isLoading;
+    private bool _datosCargados;
+    private int _ultimoTorneoCargado;
     
     private ObservableCollection<CumpleañeroCLS> _listacumpleañeros;
     public ObservableCollection<CumpleañeroCLS> listacumpleañeros
@@ -62,7 +65,6 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     
     private int idTorneoSeleccionado;
     private List<CumpleañeroCLS> todosCumpleañeros;
-    private bool datosYaCargados = false;
 
     public CumpleañeroPage(CumpleañeroService _cumpleañeroService, EquipoService _equipoService)
     {
@@ -80,130 +82,78 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
-        if (!datosYaCargados)
-        {
-            try
-            {
-                // Mostrar indicador de carga
-                loadingIndicator.IsRunning = true;
-                loadingIndicator.IsVisible = true;
-                
-                await Task.Delay(100);
-                await CargarEquipos();
-                await CargarCumpleañeros();
-                
-                datosYaCargados = true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ Error en OnAppearing: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"❌ Stack: {ex.StackTrace}");
-                
-                await DisplayAlert("Error", $"Error al cargar la página: {ex.Message}", "OK");
-            }
-            finally
-            {
-                loadingIndicator.IsRunning = false;
-                loadingIndicator.IsVisible = false;
-            }
-        }
+        await CargarDatos();
     }
 
-    private async Task CargarEquipos()
+    private async Task CargarDatos()
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] CargarEquipos iniciado");
-            
-            idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
-            
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] idTorneo: {idTorneoSeleccionado}");
-
-            if (idTorneoSeleccionado == 0)
+            if (_isLoading)
             {
-                System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] No hay torneo seleccionado");
                 return;
             }
 
-            var equipos = await equipoService.listarEquipoPorTorneo(idTorneoSeleccionado);
-            
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Equipos recibidos: {equipos?.Count ?? 0}");
-            
-            if (equipos != null)
-            {
-                listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
-            }
-            
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] CargarEquipos completado");
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"❌ Error en CargarEquipos: {ex.Message}");
-            System.Diagnostics.Debug.WriteLine($"❌ Stack: {ex.StackTrace}");
-            await DisplayAlert("Error", $"Error al cargar equipos: {ex.Message}", "OK");
-        }
-    }
-
-    private async Task CargarCumpleañeros()
-    {
-        try
-        {
-            var startTime = DateTime.Now;
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] CargarCumpleañeros iniciado");
+            _isLoading = true;
+            loadingIndicator.IsRunning = true;
+            loadingIndicator.IsVisible = true;
 
             idTorneoSeleccionado = Preferences.Get("UltimoTorneo", 0);
+            var nombreTorneo = Preferences.Get("NombreTorneo", "Sin torneo");
+            lblTorneoNombre.Text = nombreTorneo;
+
+            if (_datosCargados && _ultimoTorneoCargado == idTorneoSeleccionado)
+            {
+                return;
+            }
 
             if (idTorneoSeleccionado == 0)
             {
                 await DisplayAlert("Aviso", "No hay un torneo seleccionado", "OK");
-                loadingIndicator.IsRunning = false;
-                loadingIndicator.IsVisible = false;
+                listacumpleañeros.Clear();
+                lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Llamando al servicio con torneo {idTorneoSeleccionado}...");
+            pickerEquipo.SelectedIndexChanged -= OnEquipoSelected;
 
-            var cumpleañeros = await cumpleañeroService.ListarCumpleañerosPorTorneo(idTorneoSeleccionado);
+            var equiposTask = equipoService.listarEquipoPorTorneoResumen(idTorneoSeleccionado);
+            var cumpleañerosTask = cumpleañeroService.ListarCumpleañerosPorTorneo(idTorneoSeleccionado);
 
-            if (cumpleañeros == null)
-            {
-                System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] El servicio devolvió null");
-                cumpleañeros = new List<CumpleañeroCLS>();
-            }
+            await Task.WhenAll(equiposTask, cumpleañerosTask);
+
+            var equipos = equiposTask.Result ?? new ObservableCollection<EquipoListCLS>();
+            var cumpleañeros = cumpleañerosTask.Result ?? new List<CumpleañeroCLS>();
 
             todosCumpleañeros = cumpleañeros;
 
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Total recibidos: {todosCumpleañeros.Count}");
-
-            // Verificar si hay cumpleañeros
-            if (todosCumpleañeros.Count == 0)
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                listacumpleañeros.Clear();
-                lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-                System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] No hay cumpleañeros para mostrar");
-                return;
-            }
+                listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
+                listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
+                pickerEquipo.SelectedIndex = -1;
+                lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {todosCumpleañeros.Count}";
+            });
 
-            // Cargar todos los cumpleañeros de manera simple
-            listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
+            pickerEquipo.SelectedIndexChanged += OnEquipoSelected;
 
-            lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {todosCumpleañeros.Count}";
-
-            var elapsed = (DateTime.Now - startTime).TotalMilliseconds;
-            System.Diagnostics.Debug.WriteLine($"[CUMPLEAÑEROS] Carga completada en {elapsed}ms - {todosCumpleañeros.Count} cumpleañeros");
+            _ultimoTorneoCargado = idTorneoSeleccionado;
+            _datosCargados = true;
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"❌ Error en CargarCumpleañeros: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"❌ Error en CargarDatos: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"❌ Stack: {ex.StackTrace}");
-            
-            listacumpleañeros.Clear();
-            lblTotalCumpleañeros.Text = "Total de cumpleañeros: 0";
-            
-            await DisplayAlert("Error", $"Error al cargar cumpleañeros: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"Error al cargar la página: {ex.Message}", "OK");
+        }
+        finally
+        {
+            loadingIndicator.IsRunning = false;
+            loadingIndicator.IsVisible = false;
+            _isLoading = false;
         }
     }
+
 
     private void OnEquipoSelected(object sender, EventArgs e)
     {
@@ -213,19 +163,8 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 
             if (picker == null || picker.SelectedIndex == -1)
             {
-                // Mostrar todos
-                listacumpleañeros.Clear();
-                
-                if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
-                {
-                    foreach (var c in todosCumpleañeros)
-                    {
-                        listacumpleañeros.Add(c);
-                    }
-                }
-                
+                listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
                 lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
-                System.Diagnostics.Debug.WriteLine($"[FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
                 return;
             }
 
@@ -233,16 +172,7 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 
             if (equipoSeleccionado == null)
             {
-                listacumpleañeros.Clear();
-                
-                if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
-                {
-                    foreach (var c in todosCumpleañeros)
-                    {
-                        listacumpleañeros.Add(c);
-                    }
-                }
-                
+                listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
                 lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
             }
             else
@@ -251,16 +181,8 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
                     .Where(c => c.nombreequipo.Equals(equipoSeleccionado.nombre, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
-                listacumpleañeros.Clear();
-                
-                foreach (var c in filtrados)
-                {
-                    listacumpleañeros.Add(c);
-                }
-                
+                listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(filtrados);
                 lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
-                
-                System.Diagnostics.Debug.WriteLine($"[FILTRO] Equipo '{equipoSeleccionado.nombre}': {listacumpleañeros.Count} cumpleañeros");
             }
         }
         catch (Exception ex)
@@ -277,18 +199,8 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             pickerEquipo.SelectedIndex = -1;
 
             // Mostrar todos los cumpleañeros
-            listacumpleañeros.Clear();
-            
-            if (todosCumpleañeros != null && todosCumpleañeros.Count > 0)
-            {
-                foreach (var c in todosCumpleañeros)
-                {
-                    listacumpleañeros.Add(c);
-                }
-            }
-            
+            listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
             lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
-            System.Diagnostics.Debug.WriteLine($"[LIMPIAR FILTRO] Mostrando todos: {listacumpleañeros.Count} cumpleañeros");
         }
         catch (Exception ex)
         {

@@ -9,125 +9,127 @@
     <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
         
         <!-- ========== ENCABEZADO ========== -->
-        <Frame Grid.Row="0"
-               Padding="18,16"
-               CornerRadius="0"
-               HasShadow="True"
-               BorderColor="Transparent">
-            <Frame.Background>
+        <Grid Grid.Row="0"
+              Padding="1,2">
+            <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#1ECF4E" Offset="0.0" />
-                    <GradientStop Color="#12B76A" Offset="0.5" />
-                    <GradientStop Color="#0A8F3F" Offset="1.0" />
+                    <GradientStop Color="{StaticResource azulOscuro}" Offset="0.0" />
+                    <GradientStop Color="{StaticResource verdeOscuro}" Offset="1.0" />
                 </LinearGradientBrush>
-            </Frame.Background>
-            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="12">
+            </Grid.Background>
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="8" Offset="0,2" />
+            </Grid.Shadow>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                 <Button Grid.Column="0"
                         Text="←"
-                        FontSize="26"
+                        FontSize="30"
                         FontAttributes="Bold"
                         TextColor="White"
                         BackgroundColor="Transparent"
-                        Padding="4"
+                        Padding="6,4"
+                        Margin="0,-8,0,0"
                         Clicked="OnBackClicked" />
-                <Image Grid.Column="1"
-                       Source="logo_futboleandomenu.png"
-                       HeightRequest="42"
-                       WidthRequest="42"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Aspect="AspectFit" />
-                <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
-                    <Label Text="PRÓXIMOS CUMPLEAÑEROS"
-                           FontSize="18"
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label x:Name="lblTorneoNombre"
+                           Text="Torneo: Sin torneo"
+                           FontSize="16"
                            FontAttributes="Bold"
-                           TextColor="White" />
-                    <Label Text="Celebramos contigo"
-                           FontSize="12"
-                           TextColor="#E6FFEF" />
+                           TextColor="White"
+                           Opacity="0.95"
+                           Margin="0,2,0,0" />
                 </VerticalStackLayout>
             </Grid>
-        </Frame>
+        </Grid>
 
         <!-- ========== FILTRO POR EQUIPO ========== -->
         <Frame Grid.Row="1"
                Padding="12"
                CornerRadius="14"
-               BackgroundColor="#0F172A"
+               BackgroundColor="White"
                HasShadow="True"
                BorderColor="Transparent"
                Margin="15,10">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                <Border Grid.Column="0"
-                        StrokeThickness="1.5"
-                        Stroke="#1ECF4E"
-                        StrokeShape="RoundRectangle 10"
-                        BackgroundColor="#111827">
-                    <Picker x:Name="pickerEquipo"
-                            Title="-- SELECCIONE UN EQUIPO --"
-                            ItemsSource="{Binding listaequipos}"
-                            ItemDisplayBinding="{Binding nombre}"
-                            SelectedIndexChanged="OnEquipoSelected"
-                            FontSize="14"
-                            TextColor="#C7F9CC"
-                            TitleColor="#9CA3AF"
-                            BackgroundColor="Transparent"
-                            Margin="10,4" />
-                </Border>
-                <Button Grid.Column="1"
-                        Text="✕"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        TextColor="White"
-                        BackgroundColor="#0A8F3F"
-                        CornerRadius="10"
-                        WidthRequest="40"
-                        HeightRequest="40"
-                        Padding="0"
-                        Clicked="OnLimpiarFiltroClicked"
-                        ToolTipProperties.Text="Mostrar todos" />
-            </Grid>
+            <Border StrokeThickness="1.5"
+                    Stroke="#D0D7DE"
+                    StrokeShape="RoundRectangle 12"
+                    BackgroundColor="#F8F9FA">
+                <Grid Padding="10,4" ColumnDefinitions="*,Auto">
+                    <Grid Grid.Column="0" ColumnDefinitions="Auto,*">
+                        <Label Grid.Column="0"
+                               Text="🔍"
+                               FontSize="16"
+                               VerticalOptions="Center"
+                               Margin="6,0,8,0" />
+                        <Picker Grid.Column="1"
+                                x:Name="pickerEquipo"
+                                Title="-- SELECCIONE UN EQUIPO --"
+                                ItemsSource="{Binding listaequipos}"
+                                ItemDisplayBinding="{Binding nombre}"
+                                SelectedIndexChanged="OnEquipoSelected"
+                                FontSize="14"
+                                TextColor="{StaticResource verdeOscuro}"
+                                TitleColor="#6c757d"
+                                BackgroundColor="Transparent" />
+                    </Grid>
+                    <Button Grid.Column="1"
+                            Text="✕"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            BackgroundColor="{StaticResource rojoOscuro}"
+                            CornerRadius="8"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Padding="0"
+                            Clicked="OnLimpiarFiltroClicked"
+                            ToolTipProperties.Text="Mostrar todos" />
+                </Grid>
+            </Border>
         </Frame>
 
         <!-- ========== ENCABEZADO DE TABLA ========== -->
         <Border Grid.Row="2"
                 StrokeThickness="0"
                 StrokeShape="RoundRectangle 12,12,0,0"
-                BackgroundColor="#0F172A"
+                BackgroundColor="{StaticResource azulOscuro}"
                 Margin="12,0,12,5">
-            <Grid ColumnDefinitions="*,Auto,Auto"
+            <Grid ColumnDefinitions="*,70,50"
                   Padding="15,10"
                   ColumnSpacing="10">
                 <Label Grid.Column="0"
                        Text="NOMBRE"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
+                       TextColor="White"
                        HorizontalOptions="Start"
                        VerticalOptions="Center" />
                 <Label Grid.Column="1"
-                       Text="F. NAC."
+                       Text="NACIMIENTO"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
-                       HorizontalOptions="Center"
+                       TextColor="White"
+                       HorizontalOptions="End"
+                       HorizontalTextAlignment="End"
                        VerticalOptions="Center" />
                 <Label Grid.Column="2"
-                       Text="CUMPL"
+                       Text="CUMPLE"
                        FontSize="12"
                        FontAttributes="Bold"
-                       TextColor="#C7F9CC"
+                       TextColor="White"
                        HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Margin="0,0,10,0" />
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center" />
             </Grid>
         </Border>
 
         <!-- ========== LISTA DE CUMPLEAÑEROS ========== -->
-        <Grid Grid.Row="3" BackgroundColor="#F1F8E8">
+        <Grid Grid.Row="3" BackgroundColor="#F5F5F5">
             <CollectionView x:Name="collectionCumpleañeros"
                             ItemsSource="{Binding listacumpleañeros}"
                             SelectionMode="None"
+                            ItemSizingStrategy="MeasureAllItems"
                             Margin="12,0,12,5">
                 
                 <CollectionView.ItemsLayout>
@@ -136,14 +138,15 @@
                         
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 12"
-                                        BackgroundColor="#F8FBEF"
-                                        Padding="15,12">
+                                <Frame Padding="15,12"
+                                       CornerRadius="12"
+                                       BackgroundColor="White"
+                                       HasShadow="True"
+                                       BorderColor="Transparent">
                                     
-                                    <Grid RowDefinitions="Auto,Auto,Auto"
-                                          ColumnDefinitions="*,Auto,Auto"
-                                          RowSpacing="6"
+                                    <Grid RowDefinitions="Auto,Auto"
+                                          ColumnDefinitions="*,70,50"
+                                          RowSpacing="4"
                                           ColumnSpacing="10">
                                         
                                         <!-- NOMBRE (primera fila, ocupa toda la columna izquierda) -->
@@ -152,8 +155,8 @@
                                                FontSize="15"
                                                FontAttributes="Bold"
                                                TextColor="#0F172A"
-                                               LineBreakMode="WordWrap"
-                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1"
                                                VerticalOptions="Center" />
                                         
                                         <!-- FECHA (primera fila, columna central) -->
@@ -162,7 +165,8 @@
                                                FontSize="14"
                                                FontAttributes="Bold"
                                                TextColor="#0F172A"
-                                               HorizontalOptions="Center"
+                                               HorizontalOptions="End"
+                                               HorizontalTextAlignment="End"
                                                VerticalOptions="Center">
                                             <Label.Triggers>
                                                 <DataTrigger TargetType="Label" Binding="{Binding esCumpleañosHoy}" Value="True">
@@ -179,8 +183,8 @@
                                                FontAttributes="Bold"
                                                TextColor="#0F172A"
                                                HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               Margin="0,0,10,0" />
+                                               HorizontalTextAlignment="Center"
+                                               VerticalOptions="Center" />
                                         
                                         <!-- EQUIPO (segunda fila, ocupa todas las columnas) -->
                                         <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
@@ -191,7 +195,7 @@
                                                LineBreakMode="TailTruncation"
                                                MaxLines="1" />
                                     </Grid>
-                                </Border>
+                                </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
 

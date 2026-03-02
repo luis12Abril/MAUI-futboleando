@@ -158,7 +158,7 @@
                                         <!-- Equipo 1 -->
                                         <Label Grid.Row="0" Grid.Column="0"
                                                Text="{Binding nombreequipo01}"
-                                               FontSize="16"
+                                               FontSize="14"
                                                FontAttributes="Bold"
                                                TextColor="#0F172A"
                                                LineBreakMode="WordWrap"
@@ -198,7 +198,7 @@
                                         <!-- Equipo 2 -->
                                         <Label Grid.Row="0" Grid.Column="2"
                                                Text="{Binding nombreequipo02}"
-                                               FontSize="16"
+                                               FontSize="14"
                                                FontAttributes="Bold"
                                                TextColor="#0F172A"
                                                LineBreakMode="WordWrap"
