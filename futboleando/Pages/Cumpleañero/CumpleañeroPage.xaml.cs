@@ -10,11 +10,12 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 {
     private readonly CumpleañeroService cumpleañeroService;
     private readonly EquipoService equipoService;
-    private bool _isNavigatingBack;
     private bool _isLoading;
     private bool _datosCargados;
     private int _ultimoTorneoCargado;
-    
+    private CancellationTokenSource? _loadCts;
+    private bool _isNavigatingBack;
+
     private ObservableCollection<CumpleañeroCLS> _listacumpleañeros;
     public ObservableCollection<CumpleañeroCLS> listacumpleañeros
     {
@@ -33,25 +34,19 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             return;
         }
 
+        _isNavigatingBack = true;
+        CancelarCarga();
+
         try
         {
-            _isNavigatingBack = true;
-
-            if (Navigation?.NavigationStack?.Count > 1)
-            {
-                await Navigation.PopAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"❌ Error al regresar: {ex.Message}");
+            await Navigation.PopAsync();
         }
         finally
         {
             _isNavigatingBack = false;
         }
     }
-    
+
     private ObservableCollection<EquipoListCLS> _listaequipos;
     public ObservableCollection<EquipoListCLS> listaequipos
     {
@@ -62,37 +57,54 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
             OnPropertyChanged(nameof(listaequipos));
         }
     }
-    
+
     private int idTorneoSeleccionado;
     private List<CumpleañeroCLS> todosCumpleañeros;
 
     public CumpleañeroPage(CumpleañeroService _cumpleañeroService, EquipoService _equipoService)
     {
         InitializeComponent();
-        
+
         cumpleañeroService = _cumpleañeroService;
         equipoService = _equipoService;
         listacumpleañeros = new ObservableCollection<CumpleañeroCLS>();
         listaequipos = new ObservableCollection<EquipoListCLS>();
         todosCumpleañeros = new List<CumpleañeroCLS>();
-        
+
         BindingContext = this;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        if (_isNavigatingBack)
+        {
+            return;
+        }
+
+        await Task.Delay(50);
         await CargarDatos();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        CancelarCarga();
     }
 
     private async Task CargarDatos()
     {
         try
         {
-            if (_isLoading)
+            if (_isLoading || _isNavigatingBack)
             {
                 return;
             }
+
+            CancelarCarga();
+            _loadCts = new CancellationTokenSource();
+            var token = _loadCts.Token;
 
             _isLoading = true;
             loadingIndicator.IsRunning = true;
@@ -122,6 +134,11 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 
             await Task.WhenAll(equiposTask, cumpleañerosTask);
 
+            if (token.IsCancellationRequested || _isNavigatingBack)
+            {
+                return;
+            }
+
             var equipos = equiposTask.Result ?? new ObservableCollection<EquipoListCLS>();
             var cumpleañeros = cumpleañerosTask.Result ?? new List<CumpleañeroCLS>();
 
@@ -129,6 +146,11 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
+                if (token.IsCancellationRequested || _isNavigatingBack)
+                {
+                    return;
+                }
+
                 listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
                 listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
                 pickerEquipo.SelectedIndex = -1;
@@ -154,6 +176,21 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
         }
     }
 
+    private void CancelarCarga()
+    {
+        if (_loadCts == null)
+        {
+            return;
+        }
+
+        if (!_loadCts.IsCancellationRequested)
+        {
+            _loadCts.Cancel();
+        }
+
+        _loadCts.Dispose();
+        _loadCts = null;
+    }
 
     private void OnEquipoSelected(object sender, EventArgs e)
     {
@@ -195,10 +232,7 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     {
         try
         {
-            // Limpiar la selección del picker
             pickerEquipo.SelectedIndex = -1;
-
-            // Mostrar todos los cumpleañeros
             listacumpleañeros = new ObservableCollection<CumpleañeroCLS>(todosCumpleañeros);
             lblTotalCumpleañeros.Text = $"Total de cumpleañeros: {listacumpleañeros.Count}";
         }

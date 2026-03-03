@@ -95,7 +95,7 @@
                 StrokeShape="RoundRectangle 12,12,0,0"
                 BackgroundColor="{StaticResource azulOscuro}"
                 Margin="12,0,12,5">
-            <Grid ColumnDefinitions="*,70,50"
+            <Grid ColumnDefinitions="*,75,50"
                   Padding="15,10"
                   ColumnSpacing="10">
                 <Label Grid.Column="0"
@@ -129,7 +129,7 @@
             <CollectionView x:Name="collectionCumpleañeros"
                             ItemsSource="{Binding listacumpleañeros}"
                             SelectionMode="None"
-                            ItemSizingStrategy="MeasureAllItems"
+                            ItemSizingStrategy="MeasureFirstItem"
                             Margin="12,0,12,5">
                 
                 <CollectionView.ItemsLayout>
@@ -167,14 +167,7 @@
                                                TextColor="#0F172A"
                                                HorizontalOptions="End"
                                                HorizontalTextAlignment="End"
-                                               VerticalOptions="Center">
-                                            <Label.Triggers>
-                                                <DataTrigger TargetType="Label" Binding="{Binding esCumpleañosHoy}" Value="True">
-                                                    <Setter Property="TextColor" Value="{StaticResource rojoOscuro}" />
-                                                    <Setter Property="FontSize" Value="18" />
-                                                </DataTrigger>
-                                            </Label.Triggers>
-                                        </Label>
+                                               VerticalOptions="Center" />
                                         
                                         <!-- EDAD (primera fila, columna derecha) -->
                                         <Label Grid.Row="0" Grid.Column="2"
@@ -240,13 +233,13 @@
         <Frame Grid.Row="4"
                Padding="12"
                CornerRadius="0"
-               BackgroundColor="#0F172A"
-               HasShadow="True"
+               BackgroundColor="{StaticResource verdeOscuro}"
+               HasShadow="False"
                BorderColor="Transparent">
             <Label x:Name="lblTotalCumpleañeros"
                    Text="Total de cumpleañeros: 0"
-                   FontSize="11"
-                   TextColor="#C7F9CC"
+                   FontSize="12"
+                   TextColor="White"
                    HorizontalOptions="Center" />
         </Frame>
 
