@@ -1,12 +1,16 @@
 using futboleando.Service;
 using futboleandoEntities.Cumpleañero;
 using futboleandoEntities.Equipo;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace futboleando.Pages.Cumpleañero;
 
-public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
+public partial class CumpleañerosTorneoPage : ContentPage, INotifyPropertyChanged
 {
     private readonly CumpleañeroService cumpleañeroService;
     private readonly EquipoService equipoService;
@@ -28,32 +32,6 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private async void OnBackClicked(object sender, EventArgs e)
-    {
-        if (_isNavigatingBack)
-        {
-            return;
-        }
-
-        _isNavigatingBack = true;
-        CancelarCarga();
-
-        try
-        {
-            if (Navigation?.NavigationStack?.Count > 1)
-            {
-                await Navigation.PopAsync();
-            }
-        }
-        finally
-        {
-            if (_isActive)
-            {
-                _isNavigatingBack = false;
-            }
-        }
-    }
-
     private ObservableCollection<EquipoListCLS> _listaequipos;
     public ObservableCollection<EquipoListCLS> listaequipos
     {
@@ -68,7 +46,7 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
     private int idTorneoSeleccionado;
     private List<CumpleañeroCLS> todosCumpleañeros;
 
-    public CumpleañeroPage(CumpleañeroService _cumpleañeroService, EquipoService _equipoService)
+    public CumpleañerosTorneoPage(CumpleañeroService _cumpleañeroService, EquipoService _equipoService)
     {
         InitializeComponent();
 
@@ -254,6 +232,32 @@ public partial class CumpleañeroPage : ContentPage, INotifyPropertyChanged
         catch (Exception ex)
         {
             DisplayAlert("Error", $"Error al limpiar filtro: {ex.Message}", "OK");
+        }
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        if (_isNavigatingBack)
+        {
+            return;
+        }
+
+        _isNavigatingBack = true;
+        CancelarCarga();
+
+        try
+        {
+            if (Navigation?.NavigationStack?.Count > 1)
+            {
+                await Navigation.PopAsync();
+            }
+        }
+        finally
+        {
+            if (_isActive)
+            {
+                _isNavigatingBack = false;
+            }
         }
     }
 }

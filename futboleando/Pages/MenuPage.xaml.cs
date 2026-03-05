@@ -143,9 +143,8 @@ public partial class MenuPage : ContentPage
                 break;
 
             case 13:
-                var cumpleañeroService = MauiProgram.ServiceProvider.GetService<CumpleañeroService>();
-                CumpleañeroPage oCumpleañeroPage = new CumpleañeroPage(cumpleañeroService, equipoService);
-                App.Navigate.PushAsync(oCumpleañeroPage);
+                CumpleañerosdelTorneoPage oCumpleañerosdelTorneoPage = new CumpleañerosdelTorneoPage(jugadorService, equipoService);
+                App.Navigate.PushAsync(oCumpleañerosdelTorneoPage);
                 break;
 
             case 15:
