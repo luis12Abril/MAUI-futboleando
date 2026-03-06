@@ -108,7 +108,11 @@ public partial class CumpleañerosdelTorneoPage : ContentPage, INotifyPropertyCh
                 equipos = await equipoService.listarEquipoResumen();
             }
 
-            listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
+            var equiposOrdenados = equipos
+                .OrderBy(e => e.nombre?.Trim())
+                .ToList();
+
+            listaequipos = new ObservableCollection<EquipoListCLS>(equiposOrdenados);
         }
         catch (Exception)
         {

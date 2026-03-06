@@ -4,6 +4,7 @@ using futboleandoEntities.Goleador;
 using futboleandoEntities.Equipo;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace futboleando.Pages.Goleador;
 
@@ -70,9 +71,12 @@ public partial class GoleadorPage : ContentPage
 
             // Cargar equipos del torneo (resumen para mejor rendimiento)
             var equipos = await equipoService.listarEquipoPorTorneoResumen(idTorneoSeleccionado);
+            var equiposOrdenados = equipos
+                .OrderBy(e => e.nombre?.Trim())
+                .ToList();
 
             // Recrear la ObservableCollection (más rápido que Clear + foreach)
-            listaequipos = new ObservableCollection<EquipoListCLS>(equipos);
+            listaequipos = new ObservableCollection<EquipoListCLS>(equiposOrdenados);
             OnPropertyChanged(nameof(listaequipos));
             equiposYaCargados = true;
         }

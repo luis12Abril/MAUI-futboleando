@@ -62,7 +62,7 @@
                                Margin="6,0,8,0" />
                         <Picker Grid.Column="1"
                                 x:Name="pickerEquipo"
-                                Title="-- SELECCIONE UN EQUIPO --"
+                                Title="-- Todos los equipos --"
                                 ItemsSource="{Binding listaequipos}"
                                 ItemDisplayBinding="{Binding nombre}"
                                 SelectedIndexChanged="OnEquipoSelected"

@@ -56,13 +56,18 @@ namespace futboleando.Pages
             comunicadoService = _comunicadoService;
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
 
             // ? Evitar múltiples inicializaciones simultáneas
             if (_isInitializing) return;
-            
+
+            _ = InicializarAsync();
+        }
+
+        private async Task InicializarAsync()
+        {
             _isInitializing = true;
             try
             {

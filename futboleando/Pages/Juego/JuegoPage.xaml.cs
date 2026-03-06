@@ -81,6 +81,7 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
             var jornadas = await juegoService.ListarJornadasPorTorneo(idTorneoSeleccionado);
             var jornadasFiltradas = jornadas
                 .Where(j => !string.Equals(j.nombre?.Trim(), "-- Todas las Jornadas --", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(j => j.finiciojornada)
                 .ToList();
             listajornada = new ObservableCollection<JornadaListCLS>(jornadasFiltradas);
             OnPropertyChanged(nameof(listajornada));
