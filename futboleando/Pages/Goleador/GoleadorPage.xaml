@@ -108,130 +108,150 @@
                             ItemSizingStrategy="MeasureFirstItem"
                             Margin="10,0,10,10">
 
-                <CollectionView.Header>
-                    <Border StrokeThickness="2"
-                            Stroke="{StaticResource azulOscuro}"
-                            StrokeShape="RoundRectangle 10,10,0,0"
-                            BackgroundColor="{StaticResource azulOscuro}"
-                            Margin="0,5,0,0">
-                        <Grid ColumnDefinitions="45,*,60"
-                              Padding="10,8"
-                              ColumnSpacing="8">
-                            <Label Grid.Column="0"
-                                   Text="#"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   HorizontalOptions="Center" />
-                            <Label Grid.Column="1"
-                                   Text="NOMBRE"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   HorizontalOptions="Start" />
-                            <Label Grid.Column="2"
-                                   Text="GOLES"
-                                   FontSize="12"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   HorizontalOptions="Center" />
-                        </Grid>
-                    </Border>
-                </CollectionView.Header>
-
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="6" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:GoleadorCLS">
-                        <Frame Margin="0,0,0,6"
+                        <Frame Margin="5,5,5,10"
                                Padding="0"
-                               CornerRadius="12"
+                               CornerRadius="15"
                                BackgroundColor="White"
                                HasShadow="True"
                                BorderColor="Transparent">
 
-                            <Grid RowDefinitions="Auto,Auto"
+                            <Frame.Shadow>
+                                <Shadow Brush="Black"
+                                        Opacity="0.15"
+                                        Radius="10"
+                                        Offset="0,4" />
+                            </Frame.Shadow>
+
+                            <Grid RowDefinitions="Auto,1,Auto,1,Auto"
                                   Padding="0">
 
                                 <Grid Grid.Row="0"
-                                      ColumnDefinitions="28,*,60"
-                                      Padding="12,12,12,10"
-                                      ColumnSpacing="10">
+                                      BackgroundColor="{StaticResource azulOscuro}"
+                                      Padding="15,12"
+                                      ColumnDefinitions="Auto,Auto,*">
 
-                                    <Border Grid.Column="0"
-                                            WidthRequest="22"
-                                            HeightRequest="22"
-                                            StrokeThickness="0"
-                                            BackgroundColor="#FFD700"
-                                            StrokeShape="RoundRectangle 11"
-                                            HorizontalOptions="Start"
-                                            VerticalOptions="Center">
-                                        <Border.Triggers>
-                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="2">
-                                                <Setter Property="BackgroundColor" Value="#C0C0C0" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="3">
-                                                <Setter Property="BackgroundColor" Value="#CD7F32" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Border" Binding="{Binding posicion}" Value="1">
-                                                <Setter Property="BackgroundColor" Value="#FFD700" />
-                                            </DataTrigger>
-                                        </Border.Triggers>
+                                    <Frame Grid.Column="0"
+                                           WidthRequest="32"
+                                           HeightRequest="32"
+                                           CornerRadius="16"
+                                           Padding="0"
+                                           BackgroundColor="White"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           VerticalOptions="Center"
+                                           Margin="0,0,10,0">
                                         <Label Text="{Binding posicion}"
-                                               FontSize="10"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center" />
-                                    </Border>
-
-                                    <VerticalStackLayout Grid.Column="1"
-                                                         Spacing="2"
-                                                         VerticalOptions="Center">
-                                        <Label Text="{Binding nombrecompleto}"
                                                FontSize="14"
                                                FontAttributes="Bold"
-                                               TextColor="#1E293B"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="1" />
-                                        <Label Text="{Binding nombreequipo}"
-                                               FontSize="11"
-                                               TextColor="#64748B"
-                                               LineBreakMode="TailTruncation"
-                                               MaxLines="1" />
-                                    </VerticalStackLayout>
-
-                                    <Border Grid.Column="2"
-                                            WidthRequest="36"
-                                            HeightRequest="36"
-                                            StrokeThickness="0"
-                                            BackgroundColor="{StaticResource verdeOscuro}"
-                                            StrokeShape="Ellipse"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Center">
-                                        <Label Text="{Binding goles}"
-                                               FontSize="15"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
+                                               TextColor="{StaticResource verdeOscuro}"
                                                HorizontalOptions="Center"
                                                VerticalOptions="Center" />
-                                    </Border>
+                                    </Frame>
+
+                                    <Label Grid.Column="1"
+                                           Text="👤"
+                                           FontSize="20"
+                                           VerticalOptions="Center"
+                                           Margin="0,0,8,0" />
+
+                                    <Label Grid.Column="2"
+                                           Text="{Binding nombrecompleto}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="White"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="FillAndExpand" />
                                 </Grid>
 
-                                <Grid Grid.Row="1"
-                                      Padding="12,0,12,10">
-                                    <Button Text="VER MÁS"
-                                            FontSize="10"
+                                <BoxView Grid.Row="1"
+                                         Color="#E0E0E0"
+                                         HeightRequest="1" />
+
+                                <Grid Grid.Row="2"
+                                      Padding="15,10"
+                                      BackgroundColor="White">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Frame WidthRequest="40"
+                                               HeightRequest="40"
+                                               CornerRadius="20"
+                                               Padding="0"
+                                               HasShadow="False"
+                                               BackgroundColor="{StaticResource azulOscuro}"
+                                               VerticalOptions="Center">
+                                            <Label Text="👥"
+                                                   FontSize="20"
+                                                   TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Frame>
+
+                                        <VerticalStackLayout VerticalOptions="Center"
+                                                             Spacing="2">
+                                            <Label Text="Equipo"
+                                                   FontSize="11"
+                                                   TextColor="#999999" />
+                                            <Label Text="{Binding nombreequipo}"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource azulOscuro}" />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <BoxView Grid.Row="3"
+                                         Color="#E0E0E0"
+                                         HeightRequest="1"
+                                         Margin="15,0" />
+
+                                <Grid Grid.Row="4"
+                                      Padding="15,10"
+                                      BackgroundColor="White"
+                                      ColumnDefinitions="*,Auto">
+
+                                    <Button Grid.Column="0"
+                                            Text="VER MÁS"
+                                            FontSize="12"
                                             FontAttributes="Bold"
                                             TextColor="White"
-                                            BackgroundColor="{StaticResource azulOscuro}"
-                                            CornerRadius="6"
-                                            Padding="8,2"
+                                            BackgroundColor="{StaticResource verdeOscuro}"
+                                            CornerRadius="8"
+                                            Padding="14,8"
                                             Clicked="OnVerMasClicked"
                                             CommandParameter="{Binding idjugador}"
-                                            HorizontalOptions="End" />
+                                            HorizontalOptions="Start"
+                                            VerticalOptions="Center" />
+
+                                    <Frame Grid.Column="1"
+                                           Padding="12,8"
+                                           CornerRadius="10"
+                                           BackgroundColor="{StaticResource rojoOscuro}"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="⚽"
+                                                   FontSize="18"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding goles}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="White"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="goles"
+                                                   FontSize="11"
+                                                   TextColor="White"
+                                                   Opacity="0.9"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
                                 </Grid>
                             </Grid>
                         </Frame>
