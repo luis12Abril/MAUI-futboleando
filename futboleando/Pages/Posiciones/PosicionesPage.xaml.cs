@@ -75,7 +75,7 @@ public partial class PosicionesPage : ContentPage, INotifyPropertyChanged
             var posiciones = await Task.Run(() =>
             {
                 var equiposOrdenados = listaEquipos
-                    .OrderByDescending(e => e.puntos ?? 0)
+                    .OrderByDescending(e => (e.puntos ?? 0) + (e.puntosextras ?? 0))
                     .ThenByDescending(e => e.difgoles ?? 0)
                     .ThenByDescending(e => e.golesafavor ?? 0)
                     .ThenBy(e => e.nombre)
@@ -86,6 +86,8 @@ public partial class PosicionesPage : ContentPage, INotifyPropertyChanged
 
                 foreach (var equipo in equiposOrdenados)
                 {
+                    var puntos = (equipo.puntos ?? 0) + (equipo.puntosextras ?? 0);
+
                     lista.Add(new PosicionModel
                     {
                         Posicion = posicion++,
@@ -99,7 +101,8 @@ public partial class PosicionesPage : ContentPage, INotifyPropertyChanged
                         GolesAFavor = equipo.golesafavor ?? 0,
                         GolesEnContra = equipo.golesencontra ?? 0,
                         DifGoles = equipo.difgoles ?? 0,
-                        Puntos = equipo.puntos ?? 0
+                        PuntosExtras = equipo.puntosextras ?? 0,
+                        Puntos = puntos
                     });
                 }
 

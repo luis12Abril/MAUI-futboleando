@@ -15,6 +15,7 @@ namespace futboleando.Models
         public int GolesAFavor { get; set; }
         public int GolesEnContra { get; set; }
         public int DifGoles { get; set; }
+        public int PuntosExtras { get; set; }
         public int Puntos { get; set; }
     }
 }
