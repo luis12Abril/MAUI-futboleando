@@ -299,14 +299,7 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
         {
             if (sender is Button button && button.CommandParameter is int idJuego)
             {
-                await DisplayAlert("Ver Más", 
-                    $"Proximamente: Detalles del juego #{idJuego}\n\n" +
-                    "Aquí se mostrará:\n" +
-                    "• Alineaciones\n" +
-                    "• Goleadores\n" +
-                    "• Tarjetas\n" +
-                    "• Estadísticas", 
-                    "OK");
+                await Navigation.PushAsync(new JuegoVerMasPage(juegoService, idJuego));
             }
         }
         catch (Exception ex)

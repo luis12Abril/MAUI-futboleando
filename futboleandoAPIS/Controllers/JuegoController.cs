@@ -89,12 +89,12 @@ namespace futboleandoAPIS.Controllers
                                 idequipo01 = j.Idequipo01 ?? 0,
                                 nombreequipo01 = e1.Nombre ?? "",
                                 golesequipo01 = j.Golesequipo01,
-                                fotoequipo01 = e1.Fotoequipo ?? "",
+                                //fotoequipo01 = e1.Fotoequipo ?? "",
                                 
                                 idequipo02 = j.Idequipo02 ?? 0,
                                 nombreequipo02 = e2.Nombre ?? "",
                                 golesequipo02 = j.Golesequipo02,
-                                fotoequipo02 = e2.Fotoequipo ?? "",
+                                //fotoequipo02 = e2.Fotoequipo ?? "",
                                 
                                 nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
                                 ubicacioncampo = campo != null ? campo.Ubicacion : "",

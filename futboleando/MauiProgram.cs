@@ -55,7 +55,7 @@ namespace futboleando
                 //  BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
                 var httpClient = new HttpClient(handler)
                 {
-                    BaseAddress = new Uri("http://futboleandoapp.somee.com/"),
+                    BaseAddress = new Uri("http://futboleando2026.somee.com/"),
                     Timeout = TimeSpan.FromSeconds(60) // ✅ Aumentar timeout para evitar cortes
                 };
 

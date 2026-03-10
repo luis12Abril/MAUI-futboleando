@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace futboleandoEntities.Juego
 {
     public class JuegoDetallesCLS
@@ -26,7 +28,9 @@ namespace futboleandoEntities.Juego
         public string nombrearbitro { get; set; } = string.Empty;
         
         // Goles
+        [JsonPropertyName("detalleGolesEquipo01")]
         public List<GolDetalleCLS> golesEquipo01 { get; set; } = new List<GolDetalleCLS>();
+        [JsonPropertyName("detalleGolesEquipo02")]
         public List<GolDetalleCLS> golesEquipo02 { get; set; } = new List<GolDetalleCLS>();
     }
     
