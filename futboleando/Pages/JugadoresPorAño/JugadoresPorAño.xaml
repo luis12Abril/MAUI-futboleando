@@ -141,7 +141,7 @@
             <CollectionView x:Name="collectionJugadoresPorAño"
                             ItemsSource="{Binding listajugadoresporaño}"
                             SelectionMode="None"
-                            ItemSizingStrategy="MeasureFirstItem"
+                            ItemSizingStrategy="MeasureAllItems"
                             Margin="15,0,15,15">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
@@ -164,11 +164,11 @@
                                         FontSize="24"
                                         FontAttributes="Bold"
                                         TextColor="#0F172A"
-                                        LineBreakMode="WordWrap"
-                                        MaxLines="2"
+                                        LineBreakMode="NoWrap"
+                                        MaxLines="1"
                                         HorizontalOptions="FillAndExpand"
                                         HorizontalTextAlignment="Start"
-                                        VerticalOptions="Start"
+                                        VerticalOptions="Center"
                                         Margin="0,4,0,0"
                                         ZIndex="1" />
                                 
