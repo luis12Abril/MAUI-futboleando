@@ -109,25 +109,29 @@ namespace futboleandoAPIS.Controllers
                 // Obtener goleadores del equipo 1
                 juego.golesEquipo01 = (from g in _bd.Gols
                                       join jug in _bd.Jugadors on g.Idjugador equals jug.Idjugador
-                                      where g.Idjuego == idJuego && g.Idequipo == juego.idequipo01
+                                      where g.Idjuego == idJuego && g.Idequipo == juego.idequipo01 && g.Habilitado == 1
                                       group g by new { g.Idjugador, jug.Nombre, jug.Appaterno, jug.Apmaterno } into grp
+                                      orderby grp.Sum(x => x.Goles ?? 0) descending, grp.Key.Nombre, grp.Key.Appaterno, grp.Key.Apmaterno
                                       select new GolDetalleCLS
                                       {
                                           idjugador = grp.Key.Idjugador ?? 0,
                                           nombrejugador = $"{grp.Key.Nombre} {grp.Key.Appaterno} {grp.Key.Apmaterno}".Trim(),
-                                          goles = grp.Sum(x => x.Goles ?? 0)
+                                          goles = grp.Sum(x => x.Goles ?? 0),
+                                          habilitado = grp.Max(x => x.Habilitado) ?? 0
                                       }).ToList();
 
                 // Obtener goleadores del equipo 2
                 juego.golesEquipo02 = (from g in _bd.Gols
                                       join jug in _bd.Jugadors on g.Idjugador equals jug.Idjugador
-                                      where g.Idjuego == idJuego && g.Idequipo == juego.idequipo02
+                                      where g.Idjuego == idJuego && g.Idequipo == juego.idequipo02 && g.Habilitado == 1
                                       group g by new { g.Idjugador, jug.Nombre, jug.Appaterno, jug.Apmaterno } into grp
+                                      orderby grp.Sum(x => x.Goles ?? 0) descending, grp.Key.Nombre, grp.Key.Appaterno, grp.Key.Apmaterno
                                       select new GolDetalleCLS
                                       {
                                           idjugador = grp.Key.Idjugador ?? 0,
                                           nombrejugador = $"{grp.Key.Nombre} {grp.Key.Appaterno} {grp.Key.Apmaterno}".Trim(),
-                                          goles = grp.Sum(x => x.Goles ?? 0)
+                                          goles = grp.Sum(x => x.Goles ?? 0),
+                                          habilitado = grp.Max(x => x.Habilitado) ?? 0
                                       }).ToList();
 
                 return Ok(juego);

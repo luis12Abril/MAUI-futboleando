@@ -32,6 +32,9 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
     private List<JuegoListCLS> juegosFiltrados;
     private int idTorneoSeleccionado;
     private bool _isLoading = false;
+    private bool datosYaCargados;
+    private int _ultimoTorneoCargado;
+    private int? _ultimoJuegoSeleccionadoId;
     private int _currentLoadedIndex = 0;
     private const int INITIAL_BATCH_SIZE = 10; // Primer lote: 10 items
     private const int INCREMENTAL_BATCH_SIZE = 15; // Lotes incrementales: 15 items
@@ -51,6 +54,14 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        var torneoActual = Preferences.Get("UltimoTorneo", 0);
+
+        if (datosYaCargados && _ultimoTorneoCargado == torneoActual)
+        {
+            ScrollToJuegoSeleccionado();
+            return;
+        }
+
         await CargarDatos();
     }
 
@@ -73,6 +84,7 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
             if (idTorneoSeleccionado == 0)
             {
                 await DisplayAlert("Aviso", "No hay un torneo seleccionado", "OK");
+                datosYaCargados = false;
                 return;
             }
 
@@ -110,6 +122,11 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
             ActualizarContador();
 
             pickerJornada.SelectedIndexChanged += OnJornadaSelected;
+
+            datosYaCargados = true;
+            _ultimoTorneoCargado = idTorneoSeleccionado;
+
+            ScrollToJuegoSeleccionado();
 
             // Ocultar indicador de carga principal
             loadingIndicator.IsRunning = false;
@@ -279,6 +296,10 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
                 loadingIndicator.IsRunning = false;
                 loadingIndicator.IsVisible = false;
             });
+
+            ScrollToJuegoSeleccionado();
+            datosYaCargados = true;
+            _ultimoTorneoCargado = idTorneoSeleccionado;
         }
         catch (Exception ex)
         {
@@ -299,12 +320,41 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
         {
             if (sender is Button button && button.CommandParameter is int idJuego)
             {
+                _ultimoJuegoSeleccionadoId = idJuego;
                 await Navigation.PushAsync(new JuegoVerMasPage(juegoService, idJuego));
             }
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+        }
+    }
+
+    private void ScrollToJuegoSeleccionado()
+    {
+        if (_ultimoJuegoSeleccionadoId is null || juegosFiltrados.Count == 0)
+        {
+            return;
+        }
+
+        var index = juegosFiltrados.FindIndex(j => j.idjuego == _ultimoJuegoSeleccionadoId.Value);
+        if (index < 0)
+        {
+            return;
+        }
+
+        while (_currentLoadedIndex <= index)
+        {
+            CargarSiguienteLote();
+        }
+
+        var item = listajuegos.FirstOrDefault(j => j.idjuego == _ultimoJuegoSeleccionadoId.Value);
+        if (item != null)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                collectionJuegos.ScrollTo(item, position: ScrollToPosition.Center, animate: false);
+            });
         }
     }
 }

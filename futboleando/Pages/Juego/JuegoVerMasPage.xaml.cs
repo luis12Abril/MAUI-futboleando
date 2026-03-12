@@ -61,16 +61,7 @@ public partial class JuegoVerMasPage : ContentPage
 
             if (!string.IsNullOrWhiteSpace(detalles.fotoequipo01))
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(detalles.fotoequipo01);
-                    imgEquipo01.Source = ImageSource.FromStream(() => new MemoryStream(bytes));
-                    System.Diagnostics.Debug.WriteLine("Imagen equipo 1 cargada");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Error cargando imagen equipo 1: {ex.Message}");
-                }
+                System.Diagnostics.Debug.WriteLine("Foto equipo 1 disponible");
             }
 
             lblNombreEquipo02.Text = detalles.nombreequipo02?.ToUpper() ?? "EQUIPO 2";
@@ -78,16 +69,7 @@ public partial class JuegoVerMasPage : ContentPage
 
             if (!string.IsNullOrWhiteSpace(detalles.fotoequipo02))
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(detalles.fotoequipo02);
-                    imgEquipo02.Source = ImageSource.FromStream(() => new MemoryStream(bytes));
-                    System.Diagnostics.Debug.WriteLine("Imagen equipo 2 cargada");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Error cargando imagen equipo 2: {ex.Message}");
-                }
+                System.Diagnostics.Debug.WriteLine("Foto equipo 2 disponible");
             }
 
             lblCampo.Text = detalles.nombrecampo?.ToUpper() ?? "SIN ASIGNAR";
@@ -101,14 +83,18 @@ public partial class JuegoVerMasPage : ContentPage
             System.Diagnostics.Debug.WriteLine($"Lista goles null? {detalles.golesEquipo01 == null}");
             System.Diagnostics.Debug.WriteLine($"Cantidad en lista: {detalles.golesEquipo01?.Count ?? 0}");
 
-            if (detalles.golesEquipo01 != null && detalles.golesEquipo01.Count > 0)
+            var golesEquipo01 = detalles.golesEquipo01?
+                .Where(g => g.habilitado.GetValueOrDefault(1) == 1)
+                .ToList();
+
+            if (golesEquipo01 != null && golesEquipo01.Count > 0)
             {
-                foreach (var gol in detalles.golesEquipo01)
+                foreach (var gol in golesEquipo01)
                 {
                     System.Diagnostics.Debug.WriteLine($"  - Jugador ID: {gol.idjugador}, Nombre: '{gol.nombrejugador}', Goles: {gol.goles}");
                 }
 
-                collectionGolesEquipo01.ItemsSource = detalles.golesEquipo01;
+                collectionGolesEquipo01.ItemsSource = golesEquipo01;
                 collectionGolesEquipo01.IsVisible = true;
                 lblNoGolesEquipo01.IsVisible = false;
             }
@@ -127,14 +113,18 @@ public partial class JuegoVerMasPage : ContentPage
             System.Diagnostics.Debug.WriteLine($"Lista goles null? {detalles.golesEquipo02 == null}");
             System.Diagnostics.Debug.WriteLine($"Cantidad en lista: {detalles.golesEquipo02?.Count ?? 0}");
 
-            if (detalles.golesEquipo02 != null && detalles.golesEquipo02.Count > 0)
+            var golesEquipo02 = detalles.golesEquipo02?
+                .Where(g => g.habilitado.GetValueOrDefault(1) == 1)
+                .ToList();
+
+            if (golesEquipo02 != null && golesEquipo02.Count > 0)
             {
-                foreach (var gol in detalles.golesEquipo02)
+                foreach (var gol in golesEquipo02)
                 {
                     System.Diagnostics.Debug.WriteLine($"  - Jugador ID: {gol.idjugador}, Nombre: '{gol.nombrejugador}', Goles: {gol.goles}");
                 }
 
-                collectionGolesEquipo02.ItemsSource = detalles.golesEquipo02;
+                collectionGolesEquipo02.ItemsSource = golesEquipo02;
                 collectionGolesEquipo02.IsVisible = true;
                 lblNoGolesEquipo02.IsVisible = false;
             }

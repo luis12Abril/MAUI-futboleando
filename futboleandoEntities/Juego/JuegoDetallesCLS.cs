@@ -39,5 +39,6 @@ namespace futboleandoEntities.Juego
         public int idjugador { get; set; }
         public string nombrejugador { get; set; } = string.Empty;
         public int goles { get; set; }
+        public int? habilitado { get; set; }
     }
 }
