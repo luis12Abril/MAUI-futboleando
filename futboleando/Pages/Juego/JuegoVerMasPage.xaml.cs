@@ -1,20 +1,25 @@
 using futboleando.Service;
+using futboleandoEntities.Comentario;
 using futboleandoEntities.Juego;
 using System.Globalization;
+using Microsoft.Maui.Storage;
 
 namespace futboleando.Pages.Juego;
 
 public partial class JuegoVerMasPage : ContentPage
 {
     private readonly JuegoService juegoService;
+    private readonly ComentarioService comentarioService;
     private readonly int idJuego;
 
     public JuegoVerMasPage(JuegoService _juegoService, int _idJuego)
     {
         InitializeComponent();
         juegoService = _juegoService;
+        comentarioService = MauiProgram.ServiceProvider.GetService<ComentarioService>();
         idJuego = _idJuego;
         _ = CargarDetallesJuego();
+        ActualizarContadorComentario(0);
     }
 
     private async Task CargarDetallesJuego()
@@ -136,6 +141,8 @@ public partial class JuegoVerMasPage : ContentPage
             }
 
             System.Diagnostics.Debug.WriteLine("Detalles del juego cargados exitosamente");
+
+            await CargarComentarios();
         }
         catch (HttpRequestException httpEx)
         {
@@ -154,5 +161,94 @@ public partial class JuegoVerMasPage : ContentPage
                 "OK");
             await Navigation.PopAsync();
         }
+    }
+
+    private async Task CargarComentarios()
+    {
+        if (comentarioService == null)
+        {
+            return;
+        }
+
+        var comentarios = await comentarioService.ListarComentariosPorJuego(idJuego);
+        collectionComentarios.ItemsSource = comentarios;
+        lblNoComentarios.IsVisible = comentarios.Count == 0;
+
+        var totalComentarios = comentarios.Count;
+        var limiteAlcanzado = totalComentarios >= 30;
+
+        lblComentariosInfo.Text = $"Máx. 100 caracteres · {totalComentarios}/30 comentarios";
+        txtComentario.IsEnabled = !limiteAlcanzado;
+        btnEnviarComentario.IsEnabled = !limiteAlcanzado;
+    }
+
+    private void OnComentarioTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (e.NewTextValue == null)
+        {
+            ActualizarContadorComentario(0);
+            return;
+        }
+
+        var texto = e.NewTextValue;
+        if (texto.Length > 100)
+        {
+            texto = texto.Substring(0, 100);
+            txtComentario.Text = texto;
+        }
+
+        ActualizarContadorComentario(texto.Length);
+        btnEnviarComentario.IsEnabled = !string.IsNullOrWhiteSpace(texto);
+    }
+
+    private async void OnEnviarComentarioClicked(object sender, EventArgs e)
+    {
+        if (comentarioService == null)
+        {
+            return;
+        }
+
+        var texto = txtComentario.Text?.Trim();
+        if (string.IsNullOrWhiteSpace(texto))
+        {
+            await DisplayAlert("Aviso", "Escribe un comentario antes de enviarlo.", "OK");
+            return;
+        }
+
+        if (texto.Length > 100)
+        {
+            await DisplayAlert("Aviso", "El comentario no puede superar 100 caracteres.", "OK");
+            return;
+        }
+
+        var idUsuario = Preferences.Get("IdUsuario", 0);
+        if (idUsuario <= 0)
+        {
+            await DisplayAlert("Aviso", "Debes iniciar sesión para comentar.", "OK");
+            return;
+        }
+
+        var comentario = new ComentarioCreateCLS
+        {
+            idjuego = idJuego,
+            idusuario = idUsuario,
+            comentario = texto
+        };
+
+        var resultado = await comentarioService.AgregarComentario(comentario);
+        if (resultado == null)
+        {
+            await DisplayAlert("Error", "No se pudo enviar el comentario.", "OK");
+            return;
+        }
+
+        txtComentario.Text = string.Empty;
+        ActualizarContadorComentario(0);
+        await CargarComentarios();
+    }
+
+    private void ActualizarContadorComentario(int longitud)
+    {
+        lblComentarioCount.Text = $"{longitud}/100";
     }
 }
