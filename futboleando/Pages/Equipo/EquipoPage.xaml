@@ -197,7 +197,7 @@
                                 <!-- ✅ ESTADÍSTICAS (Derecha - COMPACTAS como puntos) -->
                                 <VerticalStackLayout Grid.Column="1"
                                                      Spacing="10"
-                                                     VerticalOptions="Center"
+                                                     VerticalOptions="Start"
                                                      HorizontalOptions="End">
                                     
                                     <!-- Goles a Favor (GF) - Compacto -->
@@ -262,6 +262,18 @@
                                                    VerticalOptions="Center" />
                                         </HorizontalStackLayout>
                                     </Frame>
+
+                                    <Button Text="VER MÁS"
+                                            FontSize="12"
+                                            FontAttributes="Bold"
+                                            TextColor="White"
+                                            BackgroundColor="{StaticResource verdeOscuro}"
+                                            CornerRadius="8"
+                                            Padding="12,8"
+                                            Margin="0,12,0,0"
+                                            WidthRequest="90"
+                                            Clicked="OnVerMasEquipoClicked"
+                                            CommandParameter="{Binding Equipo.idequipo}" />
                                     
                                 </VerticalStackLayout>
                                 

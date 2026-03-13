@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using futboleando.Service;
 using futboleandoEntities.Equipo;
 using futboleando.Models;
+using futboleando.Pages.Equipo;
 using System.ComponentModel;
 
 namespace futboleando.Pages;
@@ -111,6 +112,11 @@ public partial class EquipoPage : ContentPage, INotifyPropertyChanged
     private async void OnBackClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
+    }
+
+    private async void OnVerMasEquipoClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new EquipoVerMasPage());
     }
 
     private async Task PreloadImagesAsync(IReadOnlyList<EquipoIndexed> equipos)
