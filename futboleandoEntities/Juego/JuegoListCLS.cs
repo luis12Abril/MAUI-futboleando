@@ -16,6 +16,7 @@ namespace futboleandoEntities.Juego
         public DateTime? fhorario { get; set; }
         public int? idcampo { get; set; }
         public string nombrecampo { get; set; } = string.Empty;
+        public string nombrearbitro { get; set; } = string.Empty;
         public int? idestatusjuego { get; set; }
         public string nombreestatusjuego { get; set; } = string.Empty;
         public string? resequipo01 { get; set; }

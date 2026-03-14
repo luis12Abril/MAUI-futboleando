@@ -116,7 +116,19 @@ public partial class EquipoPage : ContentPage, INotifyPropertyChanged
 
     private async void OnVerMasEquipoClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new EquipoVerMasPage());
+        if (sender is not Button button || button.CommandParameter is not EquipoListCLS equipo)
+        {
+            return;
+        }
+
+        var juegoService = MauiProgram.ServiceProvider.GetService<JuegoService>();
+        if (juegoService == null)
+        {
+            await DisplayAlert("Error", "No se pudo cargar el servicio de juegos.", "OK");
+            return;
+        }
+
+        await Navigation.PushAsync(new EquipoVerMasPage(juegoService, equipo.idequipo, equipo.nombre));
     }
 
     private async Task PreloadImagesAsync(IReadOnlyList<EquipoIndexed> equipos)

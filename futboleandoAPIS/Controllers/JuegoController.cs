@@ -28,6 +28,8 @@ namespace futboleandoAPIS.Controllers
                              join e2 in _bd.Equipos on j.Idequipo02 equals e2.Idequipo
                              join c in _bd.Campos on j.Idcampo equals c.Idcampo into campoGroup
                              from campo in campoGroup.DefaultIfEmpty()
+                             join arb in _bd.Arbitros on j.Idarbitro equals arb.Idarbitro into arbGroup
+                             from arbitro in arbGroup.DefaultIfEmpty()
                              join est in _bd.Estatusjuegos on j.Idestatusjuego equals est.Idestatusjuego into estatusGroup
                              from estatus in estatusGroup.DefaultIfEmpty()
                              where j.Idtorneo == idTorneo && j.Habilitado == 1
@@ -46,6 +48,7 @@ namespace futboleandoAPIS.Controllers
                                  fhorario = j.Fhorario,
                                  idcampo = j.Idcampo,
                                  nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
+                                 nombrearbitro = arbitro != null ? $"{arbitro.Nombre} {arbitro.Appaterno}".Trim() : "Sin asignar",
                                  idestatusjuego = j.Idestatusjuego,
                                  nombreestatusjuego = estatus != null ? estatus.Nombre : "Sin estatus",
                                  resequipo01 = j.Resequipo01,
@@ -154,6 +157,8 @@ namespace futboleandoAPIS.Controllers
                              join e2 in _bd.Equipos on j.Idequipo02 equals e2.Idequipo
                              join c in _bd.Campos on j.Idcampo equals c.Idcampo into campoGroup
                              from campo in campoGroup.DefaultIfEmpty()
+                             join arb in _bd.Arbitros on j.Idarbitro equals arb.Idarbitro into arbGroup
+                             from arbitro in arbGroup.DefaultIfEmpty()
                              join est in _bd.Estatusjuegos on j.Idestatusjuego equals est.Idestatusjuego into estatusGroup
                              from estatus in estatusGroup.DefaultIfEmpty()
                              where j.Idtorneo == idTorneo && j.Idjornada == idJornada && j.Habilitado == 1
@@ -172,6 +177,7 @@ namespace futboleandoAPIS.Controllers
                                  fhorario = j.Fhorario,
                                  idcampo = j.Idcampo,
                                  nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
+                                 nombrearbitro = arbitro != null ? $"{arbitro.Nombre} {arbitro.Appaterno}".Trim() : "Sin asignar",
                                  idestatusjuego = j.Idestatusjuego,
                                  nombreestatusjuego = estatus != null ? estatus.Nombre : "Sin estatus",
                                  resequipo01 = j.Resequipo01,
