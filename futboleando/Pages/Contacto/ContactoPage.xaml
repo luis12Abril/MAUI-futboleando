@@ -110,20 +110,10 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <Button Text="Abrir sitio web"
-                    Style="{StaticResource botonAzul}"
-                    TextColor="White"
-                    Clicked="OnWebClicked" />
-
-            <Button Text="Enviar correo"
+            <Button Text="Enviar WhatsApp"
                     Style="{StaticResource botonVerde}"
                     TextColor="White"
-                    Clicked="OnEmailClicked" />
-
-            <Button Text="Llamar"
-                    Style="{StaticResource botonRojo}"
-                    TextColor="White"
-                    Clicked="OnCallClicked" />
+                    Clicked="OnWhatsAppClicked" />
 
             <Label Text="¡Pide tu torneo!"
                    FontSize="14"

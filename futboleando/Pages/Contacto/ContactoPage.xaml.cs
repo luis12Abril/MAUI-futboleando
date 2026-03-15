@@ -8,8 +8,6 @@ namespace futboleando.Pages.Contacto;
 
 public partial class ContactoPage : ContentPage
 {
-    private const string SitioWeb = "https://futboleando.com.mx";
-    private const string Correo = "admin@futboleando.com.mx";
     private readonly AvisoFutboleandoService avisoFutboleandoService;
 
     private string telefono = "Cargando...";
@@ -42,28 +40,17 @@ public partial class ContactoPage : ContentPage
         Telefono = string.IsNullOrWhiteSpace(telefonoDb) ? "No disponible" : telefonoDb;
     }
 
-    private async void OnWebClicked(object sender, EventArgs e)
+    private async void OnWhatsAppClicked(object sender, EventArgs e)
     {
-        await Launcher.Default.OpenAsync(new Uri(SitioWeb));
-    }
-
-    private async void OnEmailClicked(object sender, EventArgs e)
-    {
-        var subject = Uri.EscapeDataString("Información sobre administración de torneos");
-        var body = Uri.EscapeDataString("Hola, me interesa administrar un torneo con Futboleando.");
-        await Launcher.Default.OpenAsync(new Uri($"mailto:{Correo}?subject={subject}&body={body}"));
-    }
-
-    private async void OnCallClicked(object sender, EventArgs e)
-    {
-        var telefonoLlamada = LimpiarTelefono(Telefono);
-        if (string.IsNullOrWhiteSpace(telefonoLlamada) || Telefono == "No disponible")
+        var telefonoWhatsApp = LimpiarTelefono(Telefono);
+        if (string.IsNullOrWhiteSpace(telefonoWhatsApp) || Telefono == "No disponible")
         {
-            await DisplayAlert("Contacto", "No hay un número disponible para llamar.", "OK");
+            await DisplayAlert("Contacto", "No hay un número disponible para WhatsApp.", "OK");
             return;
         }
 
-        await Launcher.Default.OpenAsync(new Uri($"tel:{telefonoLlamada}"));
+        var mensaje = Uri.EscapeDataString("Hola, me interesa administrar un torneo con Futboleando.");
+        await Launcher.Default.OpenAsync(new Uri($"https://wa.me/{telefonoWhatsApp}?text={mensaje}"));
     }
 
     private async void OnBackClicked(object sender, EventArgs e)
