@@ -212,19 +212,9 @@ namespace futboleandoAPIS.Controllers
                     });
                 }
 
-                // Validar longitud mínima de contraseña
-                if (registroRequest.contra.Length < 4)
-                {
-                    return Ok(new RegistroResponseCLS
-                    {
-                        exito = false,
-                        mensaje = "La contraseña debe tener al menos 4 caracteres"
-                    });
-                }
-
                 // ✅ Verificar si el usuario ya existe (sin distinguir mayúsculas/minúsculas)
                 var usuarioExistente = _bd.Usuarios
-                    .FirstOrDefault(u => u.Nombre.ToLower() == registroRequest.nombreusuario.ToLower());
+                    .FirstOrDefault(u => u.Habilitado == 1 && u.Nombre.ToLower() == registroRequest.nombreusuario.ToLower());
 
                 if (usuarioExistente != null)
                 {

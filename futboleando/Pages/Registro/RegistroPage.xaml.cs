@@ -31,20 +31,6 @@ public partial class RegistroPage : ContentPage
             return;
         }
 
-        // ? Validar longitud mínima de usuario
-        if (oRegistroRequestCLS.nombreusuario.Length < 3)
-        {
-            await DisplayAlert("Error", "El nombre de usuario debe tener al menos 3 caracteres", "OK");
-            return;
-        }
-
-        // ? Validar longitud mínima de contraseña
-        if (oRegistroRequestCLS.contra.Length < 4)
-        {
-            await DisplayAlert("Error", "La contraseña debe tener al menos 4 caracteres", "OK");
-            return;
-        }
-
         // ? Validar que las contraseñas coincidan
         if (oRegistroRequestCLS.contra != txtConfirmPassword.Text)
         {

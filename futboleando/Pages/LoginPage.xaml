@@ -36,7 +36,7 @@
                            TextColor="White"
                            HorizontalOptions="Center" />
                     
-                    <Label Text="Gestión de Torneos Deportivos"
+                    <Label Text="Gestión de Torneos de futbol"
                            FontSize="14"
                            TextColor="White"
                            Opacity="0.8"

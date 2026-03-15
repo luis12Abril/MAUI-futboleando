@@ -26,6 +26,7 @@ namespace futboleando.Pages
         // ? Solo UNA bandera necesaria
         private bool _isInitializing = false;
         private bool _suppressSelectionEvents = false;
+        private bool _hasLoaded = false;
 
         public TorneoSelectorPage(
             EstadoService _estadoService,
@@ -54,6 +55,8 @@ namespace futboleando.Pages
             colaboradorService = _colaboradorService;
             equipoService = _equipoService;
             comunicadoService = _comunicadoService;
+
+            _ = InicializarAsync();
         }
 
         protected override void OnAppearing()
@@ -76,12 +79,13 @@ namespace futboleando.Pages
             }
             finally
             {
-                pickerEstado.InputTransparent = true;
-                await Task.Delay(150);
                 EnablePickersBasedOnData();
-                await PostRestoreUnfocusAsync();
-                pickerEstado.InputTransparent = false;
+                pickerEstado?.Unfocus();
+                pickerMunicipio?.Unfocus();
+                pickerLiga?.Unfocus();
+                pickerTorneo?.Unfocus();
                 _isInitializing = false;
+                _hasLoaded = true;
             }
         }
 
@@ -112,8 +116,11 @@ namespace futboleando.Pages
                     return;
                 }
 
-                pickerEstado.ItemsSource = estados.ToList();
-                pickerEstado.ItemDisplayBinding = new Binding("nombre");
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    pickerEstado.ItemsSource = estados.ToList();
+                    pickerEstado.ItemDisplayBinding = new Binding("nombre");
+                });
 
                 // ? Intentar restaurar selección anterior
                 var ultimoEstado = Preferences.Get("UltimoEstado", 0);

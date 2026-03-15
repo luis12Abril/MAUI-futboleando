@@ -583,7 +583,7 @@
                         <Shadow Brush="Black" Opacity="0.1" Radius="4" Offset="0,2" />
                     </Border.Shadow>
 
-                    <Grid ColumnDefinitions="20,*,16,16,16,16,16,18,18,18,18,26"
+                    <Grid ColumnDefinitions="20,*,16,16,16,16,16,18,18,20,18,26"
                           Padding="8,12"
                           ColumnSpacing="6"
                           BackgroundColor="#E3F2FD">
@@ -614,7 +614,7 @@
                             <Border BackgroundColor="White"
                                     Margin="0,1,0,0"
                                     Padding="0">
-                                <Grid ColumnDefinitions="20,*,16,16,16,16,16,18,18,18,18,26"
+                                <Grid ColumnDefinitions="20,*,16,16,16,16,16,18,18,20,18,26"
                                       Padding="8,14"
                                       ColumnSpacing="6"
                                       BackgroundColor="White">

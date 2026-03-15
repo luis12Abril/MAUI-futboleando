@@ -21,23 +21,23 @@
                                  Spacing="0">
 
                 <!-- ========== LOGO Y TÍTULO ========== -->
-                <VerticalStackLayout Spacing="15" 
-                                     Margin="0,0,0,40">
+                <VerticalStackLayout Spacing="8" 
+                                     Margin="0,0,0,20">
                     
                     <!-- Icono de registro -->
                     <Label Text="📝" 
-                           FontSize="80"
+                           FontSize="60"
                            HorizontalOptions="Center"
-                           Margin="0,0,0,10" />
+                           Margin="0,0,0,6" />
                     
                     <Label Text="CREAR CUENTA"
-                           FontSize="36"
+                           FontSize="28"
                            FontAttributes="Bold"
                            TextColor="White"
                            HorizontalOptions="Center" />
                     
                     <Label Text="Únete a Futboleando"
-                           FontSize="14"
+                           FontSize="12"
                            TextColor="White"
                            Opacity="0.8"
                            HorizontalOptions="Center"
@@ -107,7 +107,7 @@
                                 </Border>
                             </Frame>
                             
-                            <Label Text="Mínimo 3 caracteres"
+                            <Label Text="Mínimo 1 caracter"
                                    FontSize="11"
                                    TextColor="#666666"
                                    Opacity="0.7"
@@ -153,7 +153,7 @@
                                 </Border>
                             </Frame>
                             
-                            <Label Text="Mínimo 4 caracteres"
+                            <Label Text="Mínimo 1 caracter"
                                    FontSize="11"
                                    TextColor="#666666"
                                    Opacity="0.7"
