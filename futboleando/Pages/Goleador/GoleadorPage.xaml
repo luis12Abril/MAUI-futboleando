@@ -225,7 +225,7 @@
                                             CornerRadius="8"
                                             Padding="14,8"
                                             Clicked="OnVerMasClicked"
-                                            CommandParameter="{Binding idjugador}"
+                                            CommandParameter="{Binding .}"
                                             HorizontalOptions="Start"
                                             VerticalOptions="Center" />
 

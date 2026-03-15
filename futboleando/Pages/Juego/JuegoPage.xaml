@@ -123,163 +123,142 @@
                 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:JuegoListCLS">
-                        <Border StrokeThickness="3"
-                                Stroke="{StaticResource verdeOscuro}"
-                                StrokeShape="RoundRectangle 15"
-                                Margin="0,5"
-                                BackgroundColor="Transparent">
-                                    
-                            <Frame Padding="0"
-                                   CornerRadius="15"
-                                   HasShadow="True"
-                                   BorderColor="Transparent"
-                                   BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}"
-                                   Margin="0">
-                                
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                      Padding="18,18,18,22">
-                                    
-                                    <!-- Jornada -->
-                                    <Label Grid.Row="0"
+                        <Frame Margin="0,6"
+                               Padding="14"
+                               CornerRadius="16"
+                               HasShadow="True"
+                               BackgroundColor="White"
+                               BorderColor="#E5E7EB">
+
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10">
+                                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                    <Frame Grid.Column="0"
+                                           Padding="8,4"
+                                           CornerRadius="10"
+                                           HasShadow="False"
+                                           VerticalOptions="Center"
+                                           BackgroundColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToColor}}">
+                                        <Label Text="{Binding nombreestatusjuego}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToTextColor}}" />
+                                    </Frame>
+                                    <Label Grid.Column="2"
                                            Text="{Binding nombrejornada}"
-                                           FontSize="13"
+                                           FontSize="12"
                                            FontAttributes="Bold"
-                                           TextColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToTextColor}}"
+                                           TextColor="#64748B"
                                            HorizontalOptions="End"
-                                           Margin="0,0,0,10" />
+                                           VerticalOptions="Center" />
+                                </Grid>
 
-                                    <!-- Equipos y Marcador -->
-                                    <Grid Grid.Row="1"
-                                          ColumnDefinitions="2*,Auto,2*"
-                                          RowDefinitions="Auto,Auto"
-                                          ColumnSpacing="15"
-                                          RowSpacing="10">
-                                        
-                                        <!-- Equipo 1 -->
-                                        <Label Grid.Row="0" Grid.Column="0"
-                                               Text="{Binding nombreequipo01}"
+                                <Grid Grid.Row="1"
+                                      ColumnDefinitions="2*,Auto,2*"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="6">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding nombreequipo01}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource azulOscuro}"
+                                           LineBreakMode="WordWrap"
+                                           MaxLines="2"
+                                           HorizontalOptions="FillAndExpand"
+                                           HorizontalTextAlignment="End" />
+
+                                    <Frame Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                           Padding="12,8"
+                                           CornerRadius="12"
+                                           BackgroundColor="#F8FAFC"
+                                           HasShadow="False"
+                                           BorderColor="#E2E8F0">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="{Binding golesequipo01}"
+                                                   FontSize="22"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource azulOscuro}"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="-"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#94A3B8"
+                                                   VerticalOptions="Center" />
+                                            <Label Text="{Binding golesequipo02}"
+                                                   FontSize="22"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource verdeOscuro}"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Frame>
+
+                                    <Label Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding nombreequipo02}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource verdeOscuro}"
+                                           LineBreakMode="WordWrap"
+                                           MaxLines="2"
+                                           HorizontalOptions="FillAndExpand"
+                                           HorizontalTextAlignment="Start" />
+                                </Grid>
+
+                                <Grid Grid.Row="2"
+                                      ColumnDefinitions="*,*"
+                                      ColumnSpacing="10"
+                                      RowSpacing="6">
+                                    <HorizontalStackLayout Grid.Column="0" Spacing="6">
+                                        <Label Text="📅"
                                                FontSize="14"
-                                               FontAttributes="Bold"
-                                               TextColor="#0F172A"
-                                               LineBreakMode="WordWrap"
-                                               MaxLines="2"
-                                               HorizontalOptions="FillAndExpand"
-                                               HorizontalTextAlignment="End"
-                                               VerticalOptions="Start"
-                                               Margin="0,4,0,0"
-                                               ZIndex="1" />
-                                        
-                                        <!-- Marcador -->
-                                        <Frame Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                               Padding="15,10"
-                                               CornerRadius="12"
-                                               BackgroundColor="#F0F0F0"
-                                               HasShadow="False"
-                                               VerticalOptions="Center">
-                                            <HorizontalStackLayout Spacing="10">
-                                                <Label Text="{Binding golesequipo01}"
-                                                       FontSize="24"
-                                                       FontAttributes="Bold"
-                                                       TextColor="{StaticResource azulOscuro}"
-                                                       VerticalOptions="Center" />
-                                                <Label Text="-"
-                                                       FontSize="20"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#999999"
-                                                       VerticalOptions="Center" />
-                                                <Label Text="{Binding golesequipo02}"
-                                                       FontSize="24"
-                                                       FontAttributes="Bold"
-                                                       TextColor="{StaticResource verdeOscuro}"
-                                                       VerticalOptions="Center" />
-                                            </HorizontalStackLayout>
-                                        </Frame>
-                                        
-                                        <!-- Equipo 2 -->
-                                        <Label Grid.Row="0" Grid.Column="2"
-                                               Text="{Binding nombreequipo02}"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding fhorario, StringFormat='{0:dd/MM/yyyy}'}"
+                                               FontSize="12"
+                                               TextColor="#64748B"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="1" Spacing="6">
+                                        <Label Text="🕐"
                                                FontSize="14"
-                                               FontAttributes="Bold"
-                                               TextColor="#0F172A"
-                                               LineBreakMode="WordWrap"
-                                               MaxLines="2"
-                                               HorizontalOptions="FillAndExpand"
-                                               HorizontalTextAlignment="Start"
-                                               VerticalOptions="Start"
-                                               Margin="0,4,0,0"
-                                               ZIndex="1" />
-                                    </Grid>
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding fhorario, StringFormat='{0:hh:mm tt}'}"
+                                               FontSize="12"
+                                               TextColor="#64748B"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
 
-                                    <!-- Separador -->
-                                    <BoxView Grid.Row="2"
-                                             Color="#E0E0E0"
-                                             HeightRequest="1"
-                                             Margin="0,12" />
+                                <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <HorizontalStackLayout Grid.Column="0" Spacing="6">
+                                        <Label Text="🏟️"
+                                               FontSize="14"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding nombrecampo}"
+                                               FontSize="12"
+                                               TextColor="#64748B"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
 
-                                    <!-- Información adicional -->
-                                    <Grid Grid.Row="3"
-                                          ColumnDefinitions="*,*"
-                                          ColumnSpacing="10"
-                                          RowSpacing="8">
-                                        
-                                        <HorizontalStackLayout Grid.Column="0" Spacing="6">
-                                            <Label Text="📅"
-                                                   FontSize="16"
-                                                   VerticalOptions="Center" />
-                                            <Label Text="{Binding fhorario, StringFormat='{0:dd/MM/yyyy}'}"
-                                                   FontSize="13"
-                                                   TextColor="#666666"
-                                                   VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-
-                                        <HorizontalStackLayout Grid.Column="1" Spacing="6">
-                                            <Label Text="🕐"
-                                                   FontSize="16"
-                                                   VerticalOptions="Center" />
-                                            <Label Text="{Binding fhorario, StringFormat='{0:hh:mm tt}'}"
-                                                   FontSize="13"
-                                                   TextColor="#666666"
-                                                   VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-                                    </Grid>
-
-                                    <Grid Grid.Row="4"
-                                          ColumnDefinitions="*,Auto"
-                                          Margin="0,8,0,0">
-                                        
-                                        <HorizontalStackLayout Grid.Column="0" Spacing="6">
-                                            <Label Text="🏟️"
-                                                   FontSize="16"
-                                                   VerticalOptions="Center" />
-                                            <Label Text="{Binding nombrecampo}"
-                                                   FontSize="13"
-                                                   TextColor="#666666"
-                                                   VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-
-                                        <!-- Botón Ver Más -->
-                                        <Button Grid.Column="1"
-                                                Text="VER MÁS"
-                                                FontSize="12"
-                                                FontAttributes="Bold"
-                                                TextColor="White"
-                                                BackgroundColor="{StaticResource verdeOscuro}"
-                                                CornerRadius="8"
-                                                Padding="15,8"
-                                                Clicked="OnVerMasClicked"
-                                                CommandParameter="{Binding idjuego}">
-                                            <Button.Shadow>
-                                                <Shadow Brush="{StaticResource verdeOscuro}" 
-                                                        Opacity="0.3" 
-                                                        Radius="5" 
-                                                        Offset="0,2" />
-                                            </Button.Shadow>
-                                        </Button>
-                                    </Grid>
-
-                                    </Grid>
-                                </Frame>
-                            </Border>
+                                    <Button Grid.Column="1"
+                                            Text="VER MÁS"
+                                            FontSize="12"
+                                            FontAttributes="Bold"
+                                            TextColor="White"
+                                            BackgroundColor="{StaticResource verdeOscuro}"
+                                            CornerRadius="8"
+                                            Padding="15,8"
+                                            Clicked="OnVerMasClicked"
+                                            CommandParameter="{Binding idjuego}">
+                                        <Button.Shadow>
+                                            <Shadow Brush="{StaticResource verdeOscuro}"
+                                                    Opacity="0.3"
+                                                    Radius="5"
+                                                    Offset="0,2" />
+                                        </Button.Shadow>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
 

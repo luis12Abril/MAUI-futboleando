@@ -1,4 +1,3 @@
-using futboleando.Pages.GoleadorVerMas;
 using futboleando.Service;
 using futboleandoEntities.Goleador;
 using futboleandoEntities.Equipo;
@@ -142,10 +141,10 @@ public partial class GoleadorPage : ContentPage
         try
         {
             var button = sender as Button;
-            if (button?.CommandParameter is int idJugador)
+            if (button?.CommandParameter is GoleadorCLS goleador)
             {
                 // Navegar a la página de detalles del goleador
-                var goleadorVerMasPage = new GoleadorVerMasPage(idJugador);
+                var goleadorVerMasPage = new global::futboleando.Pages.Goleador.GoleadorVerMasPage(goleador.idjugador, goleador.nombrecompleto ?? string.Empty);
                 await Navigation.PushAsync(goleadorVerMasPage);
             }
         }

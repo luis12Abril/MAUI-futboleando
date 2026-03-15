@@ -216,5 +216,81 @@ namespace futboleandoAPIS.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        // ? Listar juegos donde un jugador anoto gol
+        [HttpGet("GolesPorJugador/{idTorneo}/{idJugador}")]
+        public IActionResult GetJuegosConGolesPorJugador(int idTorneo, int idJugador)
+        {
+            try
+            {
+                var juegos = (from g in _bd.Gols
+                             join j in _bd.Juegos on g.Idjuego equals j.Idjuego
+                             join jor in _bd.Jornada on j.Idjornada equals jor.Idjornada
+                             join e1 in _bd.Equipos on j.Idequipo01 equals e1.Idequipo
+                             join e2 in _bd.Equipos on j.Idequipo02 equals e2.Idequipo
+                             join c in _bd.Campos on j.Idcampo equals c.Idcampo into campoGroup
+                             from campo in campoGroup.DefaultIfEmpty()
+                             join arb in _bd.Arbitros on j.Idarbitro equals arb.Idarbitro into arbGroup
+                             from arbitro in arbGroup.DefaultIfEmpty()
+                             join est in _bd.Estatusjuegos on j.Idestatusjuego equals est.Idestatusjuego into estatusGroup
+                             from estatus in estatusGroup.DefaultIfEmpty()
+                             where g.Idjugador == idJugador
+                                && g.Habilitado == 1
+                                && j.Habilitado == 1
+                                && j.Idtorneo == idTorneo
+                                && estatus != null
+                                && estatus.Nombre == "JUGADO"
+                             group new { g } by new
+                             {
+                                 j.Idjuego,
+                                 j.Idjornada,
+                                 nombrejornada = jor.Nombre,
+                                 j.Idequipo01,
+                                 nombreequipo01 = e1.Nombre,
+                                 j.Golesequipo01,
+                                 j.Idequipo02,
+                                 nombreequipo02 = e2.Nombre,
+                                 j.Golesequipo02,
+                                 j.Fhorario,
+                                 j.Idcampo,
+                                 nombrecampo = campo != null ? campo.Nombre : "Sin asignar",
+                                 nombrearbitro = arbitro != null ? $"{arbitro.Nombre} {arbitro.Appaterno}".Trim() : "Sin asignar",
+                                 j.Idestatusjuego,
+                                 nombreestatusjuego = estatus != null ? estatus.Nombre : "Sin estatus",
+                                 j.Resequipo01,
+                                 j.Resequipo02,
+                                 idtorneo = j.Idtorneo
+                             } into grp
+                             orderby grp.Key.Fhorario descending
+                             select new JuegoGolesJugadorCLS
+                             {
+                                 idjuego = grp.Key.Idjuego,
+                                 idjornada = grp.Key.Idjornada ?? 0,
+                                 nombrejornada = grp.Key.nombrejornada ?? string.Empty,
+                                 idequipo01 = grp.Key.Idequipo01 ?? 0,
+                                 nombreequipo01 = grp.Key.nombreequipo01 ?? string.Empty,
+                                 golesequipo01 = grp.Key.Golesequipo01,
+                                 idequipo02 = grp.Key.Idequipo02 ?? 0,
+                                 nombreequipo02 = grp.Key.nombreequipo02 ?? string.Empty,
+                                 golesequipo02 = grp.Key.Golesequipo02,
+                                 fhorario = grp.Key.Fhorario,
+                                 idcampo = grp.Key.Idcampo,
+                                 nombrecampo = grp.Key.nombrecampo ?? string.Empty,
+                                 nombrearbitro = grp.Key.nombrearbitro ?? string.Empty,
+                                 idestatusjuego = grp.Key.Idestatusjuego,
+                                 nombreestatusjuego = grp.Key.nombreestatusjuego ?? string.Empty,
+                                 resequipo01 = grp.Key.Resequipo01,
+                                 resequipo02 = grp.Key.Resequipo02,
+                                 idtorneo = grp.Key.idtorneo ?? 0,
+                                 golesjugador = grp.Sum(x => x.g.Goles ?? 0)
+                             }).ToList();
+
+                return Ok(juegos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

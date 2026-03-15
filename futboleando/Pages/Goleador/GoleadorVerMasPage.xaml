@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:futboleando.Converters"
              xmlns:entities="clr-namespace:futboleandoEntities.Juego;assembly=futboleandoEntities"
-             x:Class="futboleando.Pages.Equipo.EquipoVerMasPage"
-             Title="Juegos del Equipo"
+             x:Class="futboleando.Pages.Goleador.GoleadorVerMasPage"
+             Title="Goles del Jugador"
              BackgroundColor="#F5F5F5"
              NavigationPage.HasNavigationBar="False">
 
@@ -39,22 +39,25 @@
                         Padding="6,4"
                         Margin="0,-8,0,0"
                         Clicked="OnBackClicked" />
-                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="{Binding NombreEquipoSeleccionado}"
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                    <Label Text="{Binding NombreJugador}"
                            FontSize="16"
                            FontAttributes="Bold"
                            TextColor="White"
                            Opacity="0.95"
                            Margin="0,2,0,0" />
+                    <Label Text="{Binding TotalGolesTexto}"
+                           FontSize="12"
+                           TextColor="White"
+                           Opacity="0.85" />
                 </VerticalStackLayout>
             </Grid>
         </Grid>
 
         <!-- Lista de juegos -->
         <Grid Grid.Row="1">
-            <ActivityIndicator x:Name="loadingIndicator"
-                               IsRunning="False"
-                               IsVisible="False"
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
                                Color="{StaticResource azulOscuro}"
                                VerticalOptions="Center"
                                HorizontalOptions="Center"
@@ -70,7 +73,7 @@
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="entities:JuegoListCLS">
+                    <DataTemplate x:DataType="entities:JuegoGolesJugadorCLS">
                         <Frame Margin="0,6"
                                Padding="14"
                                CornerRadius="16"
@@ -91,6 +94,25 @@
                                                FontAttributes="Bold"
                                                TextColor="{Binding nombreestatusjuego, Converter={StaticResource EstatusToTextColor}}" />
                                     </Frame>
+                                    <HorizontalStackLayout Grid.Column="1"
+                                                           Spacing="6"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center">
+                                        <Label Text="⚽"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding golesjugador}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A"
+                                               VerticalOptions="Center" />
+                                        <Label Text="{Binding golesjugadortexto}"
+                                               FontSize="10"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A"
+                                               VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
                                     <Label Grid.Column="2"
                                            Text="{Binding nombrejornada}"
                                            FontSize="12"
@@ -197,6 +219,7 @@
                                                VerticalOptions="Center" />
                                     </HorizontalStackLayout>
                                 </Grid>
+
                             </Grid>
                         </Frame>
                     </DataTemplate>
@@ -210,12 +233,12 @@
                                FontSize="60"
                                HorizontalOptions="Center"
                                Opacity="0.3" />
-                        <Label Text="No hay juegos para este equipo"
+                        <Label Text="No hay juegos con goles"
                                FontSize="16"
                                TextColor="#999999"
                                HorizontalOptions="Center"
                                Margin="0,10,0,0" />
-                        <Label Text="El equipo no tiene juegos registrados"
+                        <Label Text="Este jugador aún no registra goles"
                                FontSize="13"
                                TextColor="#CCCCCC"
                                HorizontalOptions="Center"
