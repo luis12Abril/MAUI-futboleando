@@ -26,7 +26,7 @@ namespace futboleando.Service
                 new MenuCLS{ idmenu=9 , nombreopcion="Goleadores" , nombreicono="⚽"},
                 new MenuCLS{ idmenu=10 , nombreopcion="Jugadores Por Año" , nombreicono="📅"},
                 new MenuCLS{ idmenu=6 , nombreopcion="Comunicados" , nombreicono="📢"},
-                new MenuCLS{ idmenu=13 , nombreopcion="Prox. Cumpleañeros" , nombreicono="🎂"},
+                new MenuCLS{ idmenu=13 , nombreopcion="Próximos Cumpleañeros" , nombreicono="🎂"},
                 new MenuCLS{ idmenu=11 , nombreopcion="Visitas App" , nombreicono="📊"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=12 , nombreopcion="Visitas Torneos" , nombreicono="🏟️"},  // ✅ Solo para admin
                 new MenuCLS{ idmenu=15 , nombreopcion="Contacto" , nombreicono="☎️"},

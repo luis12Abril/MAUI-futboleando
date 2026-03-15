@@ -63,10 +63,31 @@ namespace futboleando.Pages
         {
             base.OnAppearing();
 
+            PreventPickerAutoOpen();
+
             // ? Evitar múltiples inicializaciones simultáneas
             if (_isInitializing) return;
 
             _ = InicializarAsync();
+        }
+
+        private void PreventPickerAutoOpen()
+        {
+            DisableAllPickers();
+            pickerEstado?.Unfocus();
+            pickerMunicipio?.Unfocus();
+            pickerLiga?.Unfocus();
+            pickerTorneo?.Unfocus();
+
+            Device.StartTimer(TimeSpan.FromMilliseconds(150), () =>
+            {
+                EnablePickersBasedOnData();
+                pickerEstado?.Unfocus();
+                pickerMunicipio?.Unfocus();
+                pickerLiga?.Unfocus();
+                pickerTorneo?.Unfocus();
+                return false;
+            });
         }
 
         private async Task InicializarAsync()
