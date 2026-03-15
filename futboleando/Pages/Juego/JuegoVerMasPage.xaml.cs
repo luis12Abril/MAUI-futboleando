@@ -22,6 +22,12 @@ public partial class JuegoVerMasPage : ContentPage
         ActualizarContadorComentario(0);
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        txtComentario?.Unfocus();
+    }
+
     private async Task CargarDetallesJuego()
     {
         try

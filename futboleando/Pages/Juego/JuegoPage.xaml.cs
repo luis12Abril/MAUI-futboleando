@@ -54,6 +54,18 @@ public partial class JuegoPage : ContentPage, INotifyPropertyChanged
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        if (pickerJornada != null)
+        {
+            pickerJornada.IsEnabled = false;
+            pickerJornada.Unfocus();
+
+            Device.StartTimer(TimeSpan.FromMilliseconds(150), () =>
+            {
+                pickerJornada.IsEnabled = true;
+                pickerJornada.Unfocus();
+                return false;
+            });
+        }
         var torneoActual = Preferences.Get("UltimoTorneo", 0);
 
         if (datosYaCargados && _ultimoTorneoCargado == torneoActual)

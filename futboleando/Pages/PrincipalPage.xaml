@@ -45,7 +45,7 @@
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center" />
                     
-                    <Label Text="Sistema de gestión de torneos deportivos"
+                    <Label Text="Sistema de gestión de torneos de fútbol"
                            FontSize="14"
                            TextColor="White"
                            Opacity="0.85"
