@@ -42,7 +42,7 @@ public partial class ContactoPage : ContentPage
 
     private async void OnWhatsAppClicked(object sender, EventArgs e)
     {
-        var telefonoWhatsApp = LimpiarTelefono(Telefono);
+        var telefonoWhatsApp = NormalizarTelefonoWhatsApp(LimpiarTelefono(Telefono));
         if (string.IsNullOrWhiteSpace(telefonoWhatsApp) || Telefono == "No disponible")
         {
             await DisplayAlert("Contacto", "No hay un número disponible para WhatsApp.", "OK");
@@ -67,5 +67,20 @@ public partial class ContactoPage : ContentPage
 
         var caracteres = telefonoActual.Where(char.IsDigit).ToArray();
         return new string(caracteres);
+    }
+
+    private static string NormalizarTelefonoWhatsApp(string telefonoActual)
+    {
+        if (string.IsNullOrWhiteSpace(telefonoActual))
+        {
+            return string.Empty;
+        }
+
+        if (telefonoActual.StartsWith("52") || telefonoActual.Length != 10)
+        {
+            return telefonoActual;
+        }
+
+        return $"52{telefonoActual}";
     }
 }
