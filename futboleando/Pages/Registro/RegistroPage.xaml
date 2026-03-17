@@ -236,12 +236,12 @@
                 <!-- ========== PIE DE PÁGINA ========== -->
                 <VerticalStackLayout Spacing="8"
                                      HorizontalOptions="Center">
-                    <Label Text="© 2024 Futboleando"
+                    <Label Text="© 2026 Futboleando"
                            FontSize="12"
                            TextColor="White"
                            Opacity="0.7"
                            HorizontalOptions="Center" />
-                    <Label Text="v1.0.0"
+                    <Label Text="v2.0.0"
                            FontSize="10"
                            TextColor="White"
                            Opacity="0.5"
