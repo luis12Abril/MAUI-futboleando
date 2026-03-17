@@ -16,30 +16,24 @@
         </Grid.Background>
 
         <ScrollView>
-            <VerticalStackLayout Padding="30,0" 
-                                 VerticalOptions="Center"
+            <VerticalStackLayout Padding="20,16,20,10" 
+                                 VerticalOptions="Start"
                                  Spacing="0">
 
                 <!-- ========== LOGO Y TÍTULO ========== -->
-                <VerticalStackLayout Spacing="15" 
-                                     Margin="0,0,0,40">
-                    
-                    <!-- Icono de balón animado -->
-                    <Label Text="⚽" 
-                           FontSize="80"
-                           HorizontalOptions="Center"
-                           Margin="0,0,0,10" />
+                <VerticalStackLayout Spacing="6" 
+                                     Margin="0,0,0,16">
                     
                     <Label Text="FUTBOLEANDO"
-                           FontSize="36"
+                           FontSize="30"
                            FontAttributes="Bold"
                            TextColor="White"
                            HorizontalOptions="Center" />
                     
                     <Label Text="Gestión de Torneos de futbol"
-                           FontSize="14"
+                           FontSize="12"
                            TextColor="White"
-                           Opacity="0.8"
+                           Opacity="0.75"
                            HorizontalOptions="Center"
                            FontAttributes="Italic" />
                 </VerticalStackLayout>
@@ -50,7 +44,7 @@
                        BackgroundColor="White"
                        HasShadow="True"
                        BorderColor="Transparent"
-                       Margin="0,0,0,30">
+                       Margin="0,0,0,16">
                     
                     <Frame.Shadow>
                         <Shadow Brush="Black" 
