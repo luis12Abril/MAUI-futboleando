@@ -143,14 +143,15 @@
                                 <!-- ✅ FOTO DEL EQUIPO (Izquierda - MUY GRANDE, ocupa todo el espacio disponible) -->
                                 <Grid Grid.Column="0">
                                     
-                                    <!-- Si HAY foto: mostrar imagen completa con AspectFit -->
+                                    <!-- Si HAY foto: mostrar imagen cubriendo todo el contenedor -->
                                     <Frame HeightRequest="220"
+                                           WidthRequest="220"
                                            CornerRadius="15"
-                                           Padding="0"
-                                           BackgroundColor="#F8F8F8"
+                                           Padding="6"
+                                           BackgroundColor="#EAF2FF"
                                            HasShadow="False"
-                                           BorderColor="#E0E0E0"
-                                           HorizontalOptions="Fill"
+                                           BorderColor="#C7D8F5"
+                                           HorizontalOptions="Center"
                                            VerticalOptions="Center"
                                            IsClippedToBounds="True"
                                            IsVisible="{Binding TieneFoto}">
@@ -162,12 +163,13 @@
                                     
                                     <!-- Si NO hay foto: mostrar ícono de grupo -->
                                     <Frame HeightRequest="220"
+                                           WidthRequest="220"
                                            CornerRadius="15"
                                            Padding="20"
                                            BackgroundColor="#F5F5F5"
                                            HasShadow="False"
                                            BorderColor="#DDDDDD"
-                                           HorizontalOptions="Fill"
+                                           HorizontalOptions="Center"
                                            VerticalOptions="Center"
                                            IsClippedToBounds="True"
                                            IsVisible="True">
