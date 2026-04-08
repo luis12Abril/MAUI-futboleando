@@ -25,10 +25,15 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
-app.UseHttpsRedirection();
+// UseHttpsRedirection deshabilitado: en IIS/SmarterASP el HTTPS lo termina IIS,
+// no Kestrel. Habilitarlo causa bucles de redirección en hosting out-of-process.
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Endpoint de diagnóstico - sin base de datos, confirma que el servidor responde
+app.MapGet("/api/ping", () => Results.Ok(new { status = "API funcionando", hora = DateTime.Now, version = "net9.0" }));
 
 app.Run();
