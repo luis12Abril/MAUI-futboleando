@@ -22,7 +22,7 @@ either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 
 <!-- Display name -->
 <ApplicationTitle>futboleando</ApplicationTitle>
-
+	
 <!-- App Identifier -->
 <ApplicationId>com.companyname.futboleando</ApplicationId>
 
