@@ -91,7 +91,7 @@
                                         
                                         <Entry Grid.Column="1"
                                                Text="{Binding oLoginCLS.nombreusuario}"
-                                               Placeholder="Ingrese su usuario"
+                                               Placeholder="Ingrese su usuario:"
                                                FontSize="16"
                                                TextColor="#000000"
                                                PlaceholderColor="#999999"
@@ -129,7 +129,7 @@
                                         
                                         <Entry Grid.Column="1"
                                                Text="{Binding oLoginCLS.contra}"
-                                               Placeholder="Ingrese su contraseña"
+                                               Placeholder="Ingrese su contraseña:"
                                                IsPassword="True"
                                                FontSize="16"
                                                TextColor="#000000"
